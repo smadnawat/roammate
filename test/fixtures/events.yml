@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  event_name: MyString
+  place: MyString
+  start_date: 2015-07-11
+  end_date: 2015-07-11
+  link: MyString
+  city: MyString
+
+two:
+  event_name: MyString
+  place: MyString
+  start_date: 2015-07-11
+  end_date: 2015-07-11
+  link: MyString
+  city: MyString

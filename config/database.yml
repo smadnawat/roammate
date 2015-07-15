@@ -1,0 +1,23 @@
+default: &default
+  adapter: postgresql
+  username: postgres
+  password: postgres
+  host: localhost
+  port: 5432
+  pool: 10
+  timeout: 5000
+
+development:
+  <<: *default
+  database: roammate_development
+
+test:
+  <<: *default
+  database: roammate_test
+
+
+production:
+  <<: *default
+  database: roammate_production
+  username: roammate
+  password: <%= ENV['ROAMMATE_DATABASE_PASSWORD'] %>
