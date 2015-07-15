@@ -4,7 +4,6 @@ $(document).ready(function() {
     email = $("#profile_email").val();
     fname = $("#profile_first_name").val();
     gender = $("#profile_gender").val();
-    image = $("#profile_image").val();
    
     if (email.trim() === "") {
       window.alert("Email can not be null");
@@ -12,10 +11,6 @@ $(document).ready(function() {
     }
     if (fname.trim() === "") {
       window.alert("First name can not be null");
-      return false;
-    }
-    if (image.trim() === "") {
-      window.alert("Image can not be null");
       return false;
     }
     if (gender.trim() === "") {
@@ -26,8 +21,6 @@ $(document).ready(function() {
 
  $("#interest_submit_action").click(function() {
  	 name = $("#interest_interest_name").val();
-   image = $("#interest_image").val();
-   icon = $("#interest_icon").val();
    description = $("#interest_description").val();
 
 	 if (name.trim() == "") {
@@ -35,14 +28,6 @@ $(document).ready(function() {
 	  return false;
 	 }
 
-   if (image.trim() === "") {
-      window.alert("Image can not be null");
-      return false;
-    }
-     if (icon.trim() === "") {
-      window.alert("Icon can not be null");
-      return false;
-    }
     if (description.trim() === "") {
       window.alert("Description can not be null");
       return false;

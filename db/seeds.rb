@@ -20,11 +20,11 @@
 @profile4 = Profile.create(email: "#{@user4.user_id}@facebook.com", first_name: "user", last_name: "4", gender: "male", status: false, user_id: 4)
 @profile5 = Profile.create(email: "#{@user5.user_id}@facebook.com", first_name: "user", last_name: "5", gender: "male", status: false, user_id: 5)
 
-@rating1 = @user1.ratings.create(rate: "0")
-@rating2 = @user2.ratings.create(rate: "1")
-@rating3 = @user3.ratings.create(rate: "-1")
-@rating4 = @user4.ratings.create(rate: "-1")
-@rating5 = @user5.ratings.create(rate: "1")
+@rating1 = @user1.ratings.create(rate: "0", rater_id: @user2.id)
+@rating2 = @user2.ratings.create(rate: "1", rater_id: @user1.id)
+@rating3 = @user3.ratings.create(rate: "-1", rater_id: @user4.id)
+@rating4 = @user4.ratings.create(rate: "-1", rater_id: @user3.id)
+@rating5 = @user5.ratings.create(rate: "1", rater_id: @user2.id)
 
 @message1 = @user1.messages.create(reciever: @user2.id, content: "message1")
 @message2 = @user1.messages.create(reciever: @user3.id, content: "message2")

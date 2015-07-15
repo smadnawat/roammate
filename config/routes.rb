@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-
   
+  get 'profile_status/:id' => "profiles#profile_status" ,:as => "profile_status"
+  delete 'bad_rate/:id' => "messages#delete_bad_rating",:as => "delete_bad_rateing"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
