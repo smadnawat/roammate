@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
 	has_and_belongs_to_many :interests , :join_table => "users_interests" 
 	has_and_belongs_to_many :groups ,:join_table => "users_groups"
 	# has_many :questions ,dependent: :destroy
+	has_many :points ,dependent: :destroy
 	has_many :feedbacks ,dependent: :destroy
 	has_many :messages ,dependent: :destroy 
 	has_many :invitations ,dependent: :destroy

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  point: 1
+  pointable_id: 
+  pointable_type: Pointable
+  user_id: 
+
+two:
+  point: 1
+  pointable_id: 
+  pointable_type: Pointable
+  user_id: 

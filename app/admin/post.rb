@@ -11,7 +11,7 @@ ActiveAdmin.register Post do
       resources.title
     end
     column "City" do |resources|
-      resources.user.cities.first
+      resources.user.profile.location
     end
     column "Date" do |resources|
       resources.created_at.to_date
@@ -19,14 +19,18 @@ ActiveAdmin.register Post do
     actions name: "Actions"
   end
 
-  filter :created_at_cont, :as => :date_picker, label: 'Search by Date'
+  filter :user_profile_first_name_cont, label: 'Search by User Name'
 
   show do
     attributes_table do
       row :title
       row :content
-      row :image
-      row :user_id
+      row "Image" do |resources|
+        image_tag resources.image_url(:display)
+      end
+      row "User" do |resources|
+        resources.user.profile.first_name
+      end
     end
   end
 

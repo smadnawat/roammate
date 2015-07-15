@@ -5,7 +5,7 @@ ActiveAdmin.register Rating do
   index do
     selectable_column
     column "User Name" do |resources|
-      resources.user.profile.first_name + " " + resources.user.profile.last_name
+      resources.user.profile.first_name
     end
     column "Email" do |resources|
       resources.user.profile.email

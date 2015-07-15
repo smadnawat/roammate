@@ -17,7 +17,9 @@ ActiveAdmin.register Profile do
         age1 = "#{age} Years"
       end
     end
-    column :image
+    column "Image" do |resources|
+      image_tag resources.image_url(:thumbnail)
+    end
     column "Point and Ratings" do |resource|
       resource.user.ratings.first.rate
     end
@@ -59,16 +61,19 @@ ActiveAdmin.register Profile do
     f.actions
   end
 
-  show do
-    attributes_table do
-      row :interest_name
-      row :description
-      row :image
-      row :icon
-      row :status
-      row :catagory
-     end
-  end
+  # show do
+  #   attributes_table do
+  #     row :interest_name
+  #     row :description
+  #     row "Images" do |resources|
+  #       image_tag(resources.image.url(:thumbnail))
+  #     end
+  #     row :image
+  #     row :icon
+  #     row :status
+  #     row :catagory
+  #    end
+  # end
 
 end
 

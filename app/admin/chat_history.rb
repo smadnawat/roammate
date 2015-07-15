@@ -33,5 +33,17 @@ ActiveAdmin.register_page "Chat history" do
 
   end
 
-  
+  show do
+    attributes_table do
+      row :content
+      row :user_id
+
+      row "Email" do |resources|
+        resources.user.profile.email
+      end
+      
+      row :created_at
+    end
+  end
+
 end

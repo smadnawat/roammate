@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: roammate
+  api_key: '134526465421382'
+  api_secret: oOXZ5khkzq2qSOuPD0ezeycTrDg
+  enhance_image_tag: true
+  static_image_support: false
+production:
+  cloud_name: roammate
+  api_key: '134526465421382'
+  api_secret: oOXZ5khkzq2qSOuPD0ezeycTrDg
+  enhance_image_tag: true
+  static_image_support: true
+test:
+  cloud_name: roammate
+  api_key: '134526465421382'
+  api_secret: oOXZ5khkzq2qSOuPD0ezeycTrDg
+  enhance_image_tag: true
+  static_image_support: false
