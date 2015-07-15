@@ -27,18 +27,18 @@ ActiveAdmin.register Message, as: "chat_history" do
     actions name: "Actions"
   end
 
-  # show do
-  #   attributes_table do
-  #     row :content
-  #     row :user_id
+  show do
+    attributes_table do
+      row :content
+      row :user_id
 
-  #     row "Email" do |resources|
-  #       resources.user.profile.email
-  #     end
+      row "Email" do |resources|
+        resources.user.profile.email
+      end
       
-  #     row :created_at
-  #   end
-  # end
+      row :created_at
+    end
+  end
 
 
 end

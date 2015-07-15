@@ -10,8 +10,14 @@ ActiveAdmin.register Interest do
     column "Name" do |resources|
       resources.interest_name
     end
-    column :image
-    column :icon
+    column "Image" do |resources|
+      image_tag resources.image_url(:thumbnail)
+    end
+
+    column "Icon" do |resources|
+      image_tag resources.icon_url(:thumbnail)
+    end
+
     column :description
     column "Catagory" do |resources|
       resources.category.category_name
@@ -36,8 +42,12 @@ ActiveAdmin.register Interest do
     attributes_table do
       row :interest_name
       row :description
-      row :image
-      row :icon
+      row "Image" do |resources|
+        image_tag resources.image_url(:display)
+      end
+      row "Icon" do |resources|
+        image_tag resources.icon_url(:display)
+      end
       row "Category" do |resources|
         resources.category.category_name
       end

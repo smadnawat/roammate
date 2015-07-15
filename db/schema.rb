@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150715062831) do
+ActiveRecord::Schema.define(version: 20150715112947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +136,18 @@ ActiveRecord::Schema.define(version: 20150715062831) do
 
   add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
 
+  create_table "points", force: :cascade do |t|
+    t.integer  "point"
+    t.integer  "pointable_id"
+    t.string   "pointable_type"
+    t.integer  "user_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "points", ["pointable_type", "pointable_id"], name: "index_points_on_pointable_type_and_pointable_id", using: :btree
+  add_index "points", ["user_id"], name: "index_points_on_user_id", using: :btree
+
   create_table "posts", force: :cascade do |t|
     t.string   "title"
     t.string   "content"
@@ -218,6 +230,7 @@ ActiveRecord::Schema.define(version: 20150715062831) do
   add_foreign_key "interests", "categories"
   add_foreign_key "invitations", "users"
   add_foreign_key "messages", "users"
+  add_foreign_key "points", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "questions", "interests"

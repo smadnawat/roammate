@@ -28,8 +28,12 @@ ActiveAdmin.register Question , :as => "Messages" do
   show do
     attributes_table do
       row :question
-      row :interest_id
-      row :category_id
+      row "Interest" do |resources|
+        resources.interest.interest_name
+      end
+      row "category" do |resources|
+        resources.category.category_name
+      end
     end
   end
 

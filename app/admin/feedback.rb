@@ -23,7 +23,9 @@ ActiveAdmin.register Feedback do
   show do
     attributes_table do
       row :content
-      row :user_id
+      row "User" do |resources|
+        resources.user.profile.first_name
+      end
 
       row "Email" do |resources|
         resources.user.profile.email
