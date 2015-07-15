@@ -11,8 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150714052910) do
 
+ActiveRecord::Schema.define(version: 20150715062831) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -94,6 +94,13 @@ ActiveRecord::Schema.define(version: 20150714052910) do
 
   add_index "feedbacks", ["user_id"], name: "index_feedbacks_on_user_id", using: :btree
 
+  create_table "groups", force: :cascade do |t|
+    t.string   "group_name"
+    t.integer  "group_admin"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "interests", force: :cascade do |t|
     t.string   "interest_name"
     t.string   "description"
@@ -124,6 +131,7 @@ ActiveRecord::Schema.define(version: 20150714052910) do
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "group_id"
   end
 
   add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
@@ -194,6 +202,11 @@ ActiveRecord::Schema.define(version: 20150714052910) do
     t.integer "city_id"
   end
 
+  create_table "users_groups", id: false, force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "group_id"
+  end
+  
   create_table "users_interests", id: false, force: :cascade do |t|
     t.integer "user_id"
     t.integer "interest_id"
