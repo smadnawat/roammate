@@ -20,7 +20,7 @@ ActiveAdmin.register_page "Chat history" do
           td { rate.user.profile.first_name }
           td { rate.user.profile.email }
           td { rate.rate }
-          td { User.find(rate.rater_id).profile.first_name }
+          td { User.find_by_id(rate.rater_id).profile.first_name }
            td :class=>"" do 
                 a  link_to 'View', admin_chat_path(user1: rate.user.id ,user2: rate.rater_id) 
                 a " "

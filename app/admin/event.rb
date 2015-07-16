@@ -1,6 +1,6 @@
 ActiveAdmin.register Event do
   menu priority: 7
-  permit_params :event_name, :place, :event_time, :link, :city
+  permit_params :event_name, :place, :event_time, :link, :city, :event_date
 
   index do
     selectable_column
@@ -9,6 +9,9 @@ ActiveAdmin.register Event do
     column :place
     column "Time" do |resources|
       resources.event_time
+    end
+    column "Date" do |resources|
+      resources.event_date
     end
     column :link
     column :city
@@ -25,18 +28,40 @@ ActiveAdmin.register Event do
       row :event_name
       row :place
       row :event_time
+      row :event_date
       row :link
       row :city
     end
   end
 
-  form do |f|
+  # form :html => { :enctype => "multipart/form-data" } do |f|  
+  #   f.inputs "PromoCodes" do
+  #   f.input :promo_code
+  #   f.input :start_date, :as => :datepicker
+  #   f.input :start_time
+  # end
+  # f.buttons
+
+
+
+  form :html => { :enctype => "multipart/form-data" } do |f|
     f.inputs "Admin Details" do
       f.input :event_name
+      label :Please_enter_event_name,:class => "label_error" ,:id => "event_name_label"
+      label :Please_enter_valid_time_format,:class => "label_error" ,:id => "event_name_label2"
       f.input :place
+      label :Please_enter_place,:class => "label_error" ,:id => "place_label"
+
+
       f.input :event_time
+      label :Please_enter_event_time,:class => "label_error" ,:id => "event_time_label"
+      f.input :event_date, as: :datepicker
+      label :Please_enter_event_date,:class => "label_error" ,:id => "event_date_label"
+
       f.input :link
+      label :Please_enter_link,:class => "label_error" ,:id => "link_label"
       f.input :city
+      label :Please_enter_city,:class => "label_error" ,:id => "city_label"
     end
     f.actions
   end

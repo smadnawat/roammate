@@ -5,7 +5,7 @@ ActiveAdmin.register Post do
   index do
     selectable_column
     column "User Name" do |resources|
-      resources.user.profile.first_name + " " + resources.user.profile.last_name 
+      resources.user.profile.first_name
     end
     column "Post" do |resources|
       resources.title
@@ -34,13 +34,13 @@ ActiveAdmin.register Post do
     end
   end
 
-  # filter :sign_in_count
-  # filter :created_at
 
   form do |f|
     f.inputs "Admin Details" do
       f.input :title
+      label :Please_enter_title,:class => "label_error" ,:id => "title_label"
       f.input :content
+      label :Please_enter_content,:class => "label_error" ,:id => "content_label"
       f.input :image
       f.input :user_id, :as => :select, :collection => User.all.map{|u| ["#{u.profile.first_name} #{u.profile.last_name}", u.id]}
     end
