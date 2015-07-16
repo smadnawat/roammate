@@ -17,10 +17,7 @@ $(document).ready(function() {
      $("#fname_label").show();
      return false;
    }
-    // if (gender.trim() === "") {
-    //   // window.alert("Please select gender");
-    //   return false;
-    // }
+    
     if (dob.trim() === "") {
       $("#email_label").hide();
       $("#fname_label").hide();
@@ -56,8 +53,7 @@ $("#event_submit_action").click(function() {
    place = $("#event_place").val();
    link = $("#event_link").val();
    city = $("#event_city").val();
-   time = $("#event_time").val();
-
+   time = $("#event_event_time").val();
     if (name.trim() === "") {
       window.alert("Event name can not be null");
       return false;

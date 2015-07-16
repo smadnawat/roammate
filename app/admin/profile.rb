@@ -23,19 +23,26 @@ ActiveAdmin.register Profile do
     column "Point and Ratings" do |resource|
       @points = resource.user.points
       @ratings = resource.user.ratings
-      @sum = 0
+      @rate_sum =0
+      @point_sum =0
       if @ratings.present?
         @ratings.each do |r|
-          @rate = r.rate.to_i
-          @sum = @sum+@rate
-         
+          @rate = r.rate.to_i+0.0
+          @rate_sum = @rate_sum+@rate         
         end
-         p "*************#{@sum}**********#{@ratings.count}***#{@sum/@ratings.count}****"
-        @avg = (@sum/@ratings.count)*100
+        @avg = "#{Rating = (@rate_sum/@ratings.count)*100}%"
       else
-
+        @avg = "did not rate by any user"
       end
-      #resource.user.ratings.first.rate
+
+      if @points.present?
+         @points.each do |p|
+           @point_sum = @point_sum + p.point
+         end
+      else
+         @point_sum = 0
+      end
+      "Points = #{@point_sum} and #{@avg}"
     end
     column :location
     column "Status" do |resource|

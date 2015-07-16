@@ -1,20 +1,30 @@
-ActiveAdmin.register Rating do
+ActiveAdmin.register User,:as => "Rating" do
   menu priority: 3
   actions :all, :except => [:new]
 
   index do
     selectable_column
     column "User Name" do |resources|
-      resources.user.profile.first_name
+       resources.profile.first_name
     end
     column "Email" do |resources|
-      resources.user.profile.email
+       resources.profile.email
     end
-    column "Rating" do |resources|
-      resources.rate
+    column "Rating" do |resource|
+      @ratings = resource.ratings
+      @rate_sum =0
+       if @ratings.present?
+        @ratings.each do |r|
+          @rate = r.rate.to_i+0.0
+          @rate_sum = @rate_sum+@rate         
+        end
+        @avg = "#{(@rate_sum/@ratings.count)*100}%"
+      else
+        @avg = "No budy rating"
+      end
     end
   end
 
-    filter :user_profile_first_name_cont , :as => :string , :label => "Search By Name"
+     filter :profile_first_name_cont , :as => :string , :label => "Search By Name"
 
 end
