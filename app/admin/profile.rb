@@ -21,7 +21,21 @@ ActiveAdmin.register Profile do
       image_tag resources.image_url(:thumbnail)
     end
     column "Point and Ratings" do |resource|
-      resource.user.ratings.first.rate
+      @points = resource.user.points
+      @ratings = resource.user.ratings
+      @sum = 0
+      if @ratings.present?
+        @ratings.each do |r|
+          @rate = r.rate.to_i
+          @sum = @sum+@rate
+         
+        end
+         p "*************#{@sum}**********#{@ratings.count}***#{@sum/@ratings.count}****"
+        @avg = (@sum/@ratings.count)*100
+      else
+
+      end
+      #resource.user.ratings.first.rate
     end
     column :location
     column "Status" do |resource|
@@ -49,11 +63,14 @@ ActiveAdmin.register Profile do
   form do |f|
     f.inputs "Admin Details" do
       f.input :email
+      label :Please_enter_email,:class => "label_error" ,:id => "email_label"
       f.input :first_name
+      label :Please_enter_a_valid_first_name,:class => "label_error" ,:id => "fname_label"
       f.input :last_name
       f.input :image
       f.input :location
       f.input :dob,as: :datepicker, datepicker_options: { max_date: 18.years.ago.to_date}
+      label :Please_enter_date_of_birth,:class => "label_error" ,:id => "dob_label"
       f.input :gender, :as => :select,collection: [["male","male"],["female","female"]],include_blank: false, allow_blank: false
       f.input :locale
       f.input :timezone
