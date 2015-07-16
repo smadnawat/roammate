@@ -154,9 +154,7 @@ $("#post_submit_action").click(function() {
     }
   });
 
-
     $("#event_event_time").pickatime();
-    // $("#event_event_date").pickadate();
 
 });
 
