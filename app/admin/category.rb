@@ -15,6 +15,7 @@ ActiveAdmin.register Category do
   form do |f|
     f.inputs "Admin Details" do
       f.input :category_name
+      label :Please_enter_category_name,:class => "label_error" ,:id => "category_name_label"
     end
     f.actions
   end

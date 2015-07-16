@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+
+gem 'pickadate-rails'
 gem 'activeadmin', github: 'activeadmin'
 gem 'devise'
 gem 'carrierwave'

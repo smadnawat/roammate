@@ -1,5 +1,5 @@
 ActiveAdmin.register_page "Chat" do
-    menu false
+  menu false
 	content do
 		@user1 = User.find(params[:user1])
 		@user2 = User.find(params[:user2])

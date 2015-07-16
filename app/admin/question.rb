@@ -19,6 +19,7 @@ ActiveAdmin.register Question , :as => "Messages" do
   form do |f|
     f.inputs "Admin Details" do
       f.input :question
+      label :Please_enter_email,:class => "label_error" ,:id => "question_label"
       f.input :interest_id, :as => :select, :collection => Interest.all.map{|u| ["#{u.interest_name}", u.id]},include_blank: false, allow_blank: false
       f.input :category_id, :as => :select, :collection => Category.all.map{|u| ["#{u.category_name}", u.id]},include_blank: false, allow_blank: false
     end

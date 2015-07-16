@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   
   get 'profile_status/:id' => "profiles#profile_status" ,:as => "profile_status"
   delete 'bad_rate/:id' => "messages#delete_bad_rating",:as => "delete_bad_rateing"
+
+  delete 'destroy_users/:id' => "users#destroy_users" , :as => "destroy_users"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

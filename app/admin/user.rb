@@ -18,7 +18,7 @@ ActiveAdmin.register User,:as => "Rating" do
           @rate = r.rate.to_i+0.0
           @rate_sum = @rate_sum+@rate         
         end
-        @avg = "#{(@rate_sum/@ratings.count)*100}%"
+        @avg = "#{((@rate_sum/@ratings.count)*100).round(2)}%"
       else
         @avg = "No budy rating"
       end

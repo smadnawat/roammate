@@ -25,15 +25,15 @@ ActiveAdmin.register Profile do
       @ratings = resource.user.ratings
       @rate_sum =0
       @point_sum =0
-      if @ratings.present?
-        @ratings.each do |r|
-          @rate = r.rate.to_i+0.0
-          @rate_sum = @rate_sum+@rate         
-        end
-        @avg = "#{Rating = (@rate_sum/@ratings.count)*100}%"
-      else
-        @avg = "did not rate by any user"
-      end
+      # if @ratings.present?
+      #   @ratings.each do |r|
+      #     @rate = r.rate.to_i+0.0
+      #     @rate_sum = @rate_sum+@rate         
+      #   end
+      #   @avg = "#{Rating = ((@rate_sum/@ratings.count)*100).round(2)}%"
+      # else
+      #   @avg = "did not rate by any user"
+      # end
 
       if @points.present?
          @points.each do |p|
@@ -42,7 +42,7 @@ ActiveAdmin.register Profile do
       else
          @point_sum = 0
       end
-      "Points = #{@point_sum} and #{@avg}"
+      "Points = #{@point_sum}"
     end
     column :location
     column "Status" do |resource|
@@ -59,7 +59,7 @@ ActiveAdmin.register Profile do
            links += " / "
            links +=  link_to 'Edit', edit_admin_profile_path(resource)
          links += " / "  
-         links += link_to 'Delete', admin_profile_path(resource), method: :delete,:data => { :confirm => 'Are you sure, you want to delete this package?' }
+         links += link_to 'Delete', destroy_users_path(resource.user_id), method: :delete,:data => { :confirm => 'Are you sure, you want to delete this profile?' }
        end
        links
      end
@@ -70,7 +70,7 @@ ActiveAdmin.register Profile do
   form do |f|
     f.inputs "Admin Details" do
       f.input :email
-      label :Please_enter_email,:class => "label_error" ,:id => "email_label"
+      label :Please_enter_a_valid_email,:class => "label_error" ,:id => "email_label"
       f.input :first_name
       label :Please_enter_a_valid_first_name,:class => "label_error" ,:id => "fname_label"
       f.input :last_name
