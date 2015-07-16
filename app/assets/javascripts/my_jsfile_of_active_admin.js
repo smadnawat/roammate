@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+  $('.picker__holder').addClass( "time_holder" );
   var time_format = /([01]\d|2[0-3]):([0-5]\d)/;
  
   $('.label_error').hide();
@@ -29,10 +29,7 @@ $(document).ready(function() {
      $("#dob_label").hide();
      return false;
    }
-    // if (gender.trim() === "") {
-    //   // window.alert("Please select gender");
-    //   return false;
-    // }
+    
     if (dob.trim() === "") {
       $("#email_label").hide();
       $("#fname_label").hide();
@@ -72,7 +69,6 @@ $("#event_submit_action").click(function() {
    city = $("#event_city").val();
    time = $("#event_event_time").val();
    date = $("#event_event_date").val();
-
     if (name.trim() === "") {
       $("#event_name_label").show();
       $("#city_label").hide();

@@ -10,7 +10,6 @@
 // Active Admin's got SASS!
 @import "active_admin/mixins";
 @import "active_admin/base";
-
 // Overriding any non-variable SASS must be done after the fact.
 // For example, to change the default status-tag color:
 //
@@ -21,7 +20,12 @@
 	margin-left: 21%;
 	color: red;
 }
-
+.time_holder
+{
+	margin-left: 91%;
+    width: 10% !important;
+}
   @import "pickadate/classic";
   @import "pickadate/classic.date";
   @import "pickadate/classic.time";
+

@@ -7,7 +7,7 @@ ActiveAdmin.register Event do
     # id_column
     column :event_name
     column :place
-    column "Time" do |resources|
+    column "Time"  do |resources|
       resources.event_time
     end
     column "Date" do |resources|
@@ -53,7 +53,7 @@ ActiveAdmin.register Event do
       label :Please_enter_place,:class => "label_error" ,:id => "place_label"
 
 
-      f.input :event_time
+      f.input :event_time ,:class =>"time_holder"
       label :Please_enter_event_time,:class => "label_error" ,:id => "event_time_label"
       f.input :event_date, as: :datepicker
       label :Please_enter_event_date,:class => "label_error" ,:id => "event_date_label"
