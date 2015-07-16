@@ -1,20 +1,30 @@
 $(document).ready(function() {
+  $('.label_error').hide();
   $("#profile_submit_action").click(function() {
+     var check_name = /^[a-zA-Z]*$/;
     var email, fname, gender;
     email = $("#profile_email").val();
     fname = $("#profile_first_name").val();
-    gender = $("#profile_gender").val();
-   
+    dob = $("#profile_dob").val();
+  
     if (email.trim() === "") {
-      window.alert("Email can not be null");
+      $("#email_label").show();
       return false;
     }
-    if (fname.trim() === "") {
-      window.alert("First name can not be null");
-      return false;
-    }
-    if (gender.trim() === "") {
-      window.alert("Please select gender");
+   if (!check_name.test(fname) || fname.trim() === "")
+   {
+     $("#email_label").hide();
+     $("#fname_label").show();
+     return false;
+   }
+    // if (gender.trim() === "") {
+    //   // window.alert("Please select gender");
+    //   return false;
+    // }
+    if (dob.trim() === "") {
+      $("#email_label").hide();
+      $("#fname_label").hide();
+       $("#dob_label").show();
       return false;
     }
   });
