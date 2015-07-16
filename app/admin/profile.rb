@@ -74,7 +74,7 @@ ActiveAdmin.register Profile do
       f.input :first_name
       label :Please_enter_a_valid_first_name,:class => "label_error" ,:id => "fname_label"
       f.input :last_name
-      f.input :image
+      f.input :image,:as => :file
       f.input :location
       f.input :dob,as: :datepicker, datepicker_options: { max_date: 18.years.ago.to_date}
       label :Please_enter_date_of_birth,:class => "label_error" ,:id => "dob_label"

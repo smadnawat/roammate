@@ -31,7 +31,7 @@ ActiveAdmin.register Interest do
     f.inputs "Admin Details" do
       f.input :interest_name
       label :Please_enter_interest_name,:class => "label_error" ,:id => "interest_name_label"
-      f.input :image
+      f.input :image,:as => :file
       f.input :icon
       f.input :description
       label :Please_enter_description,:class => "label_error" ,:id => "description_label"
