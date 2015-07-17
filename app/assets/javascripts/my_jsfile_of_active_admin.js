@@ -7,35 +7,45 @@ $(document).ready(function() {
      var check_name = /^[a-zA-Z]*$/;
      var email_format = /^[a-zA-Z0-9_\.\-]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/;
 
-    var email, fname, gender;
+    var email, fname, gender,lname;
     email = $("#profile_email").val();
     fname = $("#profile_first_name").val();
     dob = $("#profile_dob").val();
-  
-    // if (email.trim() === "") {
-    //   $("#email_label").show();
-    //   return false;
-    // }
+    lname = $("#profile_last_name").val();
+
     if (!email_format.test(email) || email.trim()==="") {
       $("#email_label").show();
       $("#fname_label").hide();
-       $("#dob_label").hide();
+      $("#lname_label").hide();
+      $("#dob_label").hide();
       return false;
     }
    if (!check_name.test(fname) || fname.trim() === "")
    {
      $("#email_label").hide();
      $("#fname_label").show();
+     $("#lname_label").hide();
      $("#dob_label").hide();
      return false;
    }
+
+    if (!check_name.test(lname)) {
+      $("#email_label").hide();
+      $("#fname_label").hide();
+      $("#dob_label").hide();
+      $("#lname_label").show();
+      return false;
+    }
     
     if (dob.trim() === "") {
       $("#email_label").hide();
       $("#fname_label").hide();
-       $("#dob_label").show();
+      $("#dob_label").show();
+      $("#lname_label").hide();
+
       return false;
     }
+
   });
 
  $("#interest_submit_action").click(function() {
