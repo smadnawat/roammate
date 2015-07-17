@@ -46,7 +46,7 @@ ActiveAdmin.register Profile do
     end
     column :location
     column "Status" do |resource|
-      resource.status ? '<i class="status_tag yes">Active</i>'.html_safe : '<i class="status_tag no">Deactive</i>'.html_safe
+      status_tag (resource.status ? "Active" : "Deactive"), (resource.status ? :ok : :error) 
     end    
     column "Actions" do |resource|
         links = ''.html_safe
