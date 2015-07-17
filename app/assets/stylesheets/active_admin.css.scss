@@ -7,6 +7,10 @@
 // For example, to change the sidebar width:
 // $sidebar-width: 242px;
 
+$skinMainFirstColor: #191919!default;
+$skinMainSecondColor: #D65C33!default;
+$skinBorderWindowColor: #F0C2B2!default;
+
 // Active Admin's got SASS!
 @import "active_admin/mixins";
 @import "active_admin/base";
