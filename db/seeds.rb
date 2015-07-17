@@ -61,16 +61,16 @@
 @interest10 = @category5.interests.create(interest_name: "interest10", description: "description10")
 
 
-@question1 = @category1.questions.create(question: "This is question 1?",interest_id: @interest2)
-@question2 = @category1.questions.create(question: "This is question 2?",interest_id: @interest4)
-@question3 = @category2.questions.create(question: "This is question 3?",interest_id: @interest2)
-@question4 = @category2.questions.create(question: "This is question 4?",interest_id: @interest4)
-@question5 = @category3.questions.create(question: "This is question 5?",interest_id: @interest10)
-@question6 = @category3.questions.create(question: "This is question 6?",interest_id: @interest9)
-@question7 = @category4.questions.create(question: "This is question 7?",interest_id: @interest4)
-@question8 = @category4.questions.create(question: "This is question 8?",interest_id: @interest3)
-@question9 = @category5.questions.create(question: "This is question 9?",interest_id: @interest4)
-@question10 = @category5.questions.create(question: "This is question 10?",interest_id: @interest3)
+@question1 = @category1.questions.create(question: "This is question 1?",interest_id: @interest2.id)
+@question2 = @category1.questions.create(question: "This is question 2?",interest_id: @interest4.id)
+@question3 = @category2.questions.create(question: "This is question 3?",interest_id: @interest2.id)
+@question4 = @category2.questions.create(question: "This is question 4?",interest_id: @interest4.id)
+@question5 = @category3.questions.create(question: "This is question 5?",interest_id: @interest10.id)
+@question6 = @category3.questions.create(question: "This is question 6?",interest_id: @interest9.id)
+@question7 = @category4.questions.create(question: "This is question 7?",interest_id: @interest4.id)
+@question8 = @category4.questions.create(question: "This is question 8?",interest_id: @interest3.id)
+@question9 = @category5.questions.create(question: "This is question 9?",interest_id: @interest4.id)
+@question10 = @category5.questions.create(question: "This is question 10?",interest_id: @interest3.id)
 
 
 @feedback1 = @user1.feedbacks.create(content: "content1")
