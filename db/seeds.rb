@@ -61,16 +61,16 @@
 @interest10 = @category5.interests.create(interest_name: "interest10", description: "description10")
 
 
-@question1 = @category1.questions.create(question: "This is question 1?",interest_id: @interest2)
-@question2 = @category1.questions.create(question: "This is question 2?",interest_id: @interest4)
-@question3 = @category2.questions.create(question: "This is question 3?",interest_id: @interest2)
-@question4 = @category2.questions.create(question: "This is question 4?",interest_id: @interest4)
-@question5 = @category3.questions.create(question: "This is question 5?",interest_id: @interest10)
-@question6 = @category3.questions.create(question: "This is question 6?",interest_id: @interest9)
-@question7 = @category4.questions.create(question: "This is question 7?",interest_id: @interest4)
-@question8 = @category4.questions.create(question: "This is question 8?",interest_id: @interest3)
-@question9 = @category5.questions.create(question: "This is question 9?",interest_id: @interest4)
-@question10 = @category5.questions.create(question: "This is question 10?",interest_id: @interest3)
+@question1 = @category1.questions.create(question: "This is question 1?",interest_id: @interest2.id)
+@question2 = @category1.questions.create(question: "This is question 2?",interest_id: @interest4.id)
+@question3 = @category2.questions.create(question: "This is question 3?",interest_id: @interest2.id)
+@question4 = @category2.questions.create(question: "This is question 4?",interest_id: @interest4.id)
+@question5 = @category3.questions.create(question: "This is question 5?",interest_id: @interest10.id)
+@question6 = @category3.questions.create(question: "This is question 6?",interest_id: @interest9.id)
+@question7 = @category4.questions.create(question: "This is question 7?",interest_id: @interest4.id)
+@question8 = @category4.questions.create(question: "This is question 8?",interest_id: @interest3.id)
+@question9 = @category5.questions.create(question: "This is question 9?",interest_id: @interest4.id)
+@question10 = @category5.questions.create(question: "This is question 10?",interest_id: @interest3.id)
 
 
 @feedback1 = @user1.feedbacks.create(content: "content1")
@@ -85,11 +85,11 @@
 @event4 = Event.create(event_name: "event4", place: "place4", city: "city4")
 @event5 = Event.create(event_name: "event5", place: "place5", city: "city5")
 
-@city1 = City.create(city_name: "city1", state: "state1", country: "contry1", status: false)
-@city2 = City.create(city_name: "city2", state: "state2", country: "contry2", status: false)
-@city3 = City.create(city_name: "city3", state: "state3", country: "contry3", status: false)
-@city4 = City.create(city_name: "city4", state: "state4", country: "contry4", status: false)
-@city5 = City.create(city_name: "city5", state: "state5", country: "contry5", status: false)
+@city1 = City.create(city_name: "city1", state: "state1", country: "country1", status: false)
+@city2 = City.create(city_name: "city2", state: "state2", country: "country2", status: false)
+@city3 = City.create(city_name: "city3", state: "state3", country: "country3", status: false)
+@city4 = City.create(city_name: "city4", state: "state4", country: "country4", status: false)
+@city5 = City.create(city_name: "city5", state: "state5", country: "country5", status: false)
 
 @points1 = @user1.points.create(point: 50 ,pointable_id: @interest1.id,pointable_type: "Interest")
 @points2 = @user1.points.create(point: 80 ,pointable_id: @interest2.id,pointable_type: "Interest")

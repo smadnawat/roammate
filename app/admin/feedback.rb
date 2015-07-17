@@ -20,7 +20,7 @@ ActiveAdmin.register Feedback do
 
   filter :user_profile_email_cont, :as => :string , :label => "Search By Email"
  
-  show do
+  show :title => "Feedback" do
     attributes_table do
       row :content
       row "User" do |resources|

@@ -26,7 +26,7 @@ ActiveAdmin.register Question , :as => "Messages" do
     f.actions
   end
 
-  show do
+  show :title => "Question" do
     attributes_table do
       row :question
       row "Interest" do |resources|

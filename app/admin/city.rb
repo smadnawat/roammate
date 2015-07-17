@@ -13,7 +13,8 @@ ActiveAdmin.register City do
 
   filter :city_name_cont, label: 'search by city name'
 
-  show do
+  show :title => :city_name do
+
     attributes_table do
       row :city_name
       row :state

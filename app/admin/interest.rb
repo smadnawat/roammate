@@ -40,7 +40,7 @@ ActiveAdmin.register Interest do
     f.actions
   end
 
-  show do
+  show :title => :interest_name do
     attributes_table do
       row :interest_name
       row :description
