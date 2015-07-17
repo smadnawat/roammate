@@ -20,7 +20,7 @@ ActiveAdmin.register Category do
     f.actions
   end
 
-  show do
+  show :title => :category_name do
     attributes_table do
       row :category_name
       row :created_at

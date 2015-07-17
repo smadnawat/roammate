@@ -85,11 +85,11 @@
 @event4 = Event.create(event_name: "event4", place: "place4", city: "city4")
 @event5 = Event.create(event_name: "event5", place: "place5", city: "city5")
 
-@city1 = City.create(city_name: "city1", state: "state1", country: "contry1", status: false)
-@city2 = City.create(city_name: "city2", state: "state2", country: "contry2", status: false)
-@city3 = City.create(city_name: "city3", state: "state3", country: "contry3", status: false)
-@city4 = City.create(city_name: "city4", state: "state4", country: "contry4", status: false)
-@city5 = City.create(city_name: "city5", state: "state5", country: "contry5", status: false)
+@city1 = City.create(city_name: "city1", state: "state1", country: "country1", status: false)
+@city2 = City.create(city_name: "city2", state: "state2", country: "country2", status: false)
+@city3 = City.create(city_name: "city3", state: "state3", country: "country3", status: false)
+@city4 = City.create(city_name: "city4", state: "state4", country: "country4", status: false)
+@city5 = City.create(city_name: "city5", state: "state5", country: "country5", status: false)
 
 @points1 = @user1.points.create(point: 50 ,pointable_id: @interest1.id,pointable_type: "Interest")
 @points2 = @user1.points.create(point: 80 ,pointable_id: @interest2.id,pointable_type: "Interest")

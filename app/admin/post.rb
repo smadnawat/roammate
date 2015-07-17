@@ -21,7 +21,7 @@ ActiveAdmin.register Post do
 
   filter :user_profile_first_name_cont, label: 'Search by User Name'
 
-  show do
+  show :title => :title do
     attributes_table do
       row :title
       row :content
