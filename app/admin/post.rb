@@ -41,7 +41,7 @@ ActiveAdmin.register Post do
       label :Please_enter_title,:class => "label_error" ,:id => "title_label"
       f.input :content
       label :Please_enter_content,:class => "label_error" ,:id => "content_label"
-      f.input :image, :as => :file
+      f.input :image,:as => :file
       f.input :user_id, :as => :select, :collection => User.all.map{|u| ["#{u.profile.first_name} #{u.profile.last_name}", u.id]}
     end
     f.actions

@@ -6,6 +6,7 @@ gem 'activeadmin', github: 'activeadmin'
 gem 'devise'
 gem 'carrierwave'
 gem 'cloudinary'
+gem 'active_admin_theme'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.2'
 # Use postgresql as the database for Active Record

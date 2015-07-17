@@ -46,7 +46,7 @@ ActiveAdmin.register Profile do
     end
     column :location
     column "Status" do |resource|
-      resource.status ? '<i class="status_tag yes">Active</i>'.html_safe : '<i class="status_tag no">Deactive</i>'.html_safe
+      status_tag (resource.status ? "Active" : "Deactive"), (resource.status ? :ok : :error) 
     end    
     column "Actions" do |resource|
         links = ''.html_safe
@@ -74,7 +74,8 @@ ActiveAdmin.register Profile do
       f.input :first_name
       label :Please_enter_a_valid_first_name,:class => "label_error" ,:id => "fname_label"
       f.input :last_name
-      f.input :image, :as => :file
+      label :Please_enter_a_valid_last_name,:class => "label_error" ,:id => "lname_label"
+      f.input :image,:as => :file
       f.input :location
       f.input :dob,as: :datepicker, datepicker_options: { max_date: 18.years.ago.to_date}
       label :Please_enter_date_of_birth,:class => "label_error" ,:id => "dob_label"
