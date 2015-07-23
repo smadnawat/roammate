@@ -1,17 +1,28 @@
 ActiveAdmin.register Post do
   menu priority: 8
-  permit_params :title, :content, :image, :user_id
-  actions :all, :except => [:new]
+  permit_params :title, :content, :image, :user_id,:user_type,:admin_user_id
+  actions :all
   index do
     selectable_column
-    column "User Name" do |resources|
-      resources.user.profile.first_name
+    column "User name" do |resources|
+      if resources.user_id.present?
+          resources.user.profile.first_name
+        else
+          "Admin user"
+        end
+    end
+    column "User type" do |resources|
+      resources.user_type
     end
     column "Post" do |resources|
       resources.title
     end
     column "City" do |resources|
-      resources.user.profile.location
+      if resources.user_id.present?
+          resources.user.profile.first_name
+      else
+          "Admin location"
+      end
     end
     column "Date" do |resources|
       resources.created_at.to_date
@@ -29,7 +40,26 @@ ActiveAdmin.register Post do
         image_tag resources.image_url(:display)
       end
       row "User" do |resources|
-        resources.user.profile.first_name
+        if resources.user_id.present?
+          resources.user.profile.first_name
+        else
+          "Admin user"
+        end
+      end
+      row "User type" do |resources|
+        resources.user_type
+      end
+      row "Comments" do |resources|
+        if resources.comments.present?
+          resources.comments.each do |cm|
+             b "#{cm.user.profile.first_name } :" 
+             body "#{cm.reply}" 
+             body link_to 'X',delete_comment_path(resources.id,cm.id)     
+             br    
+          end
+        else
+          "Not any comment"
+        end
       end
     end
   end
@@ -42,7 +72,10 @@ ActiveAdmin.register Post do
       f.input :content
       label :Please_enter_content,:class => "label_error" ,:id => "content_label"
       f.input :image,:as => :file
-      f.input :user_id, :as => :select, :collection => User.all.map{|u| ["#{u.profile.first_name} #{u.profile.last_name}", u.id]}
+      if params[:action] != "edit"
+        f.input :admin_user_id,:input_html => {:value => current_admin_user.id,:readonly=>true }
+        f.input :user_type,:input_html => {:value => "admin",:readonly=>true } 
+      end
     end
     f.actions
   end

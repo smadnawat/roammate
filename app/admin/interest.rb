@@ -1,7 +1,6 @@
 ActiveAdmin.register Interest do
   menu priority: 2
   permit_params :interest_name, :image, :icon, :description, :status, :category_id
-
   # permit_params :email, :password, :password_confirmation
 
   index do

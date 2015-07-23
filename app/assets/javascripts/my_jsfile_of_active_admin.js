@@ -74,6 +74,7 @@ $(document).ready(function() {
   });
 $("#event_submit_action").click(function() {
    name = $("#event_event_name").val();
+   host_name = $("#event_host_name").val();
    place = $("#event_place").val();
    link = $("#event_link").val();
    city = $("#event_city").val();
@@ -81,6 +82,17 @@ $("#event_submit_action").click(function() {
    date = $("#event_event_date").val();
     if (name.trim() === "") {
       $("#event_name_label").show();
+      $("#host_name_label").hide();      
+      $("#city_label").hide();
+      $("#link_label").hide();
+      $("#event_date_label").hide();
+      $("#event_time_label").hide();
+      $("#place_label").hide();
+      return false;
+    }
+    if (host_name.trim() === "") {
+      $("#event_name_label").hide();
+      $("#host_name_label").show();      
       $("#city_label").hide();
       $("#link_label").hide();
       $("#event_date_label").hide();
@@ -92,6 +104,7 @@ $("#event_submit_action").click(function() {
       $("#place_label").show();
       $("#city_label").hide();
       $("#link_label").hide();
+      $("#host_name_label").hide();      
       $("#event_date_label").hide();
       $("#event_time_label").hide();
       $("#event_name_label").hide();
@@ -104,6 +117,7 @@ $("#event_submit_action").click(function() {
       $("#link_label").hide();
       $("#event_date_label").hide();
       $("#place_label").hide();
+      $("#host_name_label").hide();      
       $("#event_name_label").hide();
       return false;
     } 
@@ -111,6 +125,7 @@ $("#event_submit_action").click(function() {
       $("#event_date_label").show();
       $("#event_time_label").hide();
       $("#place_label").hide();
+      $("#host_name_label").hide();      
       $("#event_name_label").hide();
       $("#city_label").hide();
       $("#link_label").hide();
@@ -120,6 +135,7 @@ $("#event_submit_action").click(function() {
       $("#link_label").show();
       $("#event_date_label").hide();
       $("#city_label").hide();
+      $("#host_name_label").hide();      
       $("#event_time_label").hide();
       $("#place_label").hide();
       $("#event_name_label").hide();
@@ -130,6 +146,7 @@ $("#event_submit_action").click(function() {
       $("#link_label").hide();
       $("#event_date_label").hide();
       $("#event_time_label").hide();
+      $("#host_name_label").hide();      
       $("#place_label").hide();
       $("#event_name_label").hide();
       return false;
@@ -139,17 +156,29 @@ $("#event_submit_action").click(function() {
 $("#post_submit_action").click(function() {
    title = $("#post_title").val();
    content = $("#post_content").val();
- 
+   user_type = $("#post_user_type").val();
+  
     if (title.trim() === "") {
       $("#title_label").show();
       $("#content_label").hide();
+      $("#user_label").hide();
+
       return false;
     }
     if (content.trim() === "") {
       $("#content_label").show();
+      $("#user_label").user      
       $("#title_label").hide();
       return false;
     }  
+    if(user_type == "")
+    {
+      $("#content_label").hide();
+      $("#title_label").hide();
+      $("#user_label").show();           
+      return false;
+    }
+
   });
  
  $("#category_submit_action").click(function() {
