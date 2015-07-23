@@ -13,6 +13,8 @@ ActiveAdmin.register_page "Chat history" do
         th { 'Email' }
         th { 'Rate' }
         th { 'Rating by(user2)' }
+        th { 'Reason'}
+        th { 'Created at'}
         th { 'Action' }
       end 
       if rating.present?
@@ -22,12 +24,13 @@ ActiveAdmin.register_page "Chat history" do
             td { rate.user.profile.email }
             td { rate.rate }
             td { User.find(rate.rater_id).profile.first_name }
-             td :class=>"" do 
-                  a  link_to 'View', admin_chat_path(user1: rate.user.id ,user2: rate.rater_id) 
-                  a " "
-                  a " "
-                  a  link_to "Delete",delete_bad_rateing_path(rate),method: :delete ,:data => { :confirm => "Are you sure, you want to delete this rating?" }
-               end
+            td { rate.reason.present? ? rate.reason : "Not provided"}
+            td { rate.created_at.to_date}
+            td :class=>"" do 
+              a  link_to 'View', admin_chat_path(user1: rate.user.id ,user2: rate.rater_id) 
+              a " "
+              a  link_to "Delete",delete_bad_rateing_path(rate),method: :delete ,:data => { :confirm => "Are you sure, you want to delete this rating?" }
+            end
           end
         end
       end

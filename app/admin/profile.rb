@@ -2,7 +2,7 @@ ActiveAdmin.register Profile do
   menu priority: 1
   permit_params :email, :first_name, :last_name,:dob, :image, :location, :gender, :status, :locale, :timezone
   actions :all, :except => [:new, :show]
-  index do
+  index :title => "Total users #{Profile.all.count}" do
     selectable_column
     # id_column
     column "Name" do |resource|
@@ -25,15 +25,6 @@ ActiveAdmin.register Profile do
       @ratings = resource.user.ratings
       @rate_sum =0
       @point_sum =0
-      # if @ratings.present?
-      #   @ratings.each do |r|
-      #     @rate = r.rate.to_i+0.0
-      #     @rate_sum = @rate_sum+@rate         
-      #   end
-      #   @avg = "#{Rating = ((@rate_sum/@ratings.count)*100).round(2)}%"
-      # else
-      #   @avg = "did not rate by any user"
-      # end
 
       if @points.present?
          @points.each do |p|
@@ -48,6 +39,7 @@ ActiveAdmin.register Profile do
     column "Status" do |resource|
       status_tag (resource.status ? "Active" : "Deactive"), (resource.status ? :ok : :error) 
     end    
+    column :created_at
     column "Actions" do |resource|
         links = ''.html_safe
         a do
@@ -80,8 +72,8 @@ ActiveAdmin.register Profile do
       f.input :dob,as: :datepicker, datepicker_options: { max_date: 18.years.ago.to_date}
       label :Please_enter_date_of_birth,:class => "label_error" ,:id => "dob_label"
       f.input :gender, :as => :select,collection: [["male","male"],["female","female"]],include_blank: false, allow_blank: false
-      f.input :locale
-      f.input :timezone
+      #f.input :locale
+      #f.input :timezone
     end 
     f.actions
   end

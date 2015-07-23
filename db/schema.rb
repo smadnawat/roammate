@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150716102936) do
+ActiveRecord::Schema.define(version: 20150723113746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,8 @@ ActiveRecord::Schema.define(version: 20150716102936) do
     t.datetime "updated_at", null: false
     t.string   "event_time"
     t.string   "event_date"
+    t.string   "host_name"
+    t.string   "image"
   end
 
   create_table "feedbacks", force: :cascade do |t|
@@ -154,8 +156,10 @@ ActiveRecord::Schema.define(version: 20150716102936) do
     t.string   "content"
     t.string   "image"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "user_type"
+    t.integer  "admin_user_id"
   end
 
   add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
@@ -194,6 +198,7 @@ ActiveRecord::Schema.define(version: 20150716102936) do
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "reason"
   end
 
   add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   delete 'bad_rate/:id' => "messages#delete_bad_rating",:as => "delete_bad_rateing"
 
   delete 'destroy_users/:id' => "users#destroy_users" , :as => "destroy_users"
+  get 'post/:post_id/delete_comment/:id' => "comments#delete_comment",:as => "delete_comment"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
