@@ -51,8 +51,6 @@ ActiveAdmin.register Event do
       label :Please_enter_valid_time_format,:class => "label_error" ,:id => "event_name_label2"
       f.input :place
       label :Please_enter_place,:class => "label_error" ,:id => "place_label"
-
-
       f.input :event_time ,:class =>"time_holder"
       label :Please_enter_event_time,:class => "label_error" ,:id => "event_time_label"
       f.input :event_date, as: :datepicker, datepicker_options: { min_date: Date.today}
