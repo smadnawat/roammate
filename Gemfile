@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'active_admin_theme'
 gem 'pickadate-rails'
 gem 'activeadmin', github: 'activeadmin'
 gem 'devise'
