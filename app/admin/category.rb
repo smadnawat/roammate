@@ -2,7 +2,7 @@ ActiveAdmin.register Category do
   menu priority: 10
   permit_params :category_name
 
-  index do
+  index download_links: [:csv] do
     selectable_column
     column "Name" do |resources|
       resources.category_name

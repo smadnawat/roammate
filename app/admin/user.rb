@@ -2,7 +2,7 @@ ActiveAdmin.register User,:as => "Rating" do
   menu priority: 3
   actions :all, :except => [:new]
 
-  index do
+  index download_links: [:csv] do
     selectable_column
     column "User Name" do |resources|
        resources.profile.first_name

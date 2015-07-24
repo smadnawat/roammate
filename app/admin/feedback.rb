@@ -3,7 +3,7 @@ ActiveAdmin.register Feedback do
   actions :all, :except => [:new, :edit]
   # permit_params :email, :password, :password_confirmation
 
-  index do
+  index download_links: [:csv] do
     selectable_column
     # id_column
     column "From(Email)" do |resources|

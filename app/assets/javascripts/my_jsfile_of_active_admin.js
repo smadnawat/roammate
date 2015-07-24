@@ -197,10 +197,7 @@ $("#file_upload").click(function() {
     }
   });
  
-
-
     $("#event_event_time").pickatime();
-    // $("#event_event_date").pickadate();
 
 });
 

@@ -7,7 +7,8 @@ ActiveAdmin.register Profile do
     link_to 'Upload CSV',  admin_upload_file_path
   end
 
-  index :title => "Total users #{Profile.all.count}" do
+  index :title => "Total users #{Profile.all.count}", download_links: [:csv] do
+
     selectable_column
     # id_column
     column "Name" do |resource|

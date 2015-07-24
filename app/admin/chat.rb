@@ -18,18 +18,18 @@ ActiveAdmin.register_page "Chat" do
         end
        
 		table :class => "" do
-			if !@msgs.blank?
+				if !@msgs.blank?
 			    @msgs.each do |m|
-			       tr do
-			       	  th { m.user.profile.first_name }
-			          td { m.content}
-			      end
-			   end
-	        else
-	        	 tr do
-			       	  th { "No conversion to show" }
-			      end
-			 end
-	    end 
+	       	tr do
+	       	  th { m.user.profile.first_name }
+	          td { m.content}
+	      	end
+			  end
+        else
+        	tr do
+		        th { "No conversion to show" }
+		      end
+			end
+	  end 
 	end
 end

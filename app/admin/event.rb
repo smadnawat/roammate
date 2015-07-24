@@ -2,7 +2,7 @@ ActiveAdmin.register Event do
   menu priority: 7
   permit_params :event_name, :place, :event_time,:image,:link, :city, :event_date,:host_name
 
-  index do
+  index download_links: [:csv] do
     selectable_column
     # id_column
     column :event_name

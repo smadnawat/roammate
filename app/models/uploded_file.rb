@@ -9,9 +9,13 @@ class UplodedFile < ActiveRecord::Base
 	  	end
 	end
 
-	def  csv_file_method(file_path)
-	   
-	   
+	def  csv_file_method(file_path)	   
+	   sheet = Roo::CSV.new(file_path)
+	   sheet.each do |row|
+		   	 row.each do |col|
+		   	 	puts "*****************#{col}**********"
+		   	 end
+	   end
  	end
 
 

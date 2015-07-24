@@ -2,7 +2,7 @@ ActiveAdmin.register Post do
   menu priority: 8
   permit_params :title, :content, :image, :user_id,:user_type,:admin_user_id
   actions :all
-  index do
+  index download_links: [:csv] do
     selectable_column
     column "User name" do |resources|
       if resources.user_id.present?

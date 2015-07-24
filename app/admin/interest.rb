@@ -3,7 +3,7 @@ ActiveAdmin.register Interest do
   permit_params :interest_name, :image, :icon, :description, :status, :category_id
   # permit_params :email, :password, :password_confirmation
 
-  index do
+  index download_links: [:csv] do
     selectable_column
     # id_column
     column "Name" do |resources|
