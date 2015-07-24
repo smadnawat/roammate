@@ -203,12 +203,6 @@ ActiveRecord::Schema.define(version: 20150724054843) do
 
   add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
 
-  create_table "uploded_files", force: :cascade do |t|
-    t.string   "file"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "users", force: :cascade do |t|
     t.string   "provider"
     t.string   "user_id"
