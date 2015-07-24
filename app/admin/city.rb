@@ -3,7 +3,7 @@ ActiveAdmin.register City do
   actions :all, :except => [:new, :edit, :destroy]
   # permit_params :email, :password, :password_confirmation
 
-  index do
+  index download_links: [:csv] do
     selectable_column
     column :city_name
     column :state

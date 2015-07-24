@@ -2,7 +2,7 @@ ActiveAdmin.register Question , :as => "Messages" do
   menu priority: 4
   permit_params :question, :interest_id, :category_id
 
-  index do
+  index download_links: [:csv] do
     selectable_column
     # id_column
     column "Message" do |resources|

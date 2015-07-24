@@ -2,7 +2,7 @@ ActiveAdmin.register Profile do
   menu priority: 1
   permit_params :email, :first_name, :last_name,:dob, :image, :location, :gender, :status, :locale, :timezone
   actions :all, :except => [:new, :show]
-  index :title => "Total users #{Profile.all.count}" do
+  index :title => "Total users #{Profile.all.count}", download_links: [:csv] do
     selectable_column
     # id_column
     column "Name" do |resource|

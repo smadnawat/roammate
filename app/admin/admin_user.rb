@@ -4,7 +4,7 @@ ActiveAdmin.register AdminUser do
   actions :all, :except => [:new, :destroy]
   config.filters = false
 
-  index do
+  index download_links: [:csv] do
     selectable_column
     id_column
     column :email
