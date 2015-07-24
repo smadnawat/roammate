@@ -1,0 +1,10 @@
+
+
+<%= form_for :upload_csv,url: upload_file_path do |f| %>
+	<%= f.label :please_upload_a_file,:class => "label_error" ,:id => "file_label"%>
+	 <%= f.file_field :file  %> 
+	<%= f.submit "Upload file",:id => "file_upload" %>
+
+<%end%>
+
+<br/><br/><br/>

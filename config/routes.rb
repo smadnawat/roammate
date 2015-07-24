@@ -1,12 +1,13 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  
+  root "profiles#home"
   get 'profile_status/:id' => "profiles#profile_status" ,:as => "profile_status"
   delete 'bad_rate/:id' => "messages#delete_bad_rating",:as => "delete_bad_rateing"
 
   delete 'destroy_users/:id' => "users#destroy_users" , :as => "destroy_users"
   get 'post/:post_id/delete_comment/:id' => "comments#delete_comment",:as => "delete_comment"
+  post 'upload_file' => "upload_files#upload_file"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

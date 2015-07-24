@@ -189,6 +189,15 @@ $("#post_submit_action").click(function() {
     }
   });
 
+$("#file_upload").click(function() {
+   name = $("#upload_csv_file").val(); 
+    if (name.trim() === "") {
+      $("#file_label").show();
+      return false;
+    }
+  });
+ 
+
 
     $("#event_event_time").pickatime();
     // $("#event_event_date").pickadate();

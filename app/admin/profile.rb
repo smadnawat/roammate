@@ -2,6 +2,11 @@ ActiveAdmin.register Profile do
   menu priority: 1
   permit_params :email, :first_name, :last_name,:dob, :image, :location, :gender, :status, :locale, :timezone
   actions :all, :except => [:new, :show]
+
+  action_item :only => :index do
+    link_to 'Upload CSV',  admin_upload_file_path
+  end
+
   index :title => "Total users #{Profile.all.count}" do
     selectable_column
     # id_column
