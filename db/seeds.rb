@@ -110,3 +110,15 @@
 @points6 = @user3.points.create(point: 60 ,pointable_id: @interest5.id,pointable_type: "Interest")
 @points7 = @user4.points.create(point: 50 ,pointable_id: @interest5.id,pointable_type: "Interest")
 @points8 = @user5.points.create(point: 60 ,pointable_id: @interest5.id,pointable_type: "Interest")
+
+
+@service_point1 = ServicePoint.create(service: "service1", point: "50")
+@service_point2 = ServicePoint.create(service: "service2", point: "20")
+@service_point3 = ServicePoint.create(service: "service3", point: "10")
+@service_point4 = ServicePoint.create(service: "service4", point: "10")
+@service_point5 = ServicePoint.create(service: "service5", point: "20")
+@service_point6 = ServicePoint.create(service: "service6", point: "150")
+@service_point7 = ServicePoint.create(service: "service7", point: "70")
+@service_point8 = ServicePoint.create(service: "service8", point: "80")
+@service_point9 = ServicePoint.create(service: "service9", point: "50")
+@service_point10 = ServicePoint.create(service: "service10", point: "200")
