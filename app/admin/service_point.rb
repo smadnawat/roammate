@@ -1,7 +1,7 @@
 ActiveAdmin.register ServicePoint do
 	menu priority: 11
  actions :all, :except => [:new, :destroy]
-  # permit_params :email, :password, :password_confirmation
+   permit_params :point
 
   index download_links: [:csv] do
     selectable_column
