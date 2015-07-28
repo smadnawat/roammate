@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150724100129) do
+ActiveRecord::Schema.define(version: 20150728142903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,14 @@ ActiveRecord::Schema.define(version: 20150724100129) do
 
   add_index "comments", ["post_id"], name: "index_comments_on_post_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
+
+  create_table "devices", force: :cascade do |t|
+    t.string   "device_id"
+    t.string   "device_type"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "user_id"
+  end
 
   create_table "events", force: :cascade do |t|
     t.string   "event_name"
@@ -140,15 +148,12 @@ ActiveRecord::Schema.define(version: 20150724100129) do
   add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
 
   create_table "points", force: :cascade do |t|
-    t.integer  "point"
-    t.integer  "pointable_id"
     t.string   "pointable_type"
     t.integer  "user_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end
 
-  add_index "points", ["pointable_type", "pointable_id"], name: "index_points_on_pointable_type_and_pointable_id", using: :btree
   add_index "points", ["user_id"], name: "index_points_on_user_id", using: :btree
 
   create_table "posts", force: :cascade do |t|
@@ -172,12 +177,11 @@ ActiveRecord::Schema.define(version: 20150724100129) do
     t.string   "location"
     t.string   "gender"
     t.boolean  "status"
-    t.string   "locale"
-    t.string   "timezone"
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date     "dob"
+    t.string   "fb_email"
   end
 
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
@@ -205,16 +209,17 @@ ActiveRecord::Schema.define(version: 20150724100129) do
 
   create_table "service_points", force: :cascade do |t|
     t.string   "service"
-    t.string   "point"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "point",      limit: 8
   end
 
   create_table "users", force: :cascade do |t|
     t.string   "provider"
     t.string   "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.string   "authentication_token"
   end
 
   create_table "users_categories", id: false, force: :cascade do |t|

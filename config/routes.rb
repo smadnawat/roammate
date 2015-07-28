@@ -8,6 +8,11 @@ Rails.application.routes.draw do
   delete 'destroy_users/:id' => "users#destroy_users" , :as => "destroy_users"
   get 'post/:post_id/delete_comment/:id' => "comments#delete_comment",:as => "delete_comment"
   post 'upload_file' => "upload_files#upload_file"
+
+  #*****************************************************************************
+   post 'signin' => "users#login"
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -62,4 +67,5 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  match "*path", to: "users#catch_404", via: :all
 end
