@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(version: 20150728142903) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.string   "authentication_token"
+    t.string   "current_city"
   end
 
   create_table "users_categories", id: false, force: :cascade do |t|

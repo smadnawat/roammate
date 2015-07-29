@@ -15,6 +15,13 @@ rescue_from ActionController::RoutingError do |exception|
                                     }
                   }
     end
+end
+
+  def check_user
+  	@user = User.find_by_id(params[:user_id])
+  	unless @user
+  		render :json => {:responseCode => 500,:responseMessage => "User doesn't exist."}
+  	end
   end
 
 end

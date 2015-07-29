@@ -33,6 +33,6 @@ ActiveAdmin.register_page "Chat history" do
           end
         end
       end
-    end 
+    end
   end
 end
