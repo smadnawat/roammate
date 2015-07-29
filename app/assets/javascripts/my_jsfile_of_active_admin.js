@@ -8,7 +8,7 @@ $(document).ready(function() {
      var email_format = /^[a-zA-Z0-9_\.\-]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/;
 
     var email, fname, gender,lname;
-    email = $("#profile_email").val();
+    email = $("#profile_fb_email").val();
     fname = $("#profile_first_name").val();
     dob = $("#profile_dob").val();
     lname = $("#profile_last_name").val();
@@ -193,6 +193,14 @@ $("#file_upload").click(function() {
    name = $("#upload_csv_file").val(); 
     if (name.trim() === "") {
       $("#file_label").show();
+      return false;
+    }
+  });
+
+ $("#service_point_submit_action").click(function() {
+   point = $("#service_point_point").val(); 
+    if (point.trim() === "") {
+      $("#service_point_label").show();
       return false;
     }
   });

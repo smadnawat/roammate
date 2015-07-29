@@ -1,6 +1,6 @@
 ActiveAdmin.register ServicePoint do
 	menu priority: 11
- actions :all, :except => [:new, :destroy]
+  actions :all, :except => [:new, :destroy]
    permit_params :point
 
   index download_links: [:csv] do
@@ -28,6 +28,7 @@ ActiveAdmin.register ServicePoint do
 	    f.inputs "Service And Point" do
 	      f.input :service,:input_html => {:readonly=>true } 
 	      f.input :point
+        label :Please_enter_points,:class => "label_error" ,:id => "service_point_label"
 	    end
     f.actions
   end
