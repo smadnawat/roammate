@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+
+gem 'will_paginate'
 gem 'pickadate-rails'
 gem 'activeadmin', github: 'activeadmin'
 gem 'devise'

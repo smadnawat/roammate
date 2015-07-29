@@ -8,4 +8,5 @@ class UsersController < ApplicationController
 		@user.destroy
 		redirect_to admin_profiles_path
 	end
+
 end

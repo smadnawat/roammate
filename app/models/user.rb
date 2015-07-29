@@ -12,4 +12,6 @@ class User < ActiveRecord::Base
 	has_many :ratings ,dependent: :destroy
 	has_many :posts ,dependent: :destroy
 	has_many :comments ,dependent: :destroy 
+	has_many :devices ,dependent: :destroy 
+
 end
