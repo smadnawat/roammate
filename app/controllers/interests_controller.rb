@@ -1,6 +1,6 @@
 class InterestsController < ApplicationController
 
-	before_filter :check_user, :only => [:find_mutual_interest, :predefined_interests, :selected_interest_list]
+	before_filter :check_user, :only => [:find_mutual_interest, :selected_interest_list, :current_city, :filter_user_selected_interest]
 
 	def predefined_interests
 		@interests = Interest.all
@@ -36,10 +36,23 @@ class InterestsController < ApplicationController
 		end
 	end
 
-
-	def current_city
-		@user.current_city.update_attributes(current_city: params[:current_city])
-		render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests" }
+	def filter_user_selected_interest
+		@interest = Interest.find_by_id(params[:interest_id])
+		@interest_users = @interest.users
+		if @interest_users.present?
+		arr = []
+				@interest_users.each do |user|
+						if user.profile.current_city == params[:city].strip
+							arr << user.profile
+						end
+				end
+				message = "successfully fetched users"
+				code = 200
+		else
+				message = "No record found."	
+				code = 500
+		end
+		render :json => { :response_code => code, :response_message => message, :users => arr }
 	end
 
 end
