@@ -215,6 +215,12 @@ ActiveRecord::Schema.define(version: 20150729090713) do
     t.integer  "point",      limit: 8
   end
 
+  create_table "uploded_files", force: :cascade do |t|
+    t.string   "file"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "provider"
     t.string   "user_id"
