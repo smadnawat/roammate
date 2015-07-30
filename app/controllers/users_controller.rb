@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-
+	before_filter :check_user, :only => [:match_users]
 	def destroy_users
 		@user = User.find(params[:id])
 		@rates = Rating.where("rater_id = ?", @user.id)
@@ -8,45 +8,70 @@ class UsersController < ApplicationController
 		redirect_to admin_profiles_path
 	end
 
-	def login	
+	def login
 	  @user = nil
 	  @profile = nil
 	  @status = false
-	  if User.exists? user_id: params[:user_id]
-	  	@user = User.find_by_user_id(params[:user_id])	
-	  	@profile = @user.profile
-	  	@user.authentication_token = params[:auth_token] if params[:auth_token].present?
-	  	@profile.first_name = params[:first_name] if params[:first_name].present?
-	  	@profile.last_name = params[:last_name] if params[:last_name].present?
-	    @profile.dob = params[:dob] if params[:dob].present?
-	    @profile.fb_email = params[:email] if params[:email].present?
-	    @profile.location = params[:address] if params[:address].present?
-	    @profile.email = "#{params[:user_id]}@#{params[:provider]}.com"
-	    @profile.image = params[:image] if params[:image].present?
-	    @profile.gender = params[:gender] if params[:gender].present?
-	    if @profile.save and @user.save
-           @status =true
-	    else
-	       @status =false
-	    end
-	  else
- 		@user = User.create(user_id: params[:user_id], provider: params[:provider],authentication_token: params[:auth_token])
-		@profile = Profile.create(email: "#{params[:user_id]}@#{params[:provider]}.com", fb_email: params[:email],first_name: params[:first_name], image: params[:image] ,last_name: params[:last_name], gender: params[:gender], status: false, user_id: @user.id,dob: params[:dob],location: params[:address])
-	  	@signup_points = @user.points.create(:pointable_type => "signup")
-	  	if @user and @profile
-	  	   @status =true
-	  	else
-	  		@status =false
-	  	end
-	  end
-	  if !Device.where("device_id =? and device_type= ?", params[:device_id],params[:device_type]).present?
-	    @device = @user.devices.create(:device_id => params[:device_id],:device_type =>params[:device_type]) 
-	  end
+	   if params[:user_id].present?	   	  
+		  if User.exists? user_id: params[:user_id]
+		  	@user = User.find_by_user_id(params[:user_id])	
+		  	@profile = @user.profile
+		  	@user.authentication_token = params[:auth_token] if params[:auth_token].present?
+		  	@profile.first_name = params[:first_name] if params[:first_name].present?
+		  	@profile.last_name = params[:last_name] if params[:last_name].present?
+		    @profile.dob = params[:dob] if params[:dob].present?
+		    @profile.fb_email = params[:email] if params[:email].present?
+		    @profile.location = params[:address] if params[:address].present?
+		    @profile.email = "#{params[:user_id]}@#{params[:provider]}.com"
+		    @profile.image = params[:image] if params[:image].present?
+		    @profile.gender = params[:gender] if params[:gender].present?
+		    @profile.current_city = params[:current_city] if params[:current_city].present?
+		    if @profile.save and @user.save
+	           @status =true
+		    else
+		       @status =false
+		    end
+		  else		  
+	 		@user = User.create(user_id: params[:user_id], provider: params[:provider],authentication_token: params[:auth_token])
+			@profile = Profile.create(email: "#{params[:user_id]}@#{params[:provider]}.com", fb_email: params[:email],first_name: params[:first_name], image: params[:image] ,last_name: params[:last_name], gender: params[:gender], status: false, user_id: @user.id,dob: params[:dob],current_city: params[:current_city],location: params[:address])
+		  	@signup_points = @user.points.create(:pointable_type => "signup")
+		  	if @user and @profile
+		  	   @status =true
+		  	else
+		  		@status =false
+		  	end			 
+		  end
+
+		  if params[:current_city].present?
+		   	  if !City.exists?(:city_name => params[:current_city].strip)
+		   	  	@user_city = @user.cities.create(:city_name => params[:current_city].strip)
+		   	  else
+		   	  	@city = City.find_by_city_name(params[:current_city].strip)
+		   	  	@add_user_city = @user.cities << @city
+		   	  end
+	   	  end
+
+		  if !Device.where("device_id =? and device_type= ? and user_id = ?", params[:device_id],params[:device_type],@user.id).present?
+		    @device = @user.devices.create(:device_id => params[:device_id],:device_type =>params[:device_type]) 
+		  end
+	   else
+		  @status =false
+	   end
 	 if @status
 	 	render :json => { :response_code => 200, :response_message => "Successfull login",:profile => @profile.as_json(except: [:created_at,:updated_at]) 	}
 	 else
 		render :json => { :response_code => 500, :response_message => "Login failed" }
 	 end
+	end
+
+	def match_users
+		@interests = Interest.where("id IN (?)",params[:interests])
+		@users=[]
+		@interests.each do |interest|
+			interest.users.each do |user|
+				@users << user if !@users.exists?(:id=>user.id) and user.profile.current_city == @user.profile.current_city
+			end
+		end
 	end
 
 	def catch_404

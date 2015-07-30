@@ -11,65 +11,19 @@ Rails.application.routes.draw do
 
   #*****************************************************************************
    post 'signin' => "users#login"
-
-
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
+   post 'add_current_city' => "cities#add_current_city"
+   post 'match_users' => "users#match_users"
+   get 'get_point' =>"points#get_point"
+   get 'get_profile' => "profiles#get_profile"
+   get 'get_user_cities' => "cities#get_user_cities"
+   get 'remove_city' => "cities#remove_city"
 
   get 'predefined_interests' => 'interests#predefined_interests'
   get 'predefined_events' => 'events#predefined_events'
   post 'selected_interest_list' => 'interests#selected_interest_list'
   post 'find_mutual_interest' => 'interests#find_mutual_interest'
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
 
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
 
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+ 
   match "*path", to: "users#catch_404", via: :all
 end

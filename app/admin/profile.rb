@@ -14,9 +14,9 @@ ActiveAdmin.register Profile do
     column "Name" do |resource|
       resource.first_name + " " + resource.last_name
     end
-    column "Roammate email" do |resource|
-      resource.email
-    end
+    # column "Roammate email" do |resource|
+    #   resource.email
+    # end
     column "Facebook email" do |resource|
       resource.fb_email
     end
@@ -31,7 +31,7 @@ ActiveAdmin.register Profile do
     column "Image" do |resources|
       image_tag("#{resources.image}") if resources.image.present?
     end
-    column "Point and Ratings" do |resource|
+    column "Point" do |resource|
       @points = resource.user.points
       @point_sum =0
       if @points.present?
@@ -45,6 +45,7 @@ ActiveAdmin.register Profile do
       "Points = #{@point_sum}"
     end
     column :location
+    column :current_city
     column "Status" do |resource|
       status_tag (resource.status ? "Active" : "Deactive"), (resource.status ? :ok : :error) 
     end    
@@ -66,7 +67,7 @@ ActiveAdmin.register Profile do
      end
   end
 
-  filter :email_cont, label: 'Search by email'
+  filter :fb_email_cont, label: 'Search by email'
 
   form do |f|
     f.inputs "Admin Details" do

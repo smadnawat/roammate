@@ -12,8 +12,8 @@ rescue_from ActionController::RoutingError do |exception|
       format.html { redirect_to root_path, notice: "dhjsfgdkjsf" }
       format.json { render :json => {:Response_code => 500,
           :Response_message => " Sorry!Please try again. because #{exception.message}"
-                                    }
-                  }
+          }
+       }
     end
 end
 

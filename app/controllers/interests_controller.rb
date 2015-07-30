@@ -37,9 +37,4 @@ class InterestsController < ApplicationController
 	end
 
 
-	def current_city
-		@user.current_city.update_attributes(current_city: params[:current_city])
-		render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests" }
-	end
-
 end
