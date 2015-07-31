@@ -65,6 +65,16 @@ $(document).ready(function() {
   }
 	});
 
+ $("#special_message_submit_action").click(function() {
+   name = $("#special_message_content").val();
+
+   if (name.trim() == "") {
+    $("#message_new_label").show();
+    return false;
+   }
+  });
+
+
  $("#question_submit_action").click(function() {
    question = $("#question_question").val();
     if (question.trim() === "") {
