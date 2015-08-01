@@ -47,16 +47,20 @@ class InterestsController < ApplicationController
 			@mutual_interests = @current_user_interests&@member_interests
 			@member_profile = @member.profile
 
-			if @mutual_interests.present?
+			@mutual_friends = Invitation.where("user_id = ? or reciever = ? ", @user , @user)
+
 				render :json => {
 					:response_code => 200,
 					:message => "record successfully fetched",
 					:member_profile => @member_profile,
-					:mutual_interests => @mutual_interests
+					:mutual_interests => @mutual_interests,
+					:mutual_friends => @mutual_friends
 				}
 			
-		else
-			message = "Something went wrong."
+				else
+					render :json => {
+					:message => "Something went wrong."
+				}
 		end		
 	end
 
