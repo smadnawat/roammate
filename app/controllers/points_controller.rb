@@ -15,9 +15,10 @@ class PointsController < ApplicationController
   end
 
   def point_algo
-    @distance = @user.distance_to([params[:latitude],params[:longitude]],:km).round(2)    
-    
-    render :json => { :response_code => 200, :response_message => "distance" ,:distance => @d  }
+    @second_user = User.find(params[:user_id2])
+    @distance = @user.distance_to([@second_user.latitude,@second_user.longitude],:km).round(2)    
+    @last_activity_hour = Time.now.hour - @second_user.created_at.hour
+    render :json => { :response_code => 200, :response_message => "distance" ,:distance => @distance,:last_activity=>  @last_activity_hour,:from => @user.address,:to =>"#{@second_user.latitude} === #{@second_user.longitude}" }
   end
 
 end
