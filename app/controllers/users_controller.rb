@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_filter :check_user, :only => [:match_users]
+	before_filter :check_user, :only => [:match_users,:offline]
 	def destroy_users
 		@user = User.find(params[:id])
 		@rates = Rating.where("rater_id = ?", @user.id)
@@ -43,8 +43,8 @@ class UsersController < ApplicationController
 
 		  if params[:latitude].present? and params[:longitude].present?
 			  @location = Geocoder.search("#{params[:latitude]},#{params[:longitude]}").first
-			  @add_current_location = @user.update_attributes(:latitude=> params[:latitude],:longitude => params[:longitude],:current_city => @location.city,:online => true)		 
-			  if !City.exists?(:city_name => @location.city)
+			  @add_current_location = @user.update_attributes(:latitude=> params[:latitude],:longitude => params[:longitude],:current_city => @location.city)		 
+			  if !City.exists?(:city_name => @location.city , :state=> @location.state )
 			  	@user_city = @user.cities.create(:city_name => @location.city,:state => @location.state,:country => @location.country,:status => false)
 			  else
 			  	@user_city = City.find_by_city_name(@location.city)
@@ -57,13 +57,19 @@ class UsersController < ApplicationController
 		  end
 	   else
 		  @status =false
-		  p "-----------------------------------------------------"
 	   end
+
 	 if @status
+	 	@user.update_attributes(:created_at => Time.now,:online => true)
 	 	render :json => { :response_code => 200, :response_message => "Successfull login",:profile => @profile.as_json(except: [:created_at,:updated_at]) 	}
 	 else
 		render :json => { :response_code => 500, :response_message => "Login failed" }
 	 end
+	end
+
+	def offline
+		@user.update_attributes(:online => false,:last_active_at => Time.now)
+		render :json => { :response_code => 200, :response_message => "Successfull Logout"	}
 	end
 
 	# def match_users # incomplete service........ !!!!!!!!!!!

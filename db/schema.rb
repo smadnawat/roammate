@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150801064728) do
+ActiveRecord::Schema.define(version: 20150801114519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -237,6 +237,7 @@ ActiveRecord::Schema.define(version: 20150801064728) do
     t.boolean  "online"
     t.string   "current_city"
     t.string   "address"
+    t.datetime "last_active_at"
   end
 
   create_table "users_categories", id: false, force: :cascade do |t|

@@ -104,7 +104,7 @@
 
 @city1 = City.create(city_name: "Ghaziabad", state: "Uttar Pradesh", country: "India", status: false)
 @city2 = City.create(city_name: "New Delhi", state: "Delhi", country: "India", status: false)
-@city3 = City.create(city_name: "Rajnagar", state: "Uttar Pradesh", country: "India", status: false)
+@city3 = City.create(city_name: "Rajnagar", state: "Bihar", country: "India", status: false)
 #@city4 = City.create(city_name: "city4", state: "state4", country: "country4", status: false)
 #@city5 = City.create(city_name: "city5", state: "state5", country: "country5", status: false)
 

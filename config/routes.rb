@@ -31,6 +31,6 @@ Rails.application.routes.draw do
   post 'signin' => "users#login"
   post 'selected_interest_list' => 'interests#selected_interest_list'
   post 'find_mutual_interest' => 'interests#find_mutual_interest'
-
+  get 'offline' => 'users#offline'
   match "*path", to: "users#catch_404", via: :all
 end
