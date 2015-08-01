@@ -17,9 +17,10 @@ class InterestsController < ApplicationController
 			end
 		end
 		@selected_interest = @user.interests
+		@matches = Interest.view_matches_algo(@selected_interest, @user)
 		if @selected_interest.present?
 			render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests",
-		 :selected_interest => @selected_interest.as_json(except: [:created_at,:updated_at]) 	}
+		 :selected_interest => @selected_interest.as_json(except: [:created_at,:updated_at]), :matches => @matches	}
 		else
 			render :json => { :response_code => 500, :response_message => "No record found"}
 		end
