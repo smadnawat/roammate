@@ -11,7 +11,27 @@ ActiveAdmin.register Question , :as => "Messages" do
     column "Category" do |resources|
       resources.category.category_name
     end
-    actions name: "Actions"
+    column "Status" do |resource|
+      status_tag (resource.status ? "Active" : "Deactive"), (resource.status ? :ok : :error) 
+    end
+        column "Actions" do |resource|
+        links = ''.html_safe
+        a do
+          if resource.status?
+            links += link_to 'Deactive', message_status_path(resource),:data => { :confirm => 'Are you sure, you want to deactive this profile?' }
+          else
+           links += link_to 'Active', message_status_path(resource),:data => { :confirm => 'Are you sure, you want to active this profile?' }
+           end
+            links += " / "
+            links +=  link_to 'Edit', edit_admin_message_path(resource)
+            links += " / "  
+            links += link_to 'Delete', edit_admin_message_path(resource), method: :delete,:data => { :confirm => 'Are you sure, you want to delete this profile?' }
+            links += " / "  
+            links += link_to 'View', admin_message_path(resource)
+
+       end
+       links
+     end
   end
 
   filter :category_category_name_cont, :as => :string , :label => "Search By Category"
@@ -29,6 +49,9 @@ ActiveAdmin.register Question , :as => "Messages" do
   show :title => "Question" do
     attributes_table do
       row :question
+      row "Status" do |resources|
+         status_tag (resource.status ? "Active" : "Deactive"), (resource.status ? :ok : :error)
+      end
       row "Interest" do |resources|
         resources.interest.interest_name
       end

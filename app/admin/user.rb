@@ -10,6 +10,15 @@ ActiveAdmin.register User,:as => "Rating" do
     column "Email" do |resources|
        resources.profile.email
     end
+
+    column "City" do |resources|
+       resources.profile.current_city
+    end
+
+    column "Rating Out Of" do |resources|
+       resources.ratings.count
+    end
+
     column "Rating" do |resource|
       @ratings = resource.ratings
       @rate_sum =0
@@ -26,5 +35,6 @@ ActiveAdmin.register User,:as => "Rating" do
   end
 
      filter :profile_first_name_cont , :as => :string , :label => "Search By Name"
+     filter :profile_current_city_cont , :as => :string , :label => "Search By City"
 
 end

@@ -11,7 +11,9 @@ class InterestsController < ApplicationController
 	def selected_interest_list
 		if params[:interests].present?
 			params[:interests].as_json(only: [:id]).each do |t|
-				@user.interests << Interest.find(t.values)
+ 				if !@user.interests.include?(Interest.find(t.values).first)
+					@user.interests << Interest.find(t.values)
+				end
 			end
 		end
 		@selected_interest = @user.interests
@@ -25,7 +27,7 @@ class InterestsController < ApplicationController
 
 	def find_mutual_interest
 		@current_user_interests = @user.interests
-		@visitor_user = User.find_by_id(params[:visitor_id])
+		@visitor_user = User.find_by_id(params[:member_id])
 		@visitor_user_interests = @visitor_user.interests
 		@mutual_interests = @current_user_interests&@visitor_user_interests
 		if @mutual_interests.present?
@@ -36,15 +38,41 @@ class InterestsController < ApplicationController
 		end
 	end
 
+	def select_user_to_add
+		@member = User.find_by_id(params[:member_id])
+		if @member.present?
+			@current_user_interests = @user.interests
+			@member_interests = @member.interests
+			
+			@mutual_interests = @current_user_interests&@member_interests
+			@member_profile = @member.profile
+
+			@mutual_friends = Invitation.where("user_id = ? or reciever = ? ", @user , @user)
+
+				render :json => {
+					:response_code => 200,
+					:message => "record successfully fetched",
+					:member_profile => @member_profile,
+					:mutual_interests => @mutual_interests,
+					:mutual_friends => @mutual_friends
+				}
+			
+				else
+					render :json => {
+					:message => "Something went wrong."
+				}
+		end		
+	end
+
 	def filter_user_selected_interest
 		@interest = Interest.find_by_id(params[:interest_id])
 		@interest_users = @interest.users
 		if @interest_users.present?
 		arr = []
 				@interest_users.each do |user|
-						if user.profile.current_city == params[:city].strip
-							arr << user.profile
-						end
+					if user.profile.current_city == params[:city].strip
+						arr << user.profile
+					end
 				end
 				message = "successfully fetched users"
 				code = 200

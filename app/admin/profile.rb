@@ -68,6 +68,7 @@ ActiveAdmin.register Profile do
   end
 
   filter :fb_email_cont, label: 'Search by email'
+  filter :current_city_cont, label: 'Search by city'
 
   form do |f|
     f.inputs "Admin Details" do
