@@ -1,6 +1,6 @@
 class InterestsController < ApplicationController
 
-	before_filter :check_user, :only => [:find_mutual_interest, :selected_interest_list, :current_city, :filter_user_selected_interest]
+	before_filter :check_user, :only => [:find_mutual_interest, :selected_interest_list, :current_city, :filter_user_selected_interest,:get_interests]
 
 	def predefined_interests
 		@interests = Interest.all
@@ -53,6 +53,11 @@ class InterestsController < ApplicationController
 				code = 500
 		end
 		render :json => { :response_code => code, :response_message => message, :users => arr }
+	end
+
+	def get_interests
+		@interests = @user.interests
+		render :json => { :response_code => 500, :response_message => "Interests found", :interests => @interests }
 	end
 
 end

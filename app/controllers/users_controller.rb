@@ -25,15 +25,14 @@ class UsersController < ApplicationController
 		    @profile.email = "#{params[:user_id]}@#{params[:provider]}.com"
 		    @profile.image = params[:image] if params[:image].present?
 		    @profile.gender = params[:gender] if params[:gender].present?
-		    @profile.current_city = params[:current_city] if params[:current_city].present?
 		    if @profile.save and @user.save
 	           @status =true
 		    else
 		       @status =false
 		    end
 		  else		  
-	 		@user = User.create(user_id: params[:user_id], provider: params[:provider],authentication_token: params[:auth_token])
-			@profile = Profile.create(email: "#{params[:user_id]}@#{params[:provider]}.com", fb_email: params[:email],first_name: params[:first_name], image: params[:image] ,last_name: params[:last_name], gender: params[:gender], status: false, user_id: @user.id,dob: params[:dob],current_city: params[:current_city],location: params[:address])
+	 		@user = User.create(user_id: params[:user_id], provider: params[:provider],authentication_token: params[:auth_token],online: true)
+			@profile = Profile.create(email: "#{params[:user_id]}@#{params[:provider]}.com", fb_email: params[:email],first_name: params[:first_name], image: params[:image] ,last_name: params[:last_name], gender: params[:gender], status: false, user_id: @user.id,dob: params[:dob],location: params[:address])
 		  	@signup_points = @user.points.create(:pointable_type => "signup")
 		  	if @user and @profile
 		  	   @status =true
@@ -42,15 +41,17 @@ class UsersController < ApplicationController
 		  	end			 
 		  end
 
-		  if params[:current_city].present?
-		   	  if !City.exists?(:city_name => params[:current_city].strip)
-		   	  	@user_city = @user.cities.create(:city_name => params[:current_city].strip)
-		   	  else
-		   	  	@city = City.find_by_city_name(params[:current_city].strip)
-		   	  	@add_user_city = @user.cities << @city
-		   	  end
-	   	  end
-
+		  if params[:latitude].present? and params[:longitude].present?
+			  @location = Geocoder.search("#{params[:latitude]},#{params[:longitude]}").first
+			  @add_current_location = @user.update_attributes(:latitude=> params[:latitude],:longitude => params[:longitude],:current_city => @location.city,:online => true)		 
+			  if !City.exists?(:city_name => @location.city)
+			  	@user_city = @user.cities.create(:city_name => @location.city,:state => @location.state,:country => @location.country,:status => false)
+			  else
+			  	@user_city = City.find_by_city_name(@location.city)
+			  	@user.cities << @user_city if !@user.cities.exists?(@user_city)
+			  end
+		  end
+	
 		  if !Device.where("device_id =? and device_type= ? and user_id = ?", params[:device_id],params[:device_type],@user.id).present?
 		    @device = @user.devices.create(:device_id => params[:device_id],:device_type =>params[:device_type]) 
 		  end
@@ -64,15 +65,15 @@ class UsersController < ApplicationController
 	 end
 	end
 
-	def match_users
-		@interests = Interest.where("id IN (?)",params[:interests])
-		@users=[]
-		@interests.each do |interest|
-			interest.users.each do |user|
-				@users << user if !@users.exists?(:id=>user.id) and user.profile.current_city == @user.profile.current_city
-			end
-		end
-	end
+	# def match_users # incomplete service........ !!!!!!!!!!!
+	# 	@interests = Interest.where("id IN (?)",params[:interests])
+	# 	@users=[]
+	# 	@interests.each do |interest|
+	# 		interest.users.each do |user|
+	# 			@users << user if !@users.exists?(:id=>user.id) and user.profile.current_city == @user.profile.current_city
+	# 		end
+	# 	end
+	# end
 
 	def catch_404
    	 render nothing: true

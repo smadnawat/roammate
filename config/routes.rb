@@ -14,10 +14,12 @@ Rails.application.routes.draw do
   post 'signin' => "users#login"
   post 'add_current_city' => "cities#add_current_city"
   post 'match_users' => "users#match_users"
+  post 'point_algo' => "points#point_algo"
   get 'get_point' =>"points#get_point"
   get 'get_profile' => "profiles#get_profile"
   get 'get_user_cities' => "cities#get_user_cities"
   get 'remove_city' => "cities#remove_city"
+  get 'get_interests' => "interests#get_interests"
   get 'select_user_to_add' => 'invitations#select_user_to_add'
   get 'predefined_interests' => 'interests#predefined_interests'
   get 'predefined_events' => 'events#predefined_events'

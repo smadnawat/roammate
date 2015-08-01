@@ -8,17 +8,17 @@
 
 @admin_user = AdminUser.create(email: "admin@example.com", password: "password")
 
-@user1 = User.create(provider: "facebook", user_id: "11111")
-@user2 = User.create(provider: "facebook", user_id: "22222")
-@user3 = User.create(provider: "facebook", user_id: "33333")
-@user4 = User.create(provider: "facebook", user_id: "44444")
-@user5 = User.create(provider: "facebook", user_id: "55555")
+@user1 = User.create(provider: "facebook", user_id: "11111",current_city: "Mumbai",online: true)
+@user2 = User.create(provider: "facebook", user_id: "22222",current_city: "Mumbai",online: true)
+@user3 = User.create(provider: "facebook", user_id: "33333",current_city: "Mumbai",online: true)
+@user4 = User.create(provider: "facebook", user_id: "44444",current_city: "Mumbai",online: true)
+@user5 = User.create(provider: "facebook", user_id: "55555",current_city: "Mumbai",online: true)
 
-@profile1 = Profile.create(email: "#{@user1.user_id}@facebook.com", fb_email: "user1@domain.com",first_name: "ABCD", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Aab", gender: "male", status: false, user_id: @user1.id,dob: "1997-07-16",location: "Demo location",current_city: "Delhi")
-@profile2 = Profile.create(email: "#{@user2.user_id}@facebook.com", fb_email: "user2@domain.com",first_name: "EFGH", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Eef", gender: "male", status: false, user_id: @user2.id,dob: "1996-07-16",location: "Demo location",current_city: "Delhi")
-@profile3 = Profile.create(email: "#{@user3.user_id}@facebook.com", fb_email: "user3@domain.com",first_name: "IJKL", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Iij", gender: "male", status: false, user_id: @user3.id,dob: "1992-07-16",location: "Demo location",current_city: "Delhi")
-@profile4 = Profile.create(email: "#{@user4.user_id}@facebook.com", fb_email: "user4@domain.com",first_name: "MNOP", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Mmn", gender: "male", status: false, user_id: @user4.id,dob: "1990-07-16",location: "Demo location",current_city: "Delhi")
-@profile5 = Profile.create(email: "#{@user5.user_id}@facebook.com", fb_email: "user5@domain.com",first_name: "QRST", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Qqr", gender: "male", status: false, user_id: @user5.id,dob: "1995-07-16",location: "Demo location",current_city: "Delhi")
+@profile1 = Profile.create(email: "#{@user1.user_id}@facebook.com", fb_email: "user1@domain.com",first_name: "ABCD", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Aab", gender: "male", status: false, user_id: @user1.id,dob: "1997-07-16",location: "Demo location")
+@profile2 = Profile.create(email: "#{@user2.user_id}@facebook.com", fb_email: "user2@domain.com",first_name: "EFGH", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Eef", gender: "male", status: false, user_id: @user2.id,dob: "1996-07-16",location: "Demo location")
+@profile3 = Profile.create(email: "#{@user3.user_id}@facebook.com", fb_email: "user3@domain.com",first_name: "IJKL", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Iij", gender: "male", status: false, user_id: @user3.id,dob: "1992-07-16",location: "Demo location")
+@profile4 = Profile.create(email: "#{@user4.user_id}@facebook.com", fb_email: "user4@domain.com",first_name: "MNOP", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Mmn", gender: "male", status: false, user_id: @user4.id,dob: "1990-07-16",location: "Demo location")
+@profile5 = Profile.create(email: "#{@user5.user_id}@facebook.com", fb_email: "user5@domain.com",first_name: "QRST", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Qqr", gender: "male", status: false, user_id: @user5.id,dob: "1995-07-16",location: "Demo location")
 
 @rating1 = @user1.ratings.create(rate: "0", rater_id: @user2.id)
 @rating2 = @user2.ratings.create(rate: "1", rater_id: @user1.id)

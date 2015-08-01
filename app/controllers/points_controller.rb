@@ -13,4 +13,11 @@ class PointsController < ApplicationController
       end
       render :json => { :response_code => 200, :response_message => "Points of users" ,:points => @point_sum 	}
   end
+
+  def point_algo
+    @distance = @user.distance_to([params[:latitude],params[:longitude]],:km).round(2)    
+    
+    render :json => { :response_code => 200, :response_message => "distance" ,:distance => @d  }
+  end
+
 end
