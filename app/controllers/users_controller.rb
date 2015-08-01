@@ -57,6 +57,7 @@ class UsersController < ApplicationController
 		  end
 	   else
 		  @status =false
+		  p "-----------------------------------------------------"
 	   end
 	 if @status
 	 	render :json => { :response_code => 200, :response_message => "Successfull login",:profile => @profile.as_json(except: [:created_at,:updated_at]) 	}
