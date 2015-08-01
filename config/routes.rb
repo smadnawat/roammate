@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   post 'add_current_city' => "cities#add_current_city"
   post 'match_users' => "users#match_users"
   post 'point_algo' => "points#point_algo"
+  post 'picked_interest_user_list' => "interests#picked_interest_user_list"
 
   get 'get_point' =>"points#get_point"
   get 'get_profile' => "profiles#get_profile"

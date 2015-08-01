@@ -1,6 +1,6 @@
 class InterestsController < ApplicationController
 
-	before_filter :check_user, :only => [:find_mutual_interest, :selected_interest_list, :current_city, :filter_user_selected_interest,:get_interests]
+	before_filter :check_user, :only => [:picked_interest_user_list, :find_mutual_interest, :selected_interest_list, :current_city, :filter_user_selected_interest,:get_interests]
 
 	def predefined_interests
 		@interests = Interest.all
@@ -17,13 +17,27 @@ class InterestsController < ApplicationController
 			end
 		end
 		@selected_interest = @user.interests
+		@matches = Interest.view_matches_algo(@selected_interest, @user)
 		if @selected_interest.present?
 			render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests",
-		 :selected_interest => @selected_interest.as_json(except: [:created_at,:updated_at]) 	}
+		 	:selected_interest => @selected_interest.as_json(except: [:created_at,:updated_at]),
+		  :matches => @matches	}
 		else
 			render :json => { :response_code => 500, :response_message => "No record found"}
 		end
 	end
+
+	def picked_interest_user_list
+		@interest = Interest.where('id = ?',params[:interest_id])
+		if @interest.present?
+			@matches = Interest.view_matches_algo(@interest, @user)
+			render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests",
+		  :matches => @matches	}
+		else
+			render :json => { :response_code => 500, :response_message => "No record found"}
+		end
+	end
+
 
 	def find_mutual_interest
 		@current_user_interests = @user.interests
