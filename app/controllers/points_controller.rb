@@ -1,5 +1,6 @@
 class PointsController < ApplicationController
   include ActionView::Helpers::DateHelper
+  include ApplicationHelper
  before_filter :check_user 
 
 	def get_point
@@ -44,8 +45,9 @@ class PointsController < ApplicationController
     @user1_current_city = @user.current_city
     @user2_current_city = @second_user.current_city
     @user1_current_city == @user2_current_city ?  @same_current_city = "yes #{@user2_current_city}" :  @same_current_city = "different" 
-   
-    render :json => { :response_code => 200, :response_message => "distance" ,:distance => @distance,:from => @user.address,:to =>@second_user.address,:last_activity=>  @last_activity_hour,:last_active=> @last_active_hour ,:age_difference => @age_difference,:gender_type =>  @gender_type,:common_cities => @common_cities.count,:same_current_city => @same_current_city }
+    @common_activities = common_activities(params[:user_id],params[:user_id2]).count
+    @common_friends = common_friends(params[:user_id],params[:user_id2])
+    render :json => { :response_code => 200, :response_message => "distance" ,:distance => @distance,:from => @user.address,:to =>@second_user.address,:last_activity=>  @last_activity_hour,:last_active=> @last_active_hour ,:age_difference => @age_difference,:gender_type =>  @gender_type,:common_cities => @common_cities.count,:same_current_city => @same_current_city ,:common_activities => @common_activities,:common_friends => @common_friends}
   end
 
 end

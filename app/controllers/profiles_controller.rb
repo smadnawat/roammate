@@ -1,4 +1,6 @@
 class ProfilesController < ApplicationController
+ 
+ include ApplicationHelper
  before_filter :check_user  ,only: [:view_matched_profile]
 
 	def profile_status
@@ -8,41 +10,25 @@ class ProfilesController < ApplicationController
 	end
 
 
-	# def view_matched_profile
-	# 	@member = User.find_by_id(params[:member_id])
-	# 	if @member.present?
-	# 		@common
-	# 	else
-
-	# 	end
-	# end
-
-	def select_user_to_add
+	def view_matched_profile
 		@member = User.find_by_id(params[:member_id])
 		if @member.present?
-			@current_user_interests = @user.interests
-			@member_interests = @member.interests
-			
-			@mutual_interests = @current_user_interests&@member_interests
-			@member_profile = @member.profile
-
-			@mutual_friends = Invitation.where("user_id = ? or reciever = ? ", @user , @user)
-
-				render :json => {
-					:response_code => 200,
-					:message => "record successfully fetched",
-					:member_profile => @member_profile,
-					:mutual_interests => @mutual_interests,
-					:mutual_friends => @mutual_friends
-				}
-			
-				else
-					render :json => {
-					:message => "Something went wrong."
-				}
-		end		
+			@interests = common_activities(@user.id, @member.id)
+			@mutual_friends = common_friends(@user.id, @member.id)
+			@common_friends = Profile.where('id IN (?)', @mutual_friends)
+			render :json => {:response_code => 200, :message => "record successfully fetched",
+											:member_profile => @member.profile,
+											:mutual_interests => @interests,
+											:mutual_interests_count => @interests.count,
+											:mutual_friends => @common_friends,
+											:mutual_friends_count => @mutual_friends.count
+											}
+		else
+			render :json => {
+											:response_code => 500,
+											:message => "Something went wrong."
+											}
+		end
 	end
-
-
 
 end

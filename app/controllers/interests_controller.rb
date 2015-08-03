@@ -4,8 +4,12 @@ class InterestsController < ApplicationController
 
 	def predefined_interests
 		@interests = Interest.all
-		render :json => { :response_code => 200, :response_message => "Successfully fetched interests",
-		 :interests => @interests.as_json(except: [:created_at, :updated_at, :category_id]) }
+		if @interests.present?
+			render :json => { :response_code => 200, :response_message => "Successfully fetched interests.",
+			 :interests => @interests.as_json(except: [:created_at, :updated_at, :category_id]) }
+		else
+			render :json => { :response_code => 500, :response_message => "Interests not found."}
+		end		
 	end
 
 	def selected_interest_list
