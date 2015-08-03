@@ -22,5 +22,5 @@ class Interest < ActiveRecord::Base
   	end
   	final
   end
-
+  
 end
