@@ -106,6 +106,12 @@
 @city2 = City.create(city_name: "New Delhi", state: "Delhi", country: "India", status: false)
 @city3 = City.create(city_name: "Rajnagar", state: "Bihar", country: "India", status: false)
 
+@user1.interests << [@interest1,@interest3,@interest9]
+@user2.interests << [@interest1,@interest4,@interest7] 
+@user3.interests << [@interest2,@interest3,@interest1] 
+@user4.interests << [@interest3,@interest10,@interest1] 
+@user5.interests << [@interest6,@interest5,@interest7,@interest1] 
+
 @invitation1 = @user1.invitations.create(:reciever => 2,:status => true)
 @invitation2 = @user1.invitations.create(:reciever => 3,:status => true)
 @invitation3 = @user1.invitations.create(:reciever => 4,:status => true)
@@ -115,6 +121,26 @@
 @invitation8 = @user5.invitations.create(:reciever => 2,:status => true)
 @invitation9 = @user5.invitations.create(:reciever => 4,:status => true)
 
+@service_point1 = ServicePoint.create(service: "signup", point: 10)
+@service_point2 = ServicePoint.create(service: "chat", point: 5)
+@service_point3 = ServicePoint.create(service: "send invitation", point: 5)
+@service_point4 = ServicePoint.create(service: "recieve invitation", point: 8)
+@service_point5 = ServicePoint.create(service: "feedback", point: 5)
+@service_point6 = ServicePoint.create(service: "first City", point: 6)
+@service_point7 = ServicePoint.create(service: "rate", point: 5)
+@service_point8 = ServicePoint.create(service: "interest", point: 10)
+@service_point9 = ServicePoint.create(service: "post", point: 8)
+@service_point10 = ServicePoint.create(service: "share", point: 10)
+@service_point11 = ServicePoint.create(service: "current location distance", point: 10)
+@service_point12 = ServicePoint.create(service: "last activity", point: 10)
+@service_point13= ServicePoint.create(service: "last active", point: 10)
+@service_point14= ServicePoint.create(service: "age", point: 10)
+@service_point15= ServicePoint.create(service: "gender", point: 10)
+@service_point16= ServicePoint.create(service: "common activities", point: 10)
+@service_point17= ServicePoint.create(service: "common friends", point: 10)
+@service_point18= ServicePoint.create(service: "city lived in", point: 10)
+@service_point19= ServicePoint.create(service: "common cities", point: 10)
+@service_point20= ServicePoint.create(service: "user ratings", point: 10)
 
 @points1 = @user1.points.create(pointable_type: "interest")
 @points2 = @user1.points.create(pointable_type: "signup")
@@ -124,18 +150,6 @@
 @points6 = @user3.points.create(pointable_type: "signup")
 @points7 = @user4.points.create(pointable_type: "share")
 @points8 = @user5.points.create(pointable_type: "feedback")
-
-
-@service_point1 = ServicePoint.create(service: "signup", point: 500)
-@service_point2 = ServicePoint.create(service: "chat", point: 300)
-@service_point3 = ServicePoint.create(service: "send invitation", point: 100)
-@service_point4 = ServicePoint.create(service: "recieve invitation", point: 100)
-@service_point5 = ServicePoint.create(service: "feedback", point: 200)
-@service_point6 = ServicePoint.create(service: "first City", point: 100)
-@service_point7 = ServicePoint.create(service: "rate", point: 300)
-@service_point8 = ServicePoint.create(service: "interest", point: 200)
-@service_point9 = ServicePoint.create(service: "post", point: 100)
-@service_point10 = ServicePoint.create(service: "share", point: 500)
 
 @special_message1 = @interest1.special_messages.create(content: "this is demo message", status: false)
 @special_message2 = @interest2.special_messages.create(content: "this is demo message", status: false)

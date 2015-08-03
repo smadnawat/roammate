@@ -1,3 +1,5 @@
+
+include ApplicationHelper
 ActiveAdmin.register Profile do
   menu priority: 1
   permit_params :email,:fb_email, :first_name, :last_name,:dob, :image, :location, :gender, :status
@@ -8,7 +10,7 @@ ActiveAdmin.register Profile do
   end
 
   index :title => "Total users #{Profile.all.count}", download_links: [:csv] do
-
+    
     selectable_column
     # id_column
     column "Name" do |resource|
@@ -32,20 +34,23 @@ ActiveAdmin.register Profile do
       image_tag("#{resources.image}") if resources.image.present?
     end
     column "Point" do |resource|
-      @points = resource.user.points
-      @point_sum =0
-      if @points.present?
-         @points.each do |p|          
-           @point = ServicePoint.find_by_service(p.pointable_type)
-           @point_sum = @point_sum + @point.point
-         end
-      else
-         @point_sum = 0
-      end
-      "Points = #{@point_sum}"
+
+      # @points = resource.user.points
+      # @point_sum =0
+      # if @points.present?
+      #    @points.each do |p|          
+      #      @point = ServicePoint.find_by_service(p.pointable_type)
+      #      @point_sum = @point_sum + @point.point
+      #    end
+      # else
+      #    @point_sum = 0
+      # end
+      "Points = #{user_points(resource.user.id)}"
     end
     column :location
-    column :current_city
+    column "Current city" do |resource|
+      resource.user.current_city
+    end
     column "Status" do |resource|
       status_tag (resource.status ? "Active" : "Deactive"), (resource.status ? :ok : :error) 
     end    
@@ -68,7 +73,7 @@ ActiveAdmin.register Profile do
   end
 
   filter :fb_email_cont, label: 'Search by email'
-  filter :current_city_cont, label: 'Search by city'
+  filter :user_current_city_cont, label: 'Search by city'
 
   form do |f|
     f.inputs "Admin Details" do
