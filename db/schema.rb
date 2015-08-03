@@ -75,18 +75,6 @@ ActiveRecord::Schema.define(version: 20150801114519) do
   add_index "comments", ["post_id"], name: "index_comments_on_post_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
-  create_table "current_locations", force: :cascade do |t|
-    t.float    "latitude"
-    t.float    "longitude"
-    t.boolean  "online"
-    t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "address"
-  end
-
-  add_index "current_locations", ["user_id"], name: "index_current_locations_on_user_id", using: :btree
-
   create_table "devices", force: :cascade do |t|
     t.string   "device_id"
     t.string   "device_type"
@@ -237,12 +225,6 @@ ActiveRecord::Schema.define(version: 20150801114519) do
   end
 
   add_index "special_messages", ["interest_id"], name: "index_special_messages_on_interest_id", using: :btree
-
-  create_table "uploded_files", force: :cascade do |t|
-    t.string   "file"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "users", force: :cascade do |t|
     t.string   "provider"

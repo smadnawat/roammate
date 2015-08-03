@@ -105,8 +105,16 @@
 @city1 = City.create(city_name: "Ghaziabad", state: "Uttar Pradesh", country: "India", status: false)
 @city2 = City.create(city_name: "New Delhi", state: "Delhi", country: "India", status: false)
 @city3 = City.create(city_name: "Rajnagar", state: "Bihar", country: "India", status: false)
-#@city4 = City.create(city_name: "city4", state: "state4", country: "country4", status: false)
-#@city5 = City.create(city_name: "city5", state: "state5", country: "country5", status: false)
+
+@invitation1 = @user1.invitations.create(:reciever => 2,:status => true)
+@invitation2 = @user1.invitations.create(:reciever => 3,:status => true)
+@invitation3 = @user1.invitations.create(:reciever => 4,:status => true)
+@invitation4 = @user3.invitations.create(:reciever => 2,:status => true)
+@invitation5 = @user3.invitations.create(:reciever => 5,:status => true)
+@invitation7 = @user5.invitations.create(:reciever => 1,:status => true)
+@invitation8 = @user5.invitations.create(:reciever => 2,:status => true)
+@invitation9 = @user5.invitations.create(:reciever => 4,:status => true)
+
 
 @points1 = @user1.points.create(pointable_type: "interest")
 @points2 = @user1.points.create(pointable_type: "signup")
