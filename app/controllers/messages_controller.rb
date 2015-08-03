@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
 
 	include ApplicationHelper
-	before_filter :check_user, :only => [:user_inbox]
+	before_filter :check_user, :only => [:user_inbox, :create_new_message]
 
 	def message_status
 		@message = Question.find(params[:id])
@@ -36,6 +36,17 @@ class MessagesController < ApplicationController
 			render :json => {:response_code => 200,:message => "data fetched successfully.", :inbox => user_list}
 		else
 			render :json => {:response_code => 400,:message => "No record found."}
+		end
+	end
+
+	def create_new_message
+		@get_previous_messages = Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',params[:member_id],@user.id,@user.id,params[:member_id]).order("created_at ASC")
+		@member = User.find_by_id(params[:member_id])
+		if @member.present?
+			@message = @user.messages.create(content: params[:message], reciever: params[:member_id], status: params[:status], image: params[:image])
+			render :json => { :response_code => 200,:message => "Message created successfully.", :messages => @get_previous_messages }
+		else
+			render :json => {:response_code => 500,:message => "Something went wrong."}
 		end
 	end
 

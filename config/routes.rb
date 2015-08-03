@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   post 'match_users' => "users#match_users"
   post 'point_algo' => "points#point_algo"
   post 'picked_interest_user_list' => "interests#picked_interest_user_list"
+  post 'create_new_message' => "messages#create_new_message"
 
   get 'user_inbox' => "messages#user_inbox"
   get 'accept_invitation' => "invitations#accept_invitation"
