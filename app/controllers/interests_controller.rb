@@ -1,5 +1,6 @@
 class InterestsController < ApplicationController
 
+	include ApplicationHelper
 	before_filter :check_user, :only => [:picked_interest_user_list, :selected_interest_list]
 
 	def predefined_interests
