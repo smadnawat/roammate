@@ -1,10 +1,5 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
- # protect_from_forgery with: :exception
-	# rescue_from ActionController::RoutingError do |exception|
-	#   render nothing: true
-	# end
+
 before_filter :last_click
 
 rescue_from ActionController::RoutingError do |exception|
@@ -21,7 +16,7 @@ end
     if !(params[:controller] == "users" and params[:action] == "login")
       @user = User.find_by_id(params[:user_id])
       if @user.present?
-        @user.update_attributes(:online => true,:created_at => Time.now)
+        @user.update_attributes(:online => true,:updated_at => Time.now)
       end
     end
   end
