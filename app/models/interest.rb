@@ -1,4 +1,6 @@
 class Interest < ActiveRecord::Base
+
+  include ApplicationHelper
   mount_uploader :image, AvatarUploader
   mount_uploader :icon, AvatarUploader
   mount_uploader :banner, AvatarUploader
@@ -18,7 +20,8 @@ class Interest < ActiveRecord::Base
 	  	end
   	matches.uniq.each do |t|
   		final << t.profile
-  		final << t.interests&user.interests
+      final << {:points => point_algo(t.id,user.id)}
+  		final << {:common_intrerest => t.interests&user.interests}
   	end
   	final
   end
