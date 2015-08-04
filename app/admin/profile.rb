@@ -1,6 +1,7 @@
 
 include ApplicationHelper
 ActiveAdmin.register Profile do
+
   menu priority: 1
   permit_params :email,:fb_email, :first_name, :last_name,:dob, :image, :location, :gender, :status
   actions :all, :except => [:new, :show]

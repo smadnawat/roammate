@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
 
 	include ApplicationHelper
-	before_filter :check_user, :only => [:user_inbox, :create_new_message]
+	before_filter :check_user, :only => [:user_inbox, :create_new_message, :delete_message, :create_new_group]
 
 	def message_status
 		@message = Question.find(params[:id])
@@ -51,18 +51,18 @@ class MessagesController < ApplicationController
 	end
 
 	def create_new_message
-
 		@member = User.find_by_id(params[:member_id])
 		if @member.present?
 			if !(params[:message_content].present? || params[:image].present?)
 				message = "Message not created"
 				code = 400
 			else
-			@message = @user.messages.create(content: params[:message_content], reciever: params[:member_id], status: params[:status], image: params[:image])
+			@message = @user.messages.create(content: params[:message_content], reciever: params[:member_id], image: params[:image])
+			@user.points.create(:pointable_type => "Reply first to ice breaker message")	
 				message = "Message successfully created"
 				code = 200
 			end
-
+			@get_default_quetions = Question.where('interest_id = ?',@user.active_interest)
 			@get_previous_messages = Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',params[:member_id],@user.id,@user.id,params[:member_id]).order("created_at ASC")
 
 		if @get_previous_messages.present?
@@ -76,16 +76,33 @@ class MessagesController < ApplicationController
 			msg
 		end
 			render :json => {
-												:response_code => code,
-												:message => message,
-												:user_messages => msg
+											:predefined_messages => @get_default_quetions,
+											:response_code => code,
+											:message => message,
+											:user_messages => msg
 											}
 		else
 			render :json => {
-												:response_code => 500,
-												:message => "Something went wrong."
+											:response_code => 500,
+											:message => "Something went wrong."
 											}
 		end
+	end
+
+	def delete_message
+		@message = Message.find_by_id_and_user_id(params[:message_id], @user.id)
+		if @message.present?
+			@message.destroy
+			message = "Successfully deleted message"
+			code = 200
+		else
+			message = "Message not found"
+			code = 400
+		end
+		render :json => {
+										:response_code => code,
+										:message => message
+										}
 	end
 
 end
