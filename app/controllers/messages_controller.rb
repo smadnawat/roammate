@@ -22,7 +22,6 @@ class MessagesController < ApplicationController
 	end
 
 
-
 	
 	def user_inbox
 		@friend_list = Invitation.where(' (user_id = ? or reciever = ?) and status = ? ',@user.id ,@user.id ,true)
@@ -62,7 +61,7 @@ class MessagesController < ApplicationController
 				message = "Message successfully created"
 				code = 200
 			end
-			@get_default_quetions = Question.where('interest_id = ?',@user.active_interest)
+			@get_default_quetions = Question.where('interest_id = ? and status = ?',@user.active_interest, true )
 			@get_previous_messages = Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',params[:member_id],@user.id,@user.id,params[:member_id]).order("created_at ASC")
 
 		if @get_previous_messages.present?
