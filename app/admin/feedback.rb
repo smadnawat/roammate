@@ -7,7 +7,7 @@ ActiveAdmin.register Feedback do
     selectable_column
     # id_column
     column "From(Email)" do |resources|
-      resources.user.profile.email
+      resources.user.profile.fb_email
     end
     column "Feedback" do |resources|
       resources.content
@@ -28,7 +28,7 @@ ActiveAdmin.register Feedback do
       end
 
       row "Email" do |resources|
-        resources.user.profile.email
+        resources.user.profile.fb_email
       end
       
       row :created_at

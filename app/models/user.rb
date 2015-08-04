@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
 	has_one :profile , dependent: :destroy
-	has_one :current_location ,dependent: :destroy
 	has_and_belongs_to_many :cities , :join_table => "users_cities" 
 	has_and_belongs_to_many :categories , :join_table => "users_categories"
 	has_and_belongs_to_many :interests , :join_table => "users_interests" 

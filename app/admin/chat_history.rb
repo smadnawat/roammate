@@ -20,7 +20,7 @@ ActiveAdmin.register_page "Chat history" do
         rating.each do |rate| 
           tr do
             td { rate.user.profile.first_name }
-            td { rate.user.profile.email }
+            td { rate.user.profile.fb_email }
             td { rate.rate }
             td { User.find(rate.rater_id).profile.first_name }
             td { rate.reason.present? ? rate.reason : "Not provided"}
