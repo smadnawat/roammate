@@ -4,6 +4,18 @@ module ApplicationHelper
 			@interest = User.find_by_id(user).interests & User.find_by_id(member).interests
 	end
 
+	def message_count user, member
+		@first_user_message_count = Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',user,member,member,user).count
+		@second_user_message_count = Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',member,user,user,member).count
+		if @first_user_message_count == 10 && @second_user_message_count == 10
+			return
+			true
+		else
+			return
+			false
+		end
+	end
+
 	def common_friends user,member
 		@user1_invitation = Invitation.where('user_id = ? OR reciever = ? and status= ?', user, user,true)
 		@user2_invitation = Invitation.where('user_id = ? OR reciever = ? and status= ?', member, member,true)

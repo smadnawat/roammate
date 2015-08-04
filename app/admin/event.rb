@@ -44,9 +44,6 @@ ActiveAdmin.register Event do
     end
   end
 
-
-
-
   form :html => { :enctype => "multipart/form-data" } do |f|
     f.inputs "Admin Details" do
       f.input :event_name

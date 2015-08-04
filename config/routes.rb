@@ -19,7 +19,10 @@ Rails.application.routes.draw do
   post 'point_algo' => "points#point_algo"
   post 'picked_interest_user_list' => "interests#picked_interest_user_list"
   post 'create_new_message' => "messages#create_new_message"
-
+  post 'new_user_rating' => "ratings#new_user_rating"
+  post 'update_user_rating' => "ratings#update_user_rating"
+  
+  get 'delete_message' => "messages#delete_message"
   get 'user_inbox' => "messages#user_inbox"
   get 'accept_invitation' => "invitations#accept_invitation"
   get 'view_matched_profile' => "profiles#view_matched_profile"
