@@ -1,0 +1,7 @@
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+
+<%= pie_chart User.group(:current_city).count %>
+<h4>User-City graph</h4><br>
+
+<%= pie_chart @interest_data %>
+<h4> Interest graph </h4>

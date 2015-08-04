@@ -11,6 +11,7 @@ gem 'active_admin_theme'
 gem 'roo'
 gem 'iconv'
 gem 'geocoder'
+gem "chartkick"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.2'
 # Use postgresql as the database for Active Record

@@ -3,6 +3,7 @@ class ProfilesController < ApplicationController
  include ApplicationHelper
  before_filter :check_user  ,only: [:view_matched_profile]
 
+   
 	def profile_status
 		@profile = Profile.find(params[:id])
 		@profile.status ? @profile.update_attributes(:status => false) : @profile.update_attributes(:status => true)

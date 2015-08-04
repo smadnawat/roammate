@@ -26,6 +26,13 @@ module ApplicationHelper
 		common_friends = @user1_friends & @user2_friends
 	end
 
+	def find_age user
+		#@user = User.find_by_id(user)
+		today = Date.today
+        d = Date.new(today.year, user.profile.dob.month, user.profile.dob.day)
+        age = d.year - user.profile.dob.year - (d > today ? 1 : 0)
+	end
+
 	def user_rating user
 	  @ratings = User.find(user).ratings
       @rate_sum =0
