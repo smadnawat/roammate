@@ -7,6 +7,7 @@ class EventsController < ApplicationController
 			:events => @events.as_json(except: [:created_at, :updated_at]) }
 		else
 			render :json => {:response_code => 500, :response_message => "No event found."}
+		end
 	end
 
 end

@@ -35,11 +35,20 @@ class InterestsController < ApplicationController
 	def picked_interest_user_list
 		@interest = Interest.where('id = ?',params[:interest_id])
 		if @interest.present?
+			@user.update_attributes(active_interest: params[:interest_id])
 			@matches = Interest.view_matches_algo(@interest, @user)
-			render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests",
-		  :matches => @matches	}
+			render :json => 
+							{ 
+							:response_code => 200, 
+							:response_message => "Successfully fetched selected interests",
+							:matches => @matches	
+							}
 		else
-			render :json => { :response_code => 500, :response_message => "No record found"}
+			render :json => 
+							{ 
+							:response_code => 500, 
+							:response_message => "No record found"
+							}
 		end
 	end
 
