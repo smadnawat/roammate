@@ -41,7 +41,7 @@ module ApplicationHelper
     end	
 
     def user_points user
- 	  @user = User.find(user)
+ 	  @user = User.find_by_id(user)
       @points = @user.points
       @point_sum =0
       if @points.present?

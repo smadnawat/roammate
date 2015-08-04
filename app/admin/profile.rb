@@ -34,18 +34,7 @@ ActiveAdmin.register Profile do
       image_tag("#{resources.image}") if resources.image.present?
     end
     column "Point" do |resource|
-
-      # @points = resource.user.points
-      # @point_sum =0
-      # if @points.present?
-      #    @points.each do |p|          
-      #      @point = ServicePoint.find_by_service(p.pointable_type)
-      #      @point_sum = @point_sum + @point.point
-      #    end
-      # else
-      #    @point_sum = 0
-      # end
-      "Points = #{user_points(resource.user.id)}"
+      user_points(resource.user.id)
     end
     column :location
     column "Current city" do |resource|

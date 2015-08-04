@@ -33,7 +33,7 @@ class UsersController < ApplicationController
 		  else		  
 	 		@user = User.create(user_id: params[:user_id], provider: params[:provider],authentication_token: params[:auth_token],online: true)
 			@profile = Profile.create(email: "#{params[:user_id]}@#{params[:provider]}.com", fb_email: params[:email],first_name: params[:first_name], image: params[:image] ,last_name: params[:last_name], gender: params[:gender], status: false, user_id: @user.id,dob: params[:dob],location: params[:address])
-		  	@signup_points = @user.points.create(:pointable_type => "signup")
+		  	@signup_points = @user.points.create(:pointable_type => "Sign Up")
 		  	if @user and @profile
 		  	   @status =true
 		  	else
@@ -60,8 +60,9 @@ class UsersController < ApplicationController
 	   end
 
 	 if @status
+	 	@points = user_points(@user.id)
 	 	@user.update_attributes(:created_at => Time.now,:online => true)
-	 	render :json => { :response_code => 200, :response_message => "Successfull login",:profile => @profile.as_json(except: [:created_at,:updated_at]) 	}
+	 	render :json => { :response_code => 200, :response_message => "Successfull login",:profile => @profile.as_json(except: [:created_at,:updated_at]) ,:points => @points 	}
 	 else
 		render :json => { :response_code => 500, :response_message => "Login failed" }
 	 end
