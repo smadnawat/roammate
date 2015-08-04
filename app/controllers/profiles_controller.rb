@@ -14,6 +14,7 @@ class ProfilesController < ApplicationController
 		@member = User.find_by_id(params[:member_id])
 		if @member.present?
 			@interests = common_activities(@user.id, @member.id)
+			@points = point_algo(@user.id,@member.id)
 			@mutual_friends = common_friends(@user.id, @member.id)
 			@common_friends = Profile.where('id IN (?)', @mutual_friends)
 			render :json => {:response_code => 200, :message => "record successfully fetched",
@@ -21,7 +22,8 @@ class ProfilesController < ApplicationController
 											:mutual_interests => @interests,
 											:mutual_interests_count => @interests.count,
 											:mutual_friends => @common_friends,
-											:mutual_friends_count => @mutual_friends.count
+											:mutual_friends_count => @mutual_friends.count,
+											:points => @points
 											}
 		else
 			render :json => {
