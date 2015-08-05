@@ -7,7 +7,7 @@ module ApplicationHelper
 	def message_count user, member
 		@first_user_message_count = Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',user,member,member,user).count
 		@second_user_message_count = Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',member,user,user,member).count
-		if @first_user_message_count == 10 && @second_user_message_count == 10
+		if @first_user_message_count == 15 && @second_user_message_count == 15
 			return
 			true
 		else

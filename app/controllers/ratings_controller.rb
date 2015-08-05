@@ -11,7 +11,7 @@ class RatingsController < ApplicationController
 				message = "Ratings created successfully."
 				code =  200
 			else
-				message = "You have to sent and recieve atleast 10 messages."
+				message = "You have to sent and recieve atleast 15 messages."
 				code =  400
 				@ratings = nil
 			end
