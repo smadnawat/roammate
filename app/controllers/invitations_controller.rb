@@ -20,15 +20,21 @@ class InvitationsController < ApplicationController
 		end
 	end
 
-	def accept_invitation
+	def accept_or_decline_invitation
 		@member = User.find_by_id(params[:member_id])
-		if @member.present?
+		if @member.present? && @member.invitations.present?
 			@invitation = Invitation.find_by_user_id_and_reciever_and_status(@member,@user,false)
-			if @invitation.present?
-				@invitation.update_attributes(status: true)
-				@user.points.create(:pointable_type => "Accept Chat invite")
-				message = "Successfully accepted invitation"
-				code = 200
+			if @invitation.present? && params[:action_type].present?
+				if params[:action_type] == "Accept"
+					@invitation.update_attributes(status: true)
+					@user.points.create(:pointable_type => "Accept Chat invite")
+					message = "Successfully accepted invitation"
+					code = 200
+				elsif params[:action_type] == "Decline"
+					@invitation.destroy
+					message = "Successfully declineded invitation"
+					code = 200
+				end
 			else
 				message = "Already accepted this invitation"
 				code = 400

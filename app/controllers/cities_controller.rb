@@ -6,6 +6,7 @@ class CitiesController < ApplicationController
 		  @user_city =nil
 		  if !City.exists?(:city_name => params[:current_city].strip)
 		  	@user_city = @user.cities.create(:city_name => params[:current_city].strip)
+		  	@user.points.create(:pointable_type => "Add New City")
 		  else
 		  	@user_city = City.find_by_city_name(params[:current_city].strip)
 		  	@user.cities << @user_city if !@user.cities.exists?(@user_city)
