@@ -1,9 +1,10 @@
 class UploadFilesController < ApplicationController
 	def upload_file
-		if Profile.import(params[:upload_csv][:file])		
+		@file = Profile.import(params[:upload_csv][:file])
+		if @file == "y"		
 		  flash[:notice] = "File uploaded successfully"
 		else
-		  flash[:error] = "File Upload failed ! upload a valid csv file"
+		  flash[:error] = @file
 		end
 		redirect_to admin_upload_file_path
 	end
