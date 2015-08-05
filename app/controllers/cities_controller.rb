@@ -10,8 +10,8 @@ class CitiesController < ApplicationController
 		  	@user_city = City.find_by_city_name(params[:current_city].strip)
 		  	@user.cities << @user_city if !@user.cities.exists?(@user_city)
 		  end
-		  @current_city = @user.profile.update_attributes(:current_city => params[:current_city].strip)
-      render :json => { :response_code => 200, :response_message => "#{@user_city.city_name} is added to current city" ,:current_city => @user.profile.current_city 	}
+		  @current_city = @user.update_attributes(:current_city => params[:current_city].strip)
+      render :json => { :response_code => 200, :response_message => "#{@user_city.city_name} is added to current city" ,:current_city => @user.current_city 	}
 		else			
       render :json => { :response_code => 500, :response_message => "Something wrong"	}
 		end

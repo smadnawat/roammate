@@ -60,7 +60,7 @@ ActiveAdmin.register_page "Dashboard" do
             @age_data["Users between 26 to 30 years old"]=@count4
             @age_data["Users greater than 30 years old"]= @count5
 
-            @rate_data["Negarive rating users"] = @rt1
+            @rate_data["Negative rating users"] = @rt1
             @rate_data["Users between 0% to 50% rating"]=@rt2
             @rate_data["Users above 50% rating"]=@rt3
             @rate_data["Users with 100% rating"]=@rt4
