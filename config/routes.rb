@@ -21,7 +21,11 @@ Rails.application.routes.draw do
   post 'create_new_message' => "messages#create_new_message"
   post 'new_user_rating' => "ratings#new_user_rating"
   post 'update_user_rating' => "ratings#update_user_rating"
+  post 'add_profile_picture' => "profiles#add_profile_picture"
+  post 'create_post' => "posts#create_post"
+  post 'create_comment' => "posts#create_comment"
   
+  get 'add_member_to_group' => "invitations#add_member_to_group"
   get 'delete_message' => "messages#delete_message"
   get 'user_inbox' => "messages#user_inbox"
   get 'accept_or_decline_invitation' => "invitations#accept_or_decline_invitation"

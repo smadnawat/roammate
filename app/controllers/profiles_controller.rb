@@ -1,7 +1,7 @@
 class ProfilesController < ApplicationController
  
  include ApplicationHelper
- before_filter :check_user  ,only: [:view_matched_profile]
+ before_filter :check_user  ,only: [:view_matched_profile, :add_profile_picture]
 
    
 	def profile_status
@@ -31,6 +31,15 @@ class ProfilesController < ApplicationController
 											:response_code => 500,
 											:message => "Something went wrong."
 											}
+		end
+	end
+
+	def add_profile_picture
+		@image = @user.albums.build(image: params[:image], status: params[:status])
+		if @image.save
+			render :json => {:response_code => 200,:message => "Successfully changed porfile picture"}
+		else
+			render :json => {:response_code => 500,:message => "Something went wrong."}
 		end
 	end
 
