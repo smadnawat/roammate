@@ -69,17 +69,12 @@ ActiveAdmin.register_page "Dashboard" do
 
     columns do
       column do
-       
-        # panel "Recent Posts" do
          render partial: 'users/interest',locals: { :@interest_data =>   @interest_data}
-        # end
       end
 
       column do
-        # panel "Info" do
            render partial: 'users/rate_chart',locals: { :@age_data => @age_data,:@rate_data => @rate_data}
-        # end
       end
     end
-  end # content
+  end 
 end

@@ -25,7 +25,9 @@ class MessagesController < ApplicationController
 	
 	def user_inbox
 		@friend_list = Invitation.where(' (user_id = ? or reciever = ?) and status = ? ',@user.id ,@user.id ,true)
+		
 		@users = @friend_list.pluck(:user_id) + @friend_list.pluck(:reciever)
+		p "************************#{@users.inspect}"
 		@all_friends = @users.uniq - [@user.id]
 		user_list = []
 		@all_friends.each do |t|

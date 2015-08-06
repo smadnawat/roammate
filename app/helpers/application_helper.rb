@@ -1,7 +1,7 @@
 module ApplicationHelper
 
 	def common_activities user,member
-			@interest = User.find_by_id(user).interests & User.find_by_id(member).interests
+		@interest = User.find_by_id(user).interests & User.find_by_id(member).interests
 	end
 
 	def message_count user, member
@@ -85,9 +85,9 @@ module ApplicationHelper
 	    @user2_age =@second_user.profile.dob
 	    if !@user1_age.nil? and !@user2_age.nil?
 	       if @user1_age > @user2_age
-	         @age_difference = (@user1_age-@user2_age).to_i/365
+				@age_difference = (@user1_age-@user2_age).to_i/365
 	       else
-	        @age_difference = (@user2_age-@user1_age).to_i/365
+				@age_difference = (@user2_age-@user1_age).to_i/365
 	       end
 	    else
 	      @age_difference = 0
