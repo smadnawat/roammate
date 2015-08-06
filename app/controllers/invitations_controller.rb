@@ -10,6 +10,8 @@ class InvitationsController < ApplicationController
 				code = 400
 			else
 				@roam_member = @user.invitations.create(reciever: @member.id, status: false)
+				@alert = "Send chat"
+				@notification =Notification.create_notification(@user,@member,@alert)
 				@user.points.create(:pointable_type => "Send chat invite")
 				message = "Invitation successfully sent."
 				code = 200
@@ -27,6 +29,9 @@ class InvitationsController < ApplicationController
 			if @invitation.present? && params[:action_type].present?
 				if params[:action_type] == "Accept"
 					@invitation.update_attributes(status: true)
+					accept chat
+					@alert = "accept chat"
+					@notification =Notification.create_notification(@user,@member,@alert)
 					@user.points.create(:pointable_type => "Accept Chat invite")
 					message = "Successfully accepted invitation"
 					code = 200
