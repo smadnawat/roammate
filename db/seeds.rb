@@ -20,11 +20,11 @@
 @profile4 = Profile.create(email: "#{@user4.user_id}@facebook.com", fb_email: "user4@domain.com",first_name: "MNOP", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Mmn", gender: "male", status: false, user_id: @user4.id,dob: "1990-07-16",location: "Demo location")
 @profile5 = Profile.create(email: "#{@user5.user_id}@facebook.com", fb_email: "user5@domain.com",first_name: "QRST", image: "v1437647939/pgk1tslryt8vymvbejyo.png" ,last_name: "Qqr", gender: "male", status: false, user_id: @user5.id,dob: "1995-07-16",location: "Demo location")
 
-@device1 = @user1.devices.create(device_id: "dbcdef",device_type: "android")
-@device2 = @user2.devices.create(device_id: "abcdeg",device_type: "android")
-@device3 = @user3.devices.create(device_id: "abcdfg",device_type: "android")
-@device4 = @user4.devices.create(device_id: "abdefg",device_type: "android")
-@device5 = @user5.devices.create(device_id: "bcdefg",device_type: "android")
+@device1 = @user1.devices.create(device_id: "dbcdef",device_type: "Android")
+@device2 = @user2.devices.create(device_id: "abcdeg",device_type: "Android")
+@device3 = @user3.devices.create(device_id: "abcdfg",device_type: "Android")
+@device4 = @user4.devices.create(device_id: "abdefg",device_type: "Android")
+@device5 = @user5.devices.create(device_id: "bcdefg",device_type: "Android")
 
 @rating1 = @user1.ratings.create(rate: "-1", rater_id: @user2.id)
 @rating2 = @user2.ratings.create(rate: "1", rater_id: @user1.id)

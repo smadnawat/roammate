@@ -11,6 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 20150806103701) do
 
   # These are extensions that must be enabled in order to support this database
@@ -170,6 +171,18 @@ ActiveRecord::Schema.define(version: 20150806103701) do
 
   add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
 
+  create_table "notifications", force: :cascade do |t|
+    t.string   "message"
+    t.string   "notification_type"
+    t.boolean  "status"
+    t.integer  "reciever"
+    t.integer  "user_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
+
   create_table "points", force: :cascade do |t|
     t.string   "pointable_type"
     t.integer  "user_id"
@@ -296,6 +309,7 @@ ActiveRecord::Schema.define(version: 20150806103701) do
   add_foreign_key "interests", "categories"
   add_foreign_key "invitations", "users"
   add_foreign_key "messages", "users"
+  add_foreign_key "notifications", "users"
   add_foreign_key "points", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "profiles", "users"

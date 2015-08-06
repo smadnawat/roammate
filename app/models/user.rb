@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
 	has_many :comments ,dependent: :destroy
 	has_many :devices, dependent: :destroy
 	has_many :albums,dependent: :destroy
+	has_many :notifications,dependent: :destroy
 
    # geocoded_by :address
    reverse_geocoded_by :latitude, :longitude  
