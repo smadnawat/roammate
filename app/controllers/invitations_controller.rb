@@ -29,7 +29,6 @@ class InvitationsController < ApplicationController
 			if @invitation.present? && params[:action_type].present?
 				if params[:action_type] == "Accept"
 					@invitation.update_attributes(status: true)
-					accept chat
 					@alert = "accept chat"
 					@notification =Notification.create_notification(@user,@member,@alert)
 					@user.points.create(:pointable_type => "Accept Chat invite")
