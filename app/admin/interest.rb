@@ -10,7 +10,8 @@ ActiveAdmin.register Interest do
       resources.interest_name
     end
     column "Image" do |resources|
-      image_tag resources.image_url(:thumbnail)
+       image_tag resources.image_url(:thumbnail)
+      # image_tag(resources.image_url(:thumbnail))
     end
 
     column "Icon" do |resources|

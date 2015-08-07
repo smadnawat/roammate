@@ -8,7 +8,13 @@ class Interest < ActiveRecord::Base
   has_many :questions ,dependent: :destroy
   has_many :special_messages ,dependent: :destroy
   has_and_belongs_to_many :users , :join_table => "users_interests" 
+  before_destroy :delete_interest_users
 
+  def delete_interest_users
+    @users = self.users
+    @users.update_all(:active_interest => nil)
+    @action = self.users - @users
+  end
 
   def self.view_matches_algo selected_interest, user
   	matches = []

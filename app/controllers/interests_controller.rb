@@ -4,7 +4,7 @@ class InterestsController < ApplicationController
 	before_filter :check_user, :only => [:picked_interest_user_list, :selected_interest_list]
 
 	def predefined_interests
-		@interests = Interest.all
+		@interests = Interest.all.paginate(:page => params[:page], :per_page => params[:size])
 		if @interests.present?
 			render :json => { :response_code => 200, :response_message => "Successfully fetched interests.",
 			 :interests => @interests.as_json(except: [:created_at, :updated_at, :category_id]) }

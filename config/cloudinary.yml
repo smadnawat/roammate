@@ -1,19 +1,19 @@
 ---
 development:
-  cloud_name: roammate
-  api_key: '134526465421382'
-  api_secret: oOXZ5khkzq2qSOuPD0ezeycTrDg
+  cloud_name: dklf0amce
+  api_key: '475992557829252'
+  api_secret: o2NvpjdWehv02mWm5Gk8y_ZJClI
   enhance_image_tag: true
   static_image_support: false
 production:
-  cloud_name: roammate
-  api_key: '134526465421382'
-  api_secret: oOXZ5khkzq2qSOuPD0ezeycTrDg
+  cloud_name: dklf0amce
+  api_key: '475992557829252'
+  api_secret: o2NvpjdWehv02mWm5Gk8y_ZJClI
   enhance_image_tag: true
   static_image_support: true
 test:
-  cloud_name: roammate
-  api_key: '134526465421382'
-  api_secret: oOXZ5khkzq2qSOuPD0ezeycTrDg
+  cloud_name: dklf0amce
+  api_key: '475992557829252'
+  api_secret: o2NvpjdWehv02mWm5Gk8y_ZJClI
   enhance_image_tag: true
   static_image_support: false

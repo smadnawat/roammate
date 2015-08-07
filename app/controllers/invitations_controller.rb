@@ -1,6 +1,6 @@
 class InvitationsController < ApplicationController
 
-	before_filter :check_user, :only => [:add_member_as_roammate, :accept_invitation]
+	before_filter :check_user, :only => [:add_member_as_roammate, :accept_or_decline_invitation, :add_member_to_group]
 
 	def add_member_as_roammate
 		@member = User.find_by_id(params[:member_id])
@@ -29,6 +29,9 @@ class InvitationsController < ApplicationController
 			if @invitation.present? && params[:action_type].present?
 				if params[:action_type] == "Accept"
 					@invitation.update_attributes(status: true)
+					@group = Group.create(group_admin: @member.id, group_name: "#{@user.id}")
+					@group.users << @member
+					@group.users << @user
 					@alert = "accept chat"
 					@notification =Notification.create_notification(@user,@member,@alert)
 					@user.points.create(:pointable_type => "Accept Chat invite")
@@ -44,6 +47,17 @@ class InvitationsController < ApplicationController
 				code = 400
 			end
 			render :json => {:response_code => code,:message => message}
+		else
+			render :json => {:response_code => 500, :message => "Something went wrong."}
+		end
+	end
+
+	def add_member_to_group
+		@member = User.find_by_id(params[:member_id])	
+		@group = Group.find_by_id(params[:group_id])
+		if @member.present? && @group.present?
+			@group.users << @member if !@group.users.include?(@member)
+			render :json => {:response_code => 200,:message => "Member successfully added in group."}
 		else
 			render :json => {:response_code => 500, :message => "Something went wrong."}
 		end
