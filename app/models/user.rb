@@ -21,4 +21,5 @@ class User < ActiveRecord::Base
    after_validation :reverse_geocode  # auto-fetch address
    # after_validation :geocode
 
+
 end

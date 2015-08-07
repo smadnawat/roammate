@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   post 'add_profile_picture' => "profiles#add_profile_picture"
   post 'create_post' => "posts#create_post"
   post 'create_comment' => "posts#create_comment"
+  post 'update_profile' => "profiles#update_profile"
   
   get 'add_member_to_group' => "invitations#add_member_to_group"
   get 'delete_message' => "messages#delete_message"

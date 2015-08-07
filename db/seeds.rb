@@ -147,7 +147,6 @@
 @service_point18 = ServicePoint.create(service: "city lived in", point: 10)
 @service_point19 = ServicePoint.create(service: "common cities", point: 10)
 
-
 @points1 = @user1.points.create(pointable_type: "Sign Up")
 @points2 = @user1.points.create(pointable_type: "First Post to Newsfeed")
 @points3 = @user2.points.create(pointable_type: "Accept Chat invite")

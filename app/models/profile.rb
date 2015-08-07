@@ -1,6 +1,14 @@
 class Profile < ActiveRecord::Base
-  #mount_uploader :image, AvatarUploader
+  mount_uploader :image, AvatarUploader
   belongs_to :user
+
+
+  def self.image_data(data)
+    return nil unless data
+    io = CarrierStringIO.new(Base64.decode64(data)) 
+    p "+++++++++++++++#{io.inspect}+++++++++++++++++++++"
+    io
+  end
  
   def self.import(file)
   	i=1
@@ -44,4 +52,16 @@ class Profile < ActiveRecord::Base
   	@status
   end
 
+end
+
+class CarrierStringIO < StringIO
+  def original_filename
+    # the real name does not matter
+    "photo.jpeg"
+  end
+
+  def content_type
+    # this should reflect real content type, but for this example it's ok
+    "image/jpeg"
+  end
 end
