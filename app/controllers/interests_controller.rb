@@ -10,7 +10,7 @@ class InterestsController < ApplicationController
 			 :interests => @interests.as_json(except: [:created_at, :updated_at, :category_id]) }
 		else
 			render :json => { :response_code => 500, :response_message => "Interests not found."}
-		end		
+		end
 	end
 
 	def selected_interest_list
