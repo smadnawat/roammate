@@ -1,7 +1,7 @@
 class ProfilesController < ApplicationController
  
  include ApplicationHelper
- before_filter :check_user  ,only: [:view_matched_profile, :add_profile_picture]
+ before_filter :check_user  ,only: [:view_matched_profile, :add_profile_picture,:update_profile]
 
    
 	def profile_status
@@ -31,6 +31,24 @@ class ProfilesController < ApplicationController
 											:response_code => 500,
 											:message => "Something went wrong."
 											}
+		end
+	end
+
+	def update_profile
+		@user.profile.first_name = params[:first_name] if params[:first_name].present?
+		@user.profile.last_name = params[:last_name] if params[:last_name].present?
+		@user.profile.dob = params[:dob] if params[:dob].present?
+		@user.profile.fb_email = params[:fb_email]	if params[:fb_email].present?
+		params[:image] = Profile.image_data(params[:image])
+		if !@user.profile.image.present?
+			@user.profile.image = params[:image] if params[:image].present?
+		else
+			@user.albums.create(:image => params[:image], status: false)
+		end
+		if @user.profile.save
+			render :json => {:response_code => 200,:message => "Successfully updated profile"}
+		else
+			render :json => {:response_code => 500,:message => "Something went wrong."}
 		end
 	end
 
