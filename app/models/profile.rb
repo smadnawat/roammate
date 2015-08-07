@@ -1,13 +1,11 @@
 class Profile < ActiveRecord::Base
-  mount_uploader :image, AvatarUploader
+  # mount_uploader :image, AvatarUploader
   belongs_to :user
 
 
   def self.image_data(data)
     return nil unless data
     io = CarrierStringIO.new(Base64.decode64(data)) 
-    p "+++++++++++++++#{io.inspect}+++++++++++++++++++++"
-    io
   end
  
   def self.import(file)

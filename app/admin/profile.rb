@@ -3,7 +3,7 @@ include ApplicationHelper
 ActiveAdmin.register Profile do
 
   menu priority: 1
-  permit_params :email,:fb_email, :first_name, :last_name,:dob, :image, :location, :gender, :status
+  permit_params :email,:fb_email, :first_name, :last_name,:dob, :location, :gender, :status
   actions :all, :except => [:new, :show]
 
   action_item :only => :index do
@@ -11,7 +11,6 @@ ActiveAdmin.register Profile do
   end
 
   index :title => "Total users #{Profile.all.count}", download_links: [:csv] do
-    
     selectable_column
     # id_column
     column "Name" do |resource|

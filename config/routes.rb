@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   post 'create_comment' => "posts#create_comment"
   post 'update_profile' => "profiles#update_profile"
   
+  get 'get_roammate_to_add_in_group' => "invitations#get_roammate_to_add_in_group"
+  get 'special_messages' => "messages#special_messages"
   get 'add_member_to_group' => "invitations#add_member_to_group"
   get 'delete_message' => "messages#delete_message"
   get 'user_inbox' => "messages#user_inbox"

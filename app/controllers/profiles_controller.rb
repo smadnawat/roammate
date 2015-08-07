@@ -18,7 +18,8 @@ class ProfilesController < ApplicationController
 			@points = point_algo(@user.id,@member.id)
 			@mutual_friends = common_friends(@user.id, @member.id)
 			@common_friends = Profile.where('id IN (?)', @mutual_friends)
-			render :json => {:response_code => 200, :message => "record successfully fetched",
+			render :json => {
+											:response_code => 200, :message => "record successfully fetched",
 											:member_profile => @member.profile,
 											:mutual_interests => @interests,
 											:mutual_interests_count => @interests.count,
@@ -39,12 +40,12 @@ class ProfilesController < ApplicationController
 		@user.profile.last_name = params[:last_name] if params[:last_name].present?
 		@user.profile.dob = params[:dob] if params[:dob].present?
 		@user.profile.fb_email = params[:fb_email]	if params[:fb_email].present?
-		params[:image] = Profile.image_data(params[:image])
-		if !@user.profile.image.present?
-			@user.profile.image = params[:image] if params[:image].present?
-		else
-			@user.albums.create(:image => params[:image], status: false)
-		end
+		# params[:image] = Profile.image_data(params[:image])
+		# if !@user.profile.image.present?
+		# 	@user.profile.image = params[:image] if params[:image].present?
+		# else
+		# 	@user.albums.create(:image => params[:image], status: false)
+		# end
 		if @user.profile.save
 			render :json => {:response_code => 200,:message => "Successfully updated profile"}
 		else

@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
 
 	include ApplicationHelper
-	before_filter :check_user, :only => [:user_inbox, :create_new_message, :delete_message, :create_new_group]
+	before_filter :check_user, :only => [:user_inbox, :create_new_message, :delete_message, :create_new_group, :special_messages]
 
 	def message_status
 		@message = Question.find(params[:id])
@@ -90,6 +90,31 @@ class MessagesController < ApplicationController
 											}
 		end
 	end
+
+	def special_messages
+		@active_interest = Interest.find_by_id(@user.active_interest)
+		if @active_interest.present?
+			@active_messages = @active_interest.special_messages.where(status: true)
+			if @active_messages.present?
+				render :json => {
+												:active_messages => @active_messages,
+												:response_code => 200,
+												:message => "Successfully fetched messages",
+												}
+			else
+				render :json => {
+												:response_code => 400,
+												:message => "No record found."
+												}
+			end
+		else
+			render :json => {
+											:response_code => 500,
+											:message => "Something went wrong."
+											}
+		end
+	end
+
 
 	# def delete_message
 	# 	@message = Message.find_by_id_and_user_id(params[:message_id], @user.id)
