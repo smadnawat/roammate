@@ -3,7 +3,44 @@ $(document).ready(function() {
   var time_format = /([01]\d|2[0-3]):([0-5]\d)/;
  
   $('.label_error').hide();
-  $("#profile_submit_action").click(function() {
+  
+ $("#interest_submit_action").click(function() {
+ 	 name = $("#interest_interest_name").val();
+   description = $("#interest_description").val();
+
+   if (name.trim() == "") {
+    $("#interest_name_label").show();
+    $("#description_label").hide();
+    return false;
+   }
+
+  if (description.trim() === "") {
+    $("#description_label").show();
+    $("#interest_name_label").hide();
+    return false;
+  }
+	});
+
+ $("#special_message_submit_action").click(function() {
+   name = $("#special_message_content").val();
+
+   if (name.trim() == "") {
+    $("#message_new_label").show();
+    return false;
+   }
+  });
+
+ 
+ $("#service_point_submit_action").click(function() {
+   point = $("#service_point_point").val(); 
+    if (point.trim() === "") {
+      $("#service_point_label").show();
+      return false;
+    }
+  });
+ 
+
+$("#profile_submit_action").click(function() {
      var check_name = /^[a-zA-Z]*$/;
      var email_format = /^[a-zA-Z0-9_\.\-]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/;
 
@@ -48,37 +85,56 @@ $(document).ready(function() {
 
   });
 
- $("#interest_submit_action").click(function() {
- 	 name = $("#interest_interest_name").val();
-   description = $("#interest_description").val();
 
-   if (name.trim() == "") {
-    $("#interest_name_label").show();
-    $("#description_label").hide();
-    return false;
-   }
+  
+$("#post_submit_action").click(function() {
+   title = $("#post_title").val();
+   content = $("#post_content").val();
+   user_type = $("#post_user_type").val();
+  
+    if (title.trim() === "") {
+      $("#title_label").show();
+      $("#content_label").hide();
+      $("#user_label").hide();
 
-  if (description.trim() === "") {
-    $("#description_label").show();
-    $("#interest_name_label").hide();
-    return false;
-  }
-	});
+      return false;
+    }
+    if (content.trim() === "") {
+      $("#content_label").show();
+      $("#user_label").user      
+      $("#title_label").hide();
+      return false;
+    }  
+    if(user_type == "")
+    {
+      $("#content_label").hide();
+      $("#title_label").hide();
+      $("#user_label").show();           
+      return false;
+    }
 
- $("#special_message_submit_action").click(function() {
-   name = $("#special_message_content").val();
-
-   if (name.trim() == "") {
-    $("#message_new_label").show();
-    return false;
-   }
   });
-
 
  $("#question_submit_action").click(function() {
    question = $("#question_question").val();
     if (question.trim() === "") {
       $("#question_label").show();
+      return false;
+    }
+  });
+ 
+ $("#category_submit_action").click(function() {
+   name = $("#category_category_name").val(); 
+    if (name.trim() === "") {
+      $("#category_name_label").show();
+      return false;
+    }
+  });
+
+$("#file_upload").click(function() {
+   name = $("#upload_csv_file").val(); 
+    if (name.trim() === "") {
+      $("#file_label").show();
       return false;
     }
   });
@@ -162,59 +218,7 @@ $("#event_submit_action").click(function() {
       return false;
     }  
   });
-  
-$("#post_submit_action").click(function() {
-   title = $("#post_title").val();
-   content = $("#post_content").val();
-   user_type = $("#post_user_type").val();
-  
-    if (title.trim() === "") {
-      $("#title_label").show();
-      $("#content_label").hide();
-      $("#user_label").hide();
 
-      return false;
-    }
-    if (content.trim() === "") {
-      $("#content_label").show();
-      $("#user_label").user      
-      $("#title_label").hide();
-      return false;
-    }  
-    if(user_type == "")
-    {
-      $("#content_label").hide();
-      $("#title_label").hide();
-      $("#user_label").show();           
-      return false;
-    }
-
-  });
- 
- $("#category_submit_action").click(function() {
-   name = $("#category_category_name").val(); 
-    if (name.trim() === "") {
-      $("#category_name_label").show();
-      return false;
-    }
-  });
-
-$("#file_upload").click(function() {
-   name = $("#upload_csv_file").val(); 
-    if (name.trim() === "") {
-      $("#file_label").show();
-      return false;
-    }
-  });
-
- $("#service_point_submit_action").click(function() {
-   point = $("#service_point_point").val(); 
-    if (point.trim() === "") {
-      $("#service_point_label").show();
-      return false;
-    }
-  });
- 
     $("#event_event_time").pickatime();
 
 });

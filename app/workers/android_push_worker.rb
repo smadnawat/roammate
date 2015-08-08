@@ -1,6 +1,7 @@
 require 'gcm'
 class AndroidPushWorker
   include Sidekiq::Worker
+  
   def perform(reciever,alert,badges,notification)
     @device = Device.where(:user_id => reciever.to_i)
     gcm = GCM.new("AIzaSyDBo3GLq5Z3I12WTMLCLp-guCQWTQndBnI")
@@ -16,6 +17,5 @@ class AndroidPushWorker
         "collapse_key" => 'updated_state'
         }
     response = gcm.send_notification(registration_ids,options)
-    # Notification.where(:reciever => reciever.id).first.update_attributes(:status => true)
   end
 end
