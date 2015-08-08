@@ -52,6 +52,30 @@ class MessagesController < ApplicationController
 	end
 
 
+	def special_messages
+		@active_interest = Interest.find_by_id(@user.active_interest)
+		if @active_interest.present?
+			@active_messages = @active_interest.special_messages.where(status: true)
+			if @active_messages.present?
+				render :json => {
+												:active_messages => @active_messages,
+												:response_code => 200,
+												:message => "Successfully fetched messages",
+												}
+			else
+				render :json => {
+												:response_code => 400,
+												:message => "No record found."
+												}
+			end
+		else
+			render :json => {
+											:response_code => 500,
+											:message => "Something went wrong."
+											}
+		end
+	end
+
 	def create_new_message
 		@group = Group.find_by_id(params[:group_id])
 		if @group.present?
@@ -91,45 +115,21 @@ class MessagesController < ApplicationController
 		end
 	end
 
-	def special_messages
-		@active_interest = Interest.find_by_id(@user.active_interest)
-		if @active_interest.present?
-			@active_messages = @active_interest.special_messages.where(status: true)
-			if @active_messages.present?
-				render :json => {
-												:active_messages => @active_messages,
-												:response_code => 200,
-												:message => "Successfully fetched messages",
-												}
-			else
-				render :json => {
-												:response_code => 400,
-												:message => "No record found."
-												}
-			end
+
+	def delete_message
+		@message = Message.find_by_id_and_user_id(params[:message_id], @user.id)
+		if @message.present?
+			@message.destroy
+			message = "Successfully deleted message"
+			code = 200
 		else
-			render :json => {
-											:response_code => 500,
-											:message => "Something went wrong."
-											}
+			message = "Message not found"
+			code = 400
 		end
+		render :json => {
+										:response_code => code,
+										:message => message
+										}
 	end
-
-
-	# def delete_message
-	# 	@message = Message.find_by_id_and_user_id(params[:message_id], @user.id)
-	# 	if @message.present?
-	# 		@message.destroy
-	# 		message = "Successfully deleted message"
-	# 		code = 200
-	# 	else
-	# 		message = "Message not found"
-	# 		code = 400
-	# 	end
-	# 	render :json => {
-	# 									:response_code => code,
-	# 									:message => message
-	# 									}
-	# end
 
 end

@@ -34,19 +34,19 @@ Rails.application.routes.draw do
   get 'accept_or_decline_invitation' => "invitations#accept_or_decline_invitation"
   get 'view_matched_profile' => "profiles#view_matched_profile"
   get 'add_member_as_roammate' => "invitations#add_member_as_roammate"
-  get 'get_point' =>"points#get_point"
-  get 'get_profile' => "profiles#get_profile"
+  # get 'get_point' =>"points#get_point"
+  # get 'get_profile' => "profiles#get_profile"
   get 'get_user_cities' => "cities#get_user_cities"
   get 'remove_city' => "cities#remove_city"
-  get 'get_interests' => "interests#get_interests"
-  get 'select_user_to_add' => 'invitations#select_user_to_add'
-  get 'select_user_to_add' => 'interests#select_user_to_add'
+  # get 'get_interests' => "interests#get_interests"
+  # get 'select_user_to_add' => 'invitations#select_user_to_add'
+  # get 'select_user_to_add' => 'interests#select_user_to_add'
   get 'predefined_interests' => 'interests#predefined_interests'
   get 'predefined_events' => 'events#predefined_events'
-  post 'filter_user_selected_interest' => 'interests#filter_user_selected_interest'
+  # post 'filter_user_selected_interest' => 'interests#filter_user_selected_interest'
   post 'signin' => "users#login"
   post 'selected_interest_list' => 'interests#selected_interest_list'
-  post 'find_mutual_interest' => 'interests#find_mutual_interest'
+  # post 'find_mutual_interest' => 'interests#find_mutual_interest'
   get 'offline' => 'users#offline'
   match "*path", to: "users#catch_404", via: :all
 end

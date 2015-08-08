@@ -52,6 +52,17 @@ class InvitationsController < ApplicationController
 		end
 	end
 
+	def add_member_to_group
+		@member = User.find_by_id(params[:member_id])	
+		@group = Group.find_by_id(params[:group_id])
+		if @member.present? && @group.present?
+			@group.users << @member if !@group.users.include?(@member)
+			render :json => {:response_code => 200,:message => "Member successfully added in group."}
+		else
+			render :json => {:response_code => 500, :message => "Something went wrong."}
+		end
+	end
+
 	def get_roammate_to_add_in_group
 		@members = Invitations.where("(user_id = ? or reciever = ?) and status = ?", @user.id, @user.id, true)
 		@ids = @members.pluck(:user_id) + @members.pluck(:reciever)	- [@user.id]
@@ -61,17 +72,6 @@ class InvitationsController < ApplicationController
 				friends << Profile.find_by_id(user)
 			end
 			render :json => {:response_code => 200,:message => "Member successfully added in group.", :members => friends}
-		else
-			render :json => {:response_code => 500, :message => "Something went wrong."}
-		end
-	end
-
-	def add_member_to_group
-		@member = User.find_by_id(params[:member_id])	
-		@group = Group.find_by_id(params[:group_id])
-		if @member.present? && @group.present?
-			@group.users << @member if !@group.users.include?(@member)
-			render :json => {:response_code => 200,:message => "Member successfully added in group."}
 		else
 			render :json => {:response_code => 500, :message => "Something went wrong."}
 		end

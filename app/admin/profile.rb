@@ -31,7 +31,7 @@ ActiveAdmin.register Profile do
       end
     end
     column "Image" do |resources|
-      image_tag resources.image_url(:thumbnail) if resources.image.present?
+      image_tag(resources.image, :size => "80x50") if resources.image.present?
     end
     column "Point" do |resource|
       user_points(resource.user.id)

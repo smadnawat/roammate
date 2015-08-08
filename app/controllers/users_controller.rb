@@ -26,7 +26,7 @@ class UsersController < ApplicationController
 		    @profile.image = params[:image] if params[:image].present?
 		    @profile.gender = params[:gender] if params[:gender].present?
 		    if @profile.save and @user.save
-	           @status =true
+	          @status =true
 		    else
 		       @status =false
 		    end
