@@ -2,7 +2,7 @@ require 'gcm'
 class AndroidPushWorker
   include Sidekiq::Worker
   
-  def perform(reciever,alert,badges,notification)
+  def perform(reciever,alert,badges,notification,invitation)
     @device = Device.where(:user_id => reciever.to_i)
     gcm = GCM.new("AIzaSyDBo3GLq5Z3I12WTMLCLp-guCQWTQndBnI")
     registration_ids= ["#{@device.last.device_id}"]
@@ -10,7 +10,8 @@ class AndroidPushWorker
          'data' => {
           'alert' => alert,
           'badge' => badges,
-          'notification_id' => notification
+          'notification_id' => notification,
+          'invitation_id' => invitation
          },
         "time_to_live" => 108,
         "delay_while_idle" => true,

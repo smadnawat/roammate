@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
 	has_many :points ,dependent: :destroy
 	has_many :feedbacks ,dependent: :destroy
 	has_many :messages ,dependent: :destroy
-	has_many :invitations ,dependent: :destroy
+	has_many :invitations ,dependent: :destroy 
 	has_many :ratings ,dependent: :destroy
 	has_many :posts ,dependent: :destroy
 	has_many :comments ,dependent: :destroy
