@@ -1,8 +1,5 @@
 ActiveAdmin.register_page "Chat history" do
   menu priority: 5
-  #config.filters = false
-  #actions :all, :except => [:new, :edit]
-  # permit_params :email, :password, :password_confirmation
   
   content do
       rating = Rating.where("rate = ?","-1")
