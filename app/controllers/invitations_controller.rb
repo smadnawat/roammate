@@ -31,7 +31,6 @@ class InvitationsController < ApplicationController
 				@group.users << @invitation.user
 				@group.users << @user
 				@alert = "accept chat"
-				p "----------------------------#{@invitation.user.inspect}"
 				@notification =Notification.create_notification(@user,@invitation.user,@alert,@invitation.id)
 				@user.points.create(:pointable_type => "Accept Chat invite")
 				message = "Successfully accepted invitation"
