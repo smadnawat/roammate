@@ -25,6 +25,8 @@ class InvitationsController < ApplicationController
 	def accept_or_decline_invitation
 		@invitation = Invitation.find_by_id(params[:invitation_id])
 		if @invitation.present? && params[:action_type].present?
+			@notice = Notification.find_by_id(params[:notification_id])
+			@notice.update_attributes(status: true)
 			if params[:action_type] == "Accept"
 				@invitation.update_attributes(status: true)
 				@group = Group.create(group_admin: @invitation.user_id, group_name: "#{@user.id}")
