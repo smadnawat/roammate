@@ -2,7 +2,7 @@
 class ApplePushWorker
 	include Sidekiq::Worker
 
-  def perform(reciever,alert,badges,noti)
+  def perform(reciever,alert,badges,noti,invitation)
     pusher = Grocer.pusher(
       certificate: Rails.root.join('MobiloitteDevApp.pem'),      # required
       passphrase:  "Mobiloitte",                       # optional
@@ -14,7 +14,7 @@ class ApplePushWorker
     notification = Grocer::Notification.new(
       :device_token => "#{@device.last.device_id}",
       :alert =>  alert,
-      custom: {:notification_id => noti},
+      custom: {:notification_id => noti,:invitation_id => invitation},
       :badge => badges,
       :sound => "siren.aiff",         # optional
       :expiry => Time.now + 60*60,     # optional; 0 is default, meaning the message is not stored

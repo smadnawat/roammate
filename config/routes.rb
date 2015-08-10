@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   get 'add_member_to_group' => "invitations#add_member_to_group"
   get 'delete_message' => "messages#delete_message"
   get 'user_inbox' => "messages#user_inbox"
-  get 'accept_or_decline_invitation' => "invitations#accept_or_decline_invitation"
+  post 'accept_or_decline_invitation' => "invitations#accept_or_decline_invitation"
   get 'view_matched_profile' => "profiles#view_matched_profile"
   get 'add_member_as_roammate' => "invitations#add_member_as_roammate"
   # get 'get_point' =>"points#get_point"

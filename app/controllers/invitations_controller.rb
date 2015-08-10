@@ -9,9 +9,9 @@ class InvitationsController < ApplicationController
 				message = "Already invited this member as your roammate"
 				code = 400
 			else
-				@roam_member = @user.invitations.create(reciever: @member.id, status: false)
+				@invitation = @user.invitations.create(reciever: @member.id, status: false)
 				@alert = "Send chat"
-				@notification =Notification.create_notification(@user,@member,@alert)
+				@notification =Notification.create_notification(@user,@member,@alert,@invitation.id)
 				@user.points.create(:pointable_type => "Send chat invite")
 				message = "Invitation successfully sent."
 				code = 200
@@ -23,33 +23,29 @@ class InvitationsController < ApplicationController
 	end
 
 	def accept_or_decline_invitation
-		@member = User.find_by_id(params[:member_id])
-		if @member.present? && @member.invitations.present?
-			@invitation = Invitation.find_by_user_id_and_reciever_and_status(@member,@user,false)
-			if @invitation.present? && params[:action_type].present?
-				if params[:action_type] == "Accept"
-					@invitation.update_attributes(status: true)
-					@group = Group.create(group_admin: @member.id, group_name: "#{@user.id}")
-					@group.users << @member
-					@group.users << @user
-					@alert = "accept chat"
-					@notification =Notification.create_notification(@user,@member,@alert)
-					@user.points.create(:pointable_type => "Accept Chat invite")
-					message = "Successfully accepted invitation"
-					code = 200
-				elsif params[:action_type] == "Decline"
-					@invitation.destroy
-					message = "Successfully declineded invitation"
-					code = 200
-				end
-			else
-				message = "Already accepted this invitation"
-				code = 400
+		@invitation = Invitation.find_by_id(params[:invitation_id])
+		if @invitation.present? && params[:action_type].present?
+			if params[:action_type] == "Accept"
+				@invitation.update_attributes(status: true)
+				@group = Group.create(group_admin: @invitation.user_id, group_name: "#{@user.id}")
+				@group.users << @invitation.user
+				@group.users << @user
+				@alert = "accept chat"
+				p "----------------------------#{@invitation.user.inspect}"
+				@notification =Notification.create_notification(@user,@invitation.user,@alert,@invitation.id)
+				@user.points.create(:pointable_type => "Accept Chat invite")
+				message = "Successfully accepted invitation"
+				code = 200
+			elsif params[:action_type] == "Decline"
+				@invitation.destroy
+				message = "Successfully declineded invitation"
+				code = 200
 			end
-			render :json => {:response_code => code,:message => message}
 		else
-			render :json => {:response_code => 500, :message => "Something went wrong."}
+			message = "Already accepted this invitation"
+			code = 400
 		end
+		render :json => {:response_code => code,:message => message}
 	end
 
 	def add_member_to_group

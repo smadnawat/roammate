@@ -1,9 +1,16 @@
 class UsersController < ApplicationController
 	before_filter :check_user, :only => [:match_users,:offline]
+
 	def destroy_users
 		@user = User.find(params[:id])
 		@rates = Rating.where("rater_id = ?", @user.id)
 		@rates.destroy_all
+		@invitations = Invitation.where("reciever = ?",@user.id)
+		@invitations.destroy_all
+		@notification = Notification.where("reciever = ?",@user.id)
+		@notification.destroy_all
+		@group = Group.where("group_name = ?",@user.id.to_s)
+		@group.destroy_all
 		@user.destroy
 		redirect_to admin_profiles_path
 	end
