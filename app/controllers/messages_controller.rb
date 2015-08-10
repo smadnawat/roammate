@@ -79,7 +79,7 @@ class MessagesController < ApplicationController
 	def create_new_message
 		@group = Group.find_by_id(params[:group_id])
 		if @group.present?
-			if !(params[:message_content].present? || params[:image].present?)
+			if !params[:message_content].present?
 				message = "Message not created"
 				code = 400
 			else
@@ -90,18 +90,14 @@ class MessagesController < ApplicationController
 			end
 			@get_default_quetions = Question.where('interest_id = ? and status = ?',@user.active_interest, true )
 			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at ASC")
-
-		if @get_previous_messages.present?
 			msg = []
+		if @get_previous_messages.present?
 			@get_previous_messages.each do |msgs|
 				msg << msgs.user.profile
 				msg << msgs
 			end
-			msg
-		else
-			msg
 		end
-			render :json => {
+		render :json => {
 											:predefined_messages => @get_default_quetions,
 											:response_code => code,
 											:message => message,

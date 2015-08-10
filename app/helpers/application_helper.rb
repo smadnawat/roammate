@@ -4,14 +4,12 @@ module ApplicationHelper
 		@interest = User.find_by_id(user).interests & User.find_by_id(member).interests
 	end
 
-	def message_count user, member
-		@first_user_message_count = Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',user,member,member,user).count
-		@second_user_message_count = Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',member,user,user,member).count
-		if @first_user_message_count == 15 && @second_user_message_count == 15
-			return
+	def message_count user, group
+		@first_user_message_count = group.messages.where("user_id = ?",user.id).count#Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',user,member,member,user).count
+		@second_user_message_count = group.messages.where("user_id = ?",group.group_name.to_i).count#Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',member,user,user,member).count
+		if @first_user_message_count >= 10 && @second_user_message_count >= 10
 			true
 		else
-			return
 			false
 		end
 	end
@@ -60,8 +58,8 @@ module ApplicationHelper
     end	
 
     def user_points user
- 	  @user = User.find_by_id(user)
-      @points = @user.points
+ 	  @user1 = User.find_by_id(user)
+      @points = @user1.points
       @point_sum =0
       if @points.present?
          @points.each do |p|          
