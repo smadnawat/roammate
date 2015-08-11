@@ -30,7 +30,7 @@ ActiveAdmin.register_page "Dashboard" do
             @rt4=0
             @rt5=0
             User.all.each do |u|
-                @age = find_age(u)
+                @age = find_age(u) if u.profile.dob.present?
                if @age < 18 
                   @count1 +=1
                elsif @age >=18 and @age <=21
