@@ -9,6 +9,7 @@ class Interest < ActiveRecord::Base
   has_many :special_messages ,dependent: :destroy
   has_and_belongs_to_many :users , :join_table => "users_interests" 
   before_destroy :delete_interest_users
+  validates_presence_of  :image,:icon,:banner
 
   def delete_interest_users
     @users = self.users
