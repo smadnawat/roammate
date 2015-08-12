@@ -1,7 +1,19 @@
 module ApplicationHelper
 
 	def common_activities user,member
-		@interest = User.find_by_id(user).interests & User.find_by_id(member).interests
+		@interests = User.find_by_id(user).interests & User.find_by_id(member).interests
+		@interest = []
+			@interests.each do |i|
+				@int = {}
+				@int[:id] =  i.id
+				@int[:interest_name] =  i.interest_name
+				@int[:image] =  i.image.url
+				@int[:icon] =  i.icon.url
+				@int[:banner]= i.banner.url
+				@int[:description] = i.description				
+				@interest << @int
+			end
+			return @interest
 	end
 
 	def message_count user, group
@@ -44,33 +56,33 @@ module ApplicationHelper
 	end
 
 	def user_rating user
-	  @ratings = User.find(user).ratings
-      @rate_sum =0
-       if @ratings.present?
-        @ratings.each do |r|
-          @rate = r.rate.to_i+0.0
-          @rate_sum = @rate_sum+@rate         
-        end
-        @avg = ((@rate_sum/@ratings.count)*100).round(2)
-      else
-        @avg = 0
-      end 
-    end	
+  @ratings = User.find(user).ratings
+    @rate_sum =0
+    if @ratings.present?
+      @ratings.each do |r|
+        @rate = r.rate.to_i+0.0
+        @rate_sum = @rate_sum+@rate         
+      end
+      @avg = ((@rate_sum/@ratings.count)*100).round(2)
+    else
+      @avg = 0
+    end 
+  end	
 
-    def user_points user
- 	  @user1 = User.find_by_id(user)
-      @points = @user1.points
-      @point_sum =0
-      if @points.present?
-         @points.each do |p|          
-           @point = ServicePoint.find_by_service(p.pointable_type)
-           @point_sum = @point_sum + @point.point
-         end
-      else
-         @point_sum = 0
-      end    		
-      @point_sum
-    end
+  def user_points user
+	  @user1 = User.find_by_id(user)
+    @points = @user1.points
+    @point_sum =0
+    if @points.present?
+       @points.each do |p|          
+         @point = ServicePoint.find_by_service(p.pointable_type)
+         @point_sum = @point_sum + @point.point
+       end
+    else
+       @point_sum = 0
+    end    		
+    @point_sum
+  end
     
     def point_algo current,second
     	@user = User.find(current)

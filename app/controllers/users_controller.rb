@@ -92,6 +92,6 @@ class UsersController < ApplicationController
 
 	def catch_404
    	 render nothing: true
-  	end
+  end
 
 end
