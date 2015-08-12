@@ -2,7 +2,7 @@ class Interest < ActiveRecord::Base
 
   include ApplicationHelper
   mount_uploader :image, AvatarUploader
-  mount_uploader :icon, AvatarUploader
+  mount_uploader :icon, IconUploader
   mount_uploader :banner, AvatarUploader
   belongs_to :category
   has_many :questions ,dependent: :destroy
