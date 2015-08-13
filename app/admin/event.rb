@@ -42,6 +42,7 @@ ActiveAdmin.register Event do
       row :link
       row :city
     end
+   
   end
 
   form :html => { :enctype => "multipart/form-data" } do |f|

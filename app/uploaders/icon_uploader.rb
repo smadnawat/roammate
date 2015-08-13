@@ -4,7 +4,6 @@ class IconUploader < CarrierWave::Uploader::Base
 
 include Cloudinary::CarrierWave
 
-
   version :display do
     process :eager => true
     process :resize_to_fill => [150, 150, :north]
@@ -18,5 +17,5 @@ include Cloudinary::CarrierWave
   def extension_white_list
     %w(png)
   end
-  
+
 end
