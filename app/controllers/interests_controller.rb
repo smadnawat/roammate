@@ -26,12 +26,13 @@ class InterestsController < ApplicationController
 
 	def selected_interest_list
 		if params[:interests].present?
-			params[:interests].as_json(only: [:id]).each do |t|
- 				if !@user.interests.include?(Interest.find(t.values).first)
-					@user.interests << Interest.find(t.values)
+			params[:interests].each do |t|
+ 				if !@user.interests.include?(Interest.find_by_id(t))
+					@user.interests << Interest.find_by_id(t) if Interest.find_by_id(t).present?
 				end
 			end
 		end
+		@events = predefined_events
 		@selected_interest = @user.interests
 		@interest = []
 		@selected_interest.each do |i|
@@ -48,7 +49,8 @@ class InterestsController < ApplicationController
 		if @selected_interest.present?
 			render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests",
 		 	:selected_interest => @interest,
-		  :matches => @matches	}
+		  :matches => @matches,
+		  :events => @events	}
 		else
 			render :json => { :response_code => 500, :response_message => "No record found"}
 		end
