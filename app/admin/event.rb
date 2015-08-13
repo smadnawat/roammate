@@ -15,7 +15,7 @@ ActiveAdmin.register Event do
       resources.event_time
     end
     column "Date" do |resources|
-      resources.event_date
+      resources.event_date.to_date if resources.event_date.present?
     end
     column "link" do |resources|
       body link_to resources.link,"#{resources.link}",:target => "_blank"

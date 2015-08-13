@@ -16,6 +16,27 @@ module ApplicationHelper
 			return @interest
 	end
 
+	def predefined_events
+		@events = Event.where('event_date >= ?', Date.today)
+		@event = []
+		if @events.present?
+			@events.each do |e|
+				@eve = {}
+				@eve[:id] = e.id
+				@eve[:event_name] = e.event_name
+				@eve[:place] = e.place
+				@eve[:link] = e.link
+				@eve[:city] = e.city
+				@eve[:event_time] = e.event_time
+				@eve[:event_date] = e.event_date.to_date
+				@eve[:host_name] = e.host_name
+				@eve[:image] = e.image.url
+				@event << @eve
+			end
+			@event
+		end
+	end
+
 	def message_count user, group
 		@first_user_message_count = group.messages.where("user_id = ?",user.id).count#Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',user,member,member,user).count
 		@second_user_message_count = group.messages.where("user_id = ?",group.group_name.to_i).count#Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',member,user,user,member).count
