@@ -1,7 +1,7 @@
 class ProfilesController < ApplicationController
  
  include ApplicationHelper
- before_filter :check_user  ,only: [:view_matched_profile, :add_profile_picture,:update_profile]
+ before_filter :check_user  ,only: [:view_matched_profile, :add_profile_picture,:update_profile, :my_profile]
 
    
 	def profile_status
@@ -27,7 +27,7 @@ class ProfilesController < ApplicationController
 			end
 			render :json => {
 											:response_code => 200, :message => "record successfully fetched",
-											:member_profile => @member.profile,
+											:member_profile => @member.profile.attributes.merge(:last_active_at => @member.updated_at.to_date),
 											:mutual_interests => @interests,
 											:mutual_interests_count => @interests.count,
 											:mutual_friends => @common_friends,
@@ -44,6 +44,32 @@ class ProfilesController < ApplicationController
 		end
 	end
 
+	def my_profile
+		@profile = @user.profile
+		@points = user_points(@user.id)
+		@interests = @user.interests
+		@intr = []
+		@interests.each do |i|
+			@int = {}
+			@int[:id] =  i.id
+			@int[:interest_name] =  i.interest_name
+			@int[:image] =  i.image.url
+			@int[:icon] =  i.icon.url
+			@int[:banner]= i.banner.url
+			@int[:description] = i.description
+			@intr << @int
+		end
+		@recieve = Invitation.where('reciever = ? and status = ?', @user.id, true).pluck(:user_id)
+		@send = Invitation.where('user_id = ? and status = ?', @user.id, true).pluck(:reciever)
+		@all_invites = @recieve + @send
+		@friends = [] 
+		@all_invites.each do |user|
+			@friends << User.find(user).profile
+		end
+		render :json => {:response_code => 200,:message => "Successfully fetched profile",
+		:profile => @profile.attributes.merge!(:my_points=> @points, :my_friends => @friends,:my_friends_count => @friends.count, :my_interest => @intr, :my_interest_count => @intr.count)}
+	end
+
 	def update_profile
 		@user.profile.first_name = params[:first_name] if params[:first_name].present?
 		@user.profile.last_name = params[:last_name] if params[:last_name].present?
@@ -57,7 +83,7 @@ class ProfilesController < ApplicationController
 	end
 
 	def add_profile_picture
-		@image = @user.albums.build(image: params[:image], status: params[:status])
+	@image = @user.albums.build(image: params[:image], status: params[:status])
 		if @image.save
 			render :json => {:response_code => 200,:message => "Successfully changed porfile picture"}
 		else

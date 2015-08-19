@@ -10,9 +10,9 @@ class Notification < ActiveRecord::Base
 	    @devices.each do |device|
 	       if device.device_type == "Android"
 	       	 #p "============#{@notification.inspect}============#{reciever.inspect}"
-	         AndroidPushWorker.perform_async(reciever.id,@alert,badges,notification.id,invitation)
+	         AndroidPushWorker.perform_async(reciever.id,@alert,badges,notification.id,invitation )
 	       else
-	         ApplePushWorker.perform_async(reciever.id,@alert,badges,notification.id,invitation)
+	         ApplePushWorker.perform_async(reciever.id,@alert,badges,notification.id,invitation )
 	       end
 	    end
     end

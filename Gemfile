@@ -6,7 +6,6 @@ gem 'sidekiq'
 gem 'gcm'
 gem 'grocer'
 gem 'unicorn'
-
 ##################
 gem 'will_paginate', '~> 3.0.6'
 gem 'pickadate-rails'
