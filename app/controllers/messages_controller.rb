@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
 
 	include ApplicationHelper
-	before_filter :check_user, :only => [:user_inbox, :create_new_message, :delete_message, :create_new_group, :special_messages]
+	before_filter :check_user, :only => [:user_inbox, :create_new_message, :delete_message, :create_new_group, :special_messages,:get_messages]
 
 	def message_status
 		@message = Question.find(params[:id])
@@ -24,31 +24,27 @@ class MessagesController < ApplicationController
 
 	def user_inbox
 		@groups = @user.groups
-		user_list = []
+		@inb= []
 		@groups.each do |g|
+			user_list = {}
 			@all_messages = g.messages
-			user_list << @all_messages.order("created_at ASC").last
-			user_list << {:total_unread_message_count => @all_messages.where('status = ?', false).count}
+			user_list["last_message"] = @all_messages.order("created_at ASC").last
+			user_list["total_unread_message_count"] = @all_messages.where('status = ?', false).count
 			if @user.id == g.group_admin
-				user_list << {:points => point_algo(@user.id, g.group_name.to_i)}
-				user_list << User.find_by_id(g.group_name.to_i).profile
+				user_list["points"] = point_algo(@user.id, g.group_name.to_i)
+				user_list["user"] = User.find_by_id(g.group_name.to_i).profile
 			else
-				user_list << {:points => point_algo(@user.id, g.group_admin)}
-				user_list << User.find_by_id(g.group_admin).profile
+				@points = point_algo(@user.id, g.group_admin)
+				user_list["user"] = User.find_by_id(g.group_admin).profile.attributes.merge(:points =>  @points)
 			end
+			@inb << user_list
 		end
-		if user_list.present?
 			render :json => {
-												:response_code => 200,
-												:message => "data fetched successfully.", 
-												:inbox => user_list
-											}
-		else
-			render :json => {
-												:response_code => 400,
-												:message => "No record found."
-											}
-		end
+								:response_code => 200,
+								:message => "data fetched successfully.", 
+								:inbox => @inb
+							}
+	
 	end
 
 
@@ -76,6 +72,35 @@ class MessagesController < ApplicationController
 		end
 	end
 
+	def get_messages
+		@group = Group.find_by_id(params[:group_id])
+		if @group.present?
+			@get_default_quetions = Question.where('interest_id = ? and status = ?',@user.active_interest, true )
+			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at ASC")
+			m = []
+			if @get_previous_messages.present?
+				@get_previous_messages.each do |msgs|
+					msg = {}
+					m << msgs.user.profile.attributes.merge(:message => msgs.as_json(only:[:id,:content,:created_at]))
+					# msg["message"] = msgs.as_json(only:[:id,:content])
+					# m << msg
+				end
+			end
+			render :json => {
+							:response_code => 200,
+							:message => "Message list",							
+							:predefined_messages => @get_default_quetions,
+							:user_messages => m
+							}
+
+		else
+			render :json => {
+							:response_code => 500,
+							:message => "Group not found."
+							}
+		end
+	end
+
 	def create_new_message
 		@group = Group.find_by_id(params[:group_id])
 		if @group.present?
@@ -83,31 +108,21 @@ class MessagesController < ApplicationController
 				message = "Message not created"
 				code = 400
 			else
-			@message = @user.messages.create(content: params[:message_content], group_id: @group.id, image: params[:image])
-			@user.points.create(:pointable_type => "Reply first to ice breaker message")	
+				@message = @user.messages.create(content: params[:message_content], group_id: @group.id, image: params[:image])
+				@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 				message = "Message successfully created"
 				code = 200
 			end
-			@get_default_quetions = Question.where('interest_id = ? and status = ?',@user.active_interest, true )
-			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at ASC")
-			msg = []
-		if @get_previous_messages.present?
-			@get_previous_messages.each do |msgs|
-				msg << msgs.user.profile
-				msg << msgs
-			end
-		end
-		render :json => {
-											:predefined_messages => @get_default_quetions,
-											:response_code => code,
-											:message => message,
-											:user_messages => msg
-											}
+			
+			render :json => {
+							:response_code => code,
+							:message => message
+							}
 		else
 			render :json => {
-											:response_code => 500,
-											:message => "Something went wrong."
-											}
+							:response_code => 500,
+							:message => "Something went wrong."
+							}
 		end
 	end
 

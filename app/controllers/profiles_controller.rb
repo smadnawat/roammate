@@ -21,6 +21,7 @@ class ProfilesController < ApplicationController
 			@ratings = nil
 			@ratable = false
 			@interests = common_activities(@user.id, @member.id)
+			@is_friend = is_friend(@user.id,@member.id)
 			if @group.present?
 				@ratings = @member.ratings.where(rater_id: @user.id).first.rate
 				@ratable = message_count(@user,@group)
@@ -28,6 +29,7 @@ class ProfilesController < ApplicationController
 			render :json => {
 											:response_code => 200, :message => "record successfully fetched",
 											:member_profile => @member.profile.attributes.merge(:last_active_at => @member.updated_at.to_date),
+											:friendship_status => @is_friend ? (@is_friend.status ? "Friend" : "Request sent") : "Not friend" ,
 											:mutual_interests => @interests,
 											:mutual_interests_count => @interests.count,
 											:mutual_friends => @common_friends,

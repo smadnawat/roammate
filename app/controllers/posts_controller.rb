@@ -2,12 +2,29 @@ class PostsController < ApplicationController
 	before_filter :check_user, :only => [:create_post, :create_comment]
 
 	def create_post
-		@post = @user.posts.build(title: params[:title], content: params[:content], image: params[:image])
+		@post = @user.posts.build(title: params[:title], content: params[:content], image: params[:image],user_type: "user")
 		if @post.save
 			render :json => {:response_code => 200,:message => "Post successfully created", :post => @post}
 		else
 			render :json => {:response_code => 500, :message => "Something went wrong."}
 		end
+	end
+
+	def get_posts
+		@posts = Post.all.order(created_at: "desc")
+		@arr = []
+		@posts.each do |p|
+			@post = {}
+			@post["post_id"] = p.id
+			@post["title"] = p.title
+			@post["content"] = p.content
+			@post["image"] = p.image.url
+			@post["created_at"] = p.created_at
+			points = user_points(p.user_id)
+			@post["user"] = p.user.profile.attributes.merge(:points =>  points)
+			@arr << @post
+		end
+		render :json => {:response_code => 200,:message => "All posts", :posts => @arr}
 	end
 
 	def create_comment

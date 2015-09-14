@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150813064928) do
+ActiveRecord::Schema.define(version: 20150909132213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -269,8 +269,8 @@ ActiveRecord::Schema.define(version: 20150813064928) do
   create_table "users", force: :cascade do |t|
     t.string   "provider"
     t.string   "user_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.string   "authentication_token"
     t.float    "latitude"
     t.float    "longitude"
@@ -279,6 +279,10 @@ ActiveRecord::Schema.define(version: 20150813064928) do
     t.string   "address"
     t.datetime "last_active_at"
     t.integer  "active_interest"
+    t.boolean  "message_notification",        default: true
+    t.boolean  "friend_request_notification", default: true
+    t.boolean  "new_event_notification",      default: true
+    t.boolean  "updates_notification",        default: true
   end
 
   create_table "users_categories", id: false, force: :cascade do |t|

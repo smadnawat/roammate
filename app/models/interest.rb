@@ -17,33 +17,6 @@ class Interest < ActiveRecord::Base
     @action = self.users - @users
   end
 
-  # def self.view_matches_algo selected_interest, user
-  # 	matches = []
-  # 	@final = []
-	 #  	selected_interest.each do |interest|
-	 #  		interest.users.where('id != ?', user.id).each do |match|
-	 #  			matches << match if match.current_city == user.current_city
-	 #  		end
-	 #  	end
-  # 	matches.uniq.each do |t|
-  #     @intr = {}
-  #     @intr[:profile] = t.profile
-  #     @intr[:points] = point_algo(t.id,user.id)
-  #     t.interests&user.interests.each do |i|
-  #       @interest = {}
-  #       @interest[:id] =  i.id
-  #       # @interest[:interest_name] =  i.interest_name
-  #       # @interest[:image] =  i.image.url
-  #       @interest[:icon] =  i.icon.url
-  #       # @interest[:banner] =  i.banner.url
-  #       # @interest[:description] =  i.description
-  #     end
-  #     @final << {:common_intrerest => @interest}
-  #     @final << @intr
-  # 	end
-  #   @final
-  # end
-
   def self.view_matches_algo selected_interest, user
     matches = []
     @final = []
@@ -59,7 +32,7 @@ class Interest < ActiveRecord::Base
       (t.interests&user.interests).each do |i|
         @int_arr <<  i.icon.url
       end  
-      @intr[:profile] = t.profile.attributes.merge!(:common_interest=> @int_arr,points: point_algo(t.id,user.id))
+      @intr[:profile] = t.profile.attributes.merge!(points: point_algo(t.id,user.id), :common_interest=> @int_arr)
       @final << @intr       
     end
     @final   

@@ -16,6 +16,15 @@ module ApplicationHelper
 			return @interest
 	end
 
+	def is_friend user,member
+		@invitation = Invitation.where(:reciever => [user,member] ,:user_id =>[user,member]).first
+		if @invitation.present?
+			@invitation
+		else
+			false
+		end
+	end
+
 	def predefined_events
 		@events = Event.where('event_date >= ?', Date.today)
 		@event = []
@@ -77,17 +86,17 @@ module ApplicationHelper
 	end
 
 	def user_rating user
-  @ratings = User.find(user).ratings
-    @rate_sum =0
-    if @ratings.present?
-      @ratings.each do |r|
-        @rate = r.rate.to_i+0.0
-        @rate_sum = @rate_sum+@rate         
-      end
-      @avg = ((@rate_sum/@ratings.count)*100).round(2)
-    else
-      @avg = 0
-    end 
+	  @ratings = User.find(user).ratings
+	    @rate_sum =0
+	    if @ratings.present?
+	      @ratings.each do |r|
+	        @rate = r.rate.to_i+0.0
+	        @rate_sum = @rate_sum+@rate         
+	      end
+	      @avg = ((@rate_sum/@ratings.count)*100).round(2)
+	    else
+	      @avg = 0
+	    end 
   end	
 
   def user_points user
