@@ -1,6 +1,6 @@
 ActiveAdmin.register Interest do
   menu priority: 2
-  permit_params :interest_name, :image, :icon, :banner, :description, :status, :category_id
+  permit_params :color, :interest_name, :image, :icon, :banner, :description, :status, :category_id
   # permit_params :email, :password, :password_confirmation
 
   index download_links: [:csv] do
@@ -38,6 +38,7 @@ ActiveAdmin.register Interest do
       f.input :image,:as => :file
       f.input :icon,:as => :file
       f.input :banner,:as => :file
+      f.input :color, input_html: { class: 'colorpicker' }
       f.input :description
       label :Please_enter_description,:class => "label_error" ,:id => "description_label"
       f.input :category_id, :label => 'Category name', :as => :select, :collection => Category.all.map{|u| ["#{u.category_name}", u.id]},include_blank: false, allow_blank: false
