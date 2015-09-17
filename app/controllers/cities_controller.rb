@@ -25,7 +25,7 @@ class CitiesController < ApplicationController
 	end
 
 	def remove_city
-	  @city = City.find_by_city_name(params[:city_name].strip)
+	  @city = City.find_by_id(params[:city_id])
 	  @user.cities -= [@city]
 	  render :json => { :response_code => 200, :response_message => "#{@city.city_name} has been removed" ,:cities => @user_cities.as_json(only: [:id,:city_name])	}
 	end

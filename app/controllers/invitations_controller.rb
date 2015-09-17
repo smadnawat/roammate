@@ -12,7 +12,6 @@ class InvitationsController < ApplicationController
 				@invitation = @user.invitations.create(reciever: @member.id, status: false)
 				@alert = "Send chat"
 				@notification = Notification.create_notification(@user,@member,@alert,@invitation.id) if @member.friend_request_notification
-
 				@user.points.create(:pointable_type => "Send chat invite")
 				message = "Invitation successfully sent."
 				code = 200

@@ -19,7 +19,7 @@ before_filter :last_click
   	end
   end
 
- def last_click
+  def last_click
     if !(params[:controller] == "users" and params[:action] == "login")
       @user = User.find_by_id(params[:user_id])
       if @user.present?

@@ -22,8 +22,10 @@ class ProfilesController < ApplicationController
 			@ratable = false
 			@interests = common_activities(@user.id, @member.id)
 			@is_friend = is_friend(@user.id,@member.id)
+			@rating = "#{user_rating(@member.id)}%"
+			@positive_ratings_count = @member.ratings.where(:rate=>"1").count
+			@n = "#{@rating} of #{@positive_ratings_count} positive rates"
 			if @group.present?
-				@ratings = @member.ratings.where(rater_id: @user.id).first.rate
 				@ratable = message_count(@user,@group)
 			end
 			render :json => {
@@ -35,7 +37,10 @@ class ProfilesController < ApplicationController
 											:mutual_friends => @common_friends,
 											:mutual_friends_count => @mutual_friends.count,
 											:points => @points,
-											:rate => @ratings,
+											:rate => @rating,
+											:total_rating_users => @member.ratings.count,
+											:positive_ratings_count => @positive_ratings_count,
+											:msg => @n,
 											:can_rate => @ratable,
 											}
 		else
@@ -68,8 +73,12 @@ class ProfilesController < ApplicationController
 		@all_invites.each do |user|
 			@friends << User.find(user).profile
 		end
+		@rating = "#{user_rating(@user.id)}%"
+		@positive_ratings_count = @user.ratings.where(:rate=>"1").count
+		@n = "#{@rating} of #{@positive_ratings_count} positive rates"
+
 		render :json => {:response_code => 200,:message => "Successfully fetched profile",
-		:profile => @profile.attributes.merge!(:my_points=> @points, :my_friends => @friends,:my_friends_count => @friends.count, :my_interest => @intr, :my_interest_count => @intr.count)}
+		:profile => @profile.attributes.merge!(:my_points=> @points,:my_friends_count => @friends.count, :my_interest => @intr, :my_interest_count => @intr.count , :rate => @rating,:total_rating_users => @user.ratings.count,:positive_ratings_count => @positive_ratings_count,:msg => @n, :my_friends => @friends)}
 	end
 
 	def update_profile

@@ -18,10 +18,12 @@ class Interest < ActiveRecord::Base
   end
 
   def self.view_matches_algo selected_interest, user
+    p "++++++++$$$$$$$$$$$$$$$$$$$++++++view_matches_algo+++++++++++++++++++"
     matches = []
     @final = []
       selected_interest.each do |interest|
         interest.users.where('id != ?', user.id).each do |match|
+          p "+++++$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$++++++++++#{match.inspect}+++++++++++++++++"
           matches << match if match.current_city == user.current_city
         end
       end

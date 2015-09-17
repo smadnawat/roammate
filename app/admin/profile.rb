@@ -14,7 +14,8 @@ ActiveAdmin.register Profile do
     selectable_column
     # id_column
     column "Name" do |resource|
-      resource.first_name + " " + resource.last_name
+      p "-------------#{resource.inspect}"
+      "#{resource.first_name}  #{resource.last_name}"
     end
     # column "Roammate email" do |resource|
     #   resource.email

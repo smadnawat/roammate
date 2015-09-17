@@ -15,11 +15,13 @@ class UsersController < ApplicationController
 		redirect_to admin_profiles_path
 	end
 
+
 	def login
 	  @user = nil
 	  @profile = nil
 	  @status = false
-	   if params[:user_id].present?	   	  
+	  @geo_api_msg = false
+	  if params[:user_id].present?	   	  
 		  if User.exists? user_id: params[:user_id]
 		  	@user = User.find_by_user_id(params[:user_id])	
 		  	@profile = @user.profile
@@ -48,32 +50,39 @@ class UsersController < ApplicationController
 		  	end			 
 		  end
 
-		  if params[:latitude].present? and params[:longitude].present?
-			  @location = Geocoder.search("#{params[:latitude]},#{params[:longitude]}").first
-			  @add_current_location = @user.update_attributes(:latitude=> params[:latitude],:longitude => params[:longitude],:current_city => @location.city)		 
-			  if !City.exists?(:city_name => @location.city , :state=> @location.state )
-			  	@user_city = @user.cities.create(:city_name => @location.city,:state => @location.state,:country => @location.country,:status => false)
+      if ( params[:city].present? and params[:state].present? and params[:country].present? )
+    	  @add_current_location = @user.update_attributes(:latitude=> params[:latitude],:longitude => params[:longitude],:current_city => params[:city])     
+			  if !City.exists?(:city_name => params[:city].strip , :state=> params[:state].strip, :country=> params[:country].strip)
+			  	@user_city = @user.cities.create(:city_name => params[:city].strip,:state => params[:state].strip,:country => params[:country].strip,:status => false)
 			  else
-			  	@user_city = City.find_by_city_name(@location.city)
+			  	@user_city = City.find_by_city_name(params[:city].strip)
 			  	@user.cities << @user_city if !@user.cities.exists?(@user_city)
 			  end
-		  end
-	
+			else
+			 	@geo_api_msg = "Please provide city,state,country all these are mendatory."
+			 	@status =false
+			end
+
 		  if !Device.where("device_id =? and device_type= ? and user_id = ?", params[:device_id],params[:device_type],@user.id).present?
 		    @device = @user.devices.create(:device_id => params[:device_id],:device_type =>params[:device_type]) 
 		  end
-	   else
-		  @status =false
-	   end
+	  else
+		 @status =false
+	  end
 
-	 if @status
-	 	@points = user_points(@user.id)
-	 	@user.update_attributes(:created_at => Time.now,:online => true)
-	 	render :json => { :response_code => 200, :response_message => "Successfull login",:profile => @profile.as_json(except: [:created_at,:updated_at]) ,:points => @points 	}
-	 else
-		render :json => { :response_code => 500, :response_message => "Login failed" }
-	 end
+	  if @status
+	  	@points = user_points(@user.id)
+	  	@user.update_attributes(:created_at => Time.now,:online => true)
+	  	render :json => { :response_code => 200, :response_message => "Successfull login",:profile => @profile.as_json(except: [:created_at,:updated_at]) ,:points => @points 	}
+	  else
+	  	if @geo_api_msg.present?
+	  		render :json => { :response_code => 500, :response_message => "Login failed",  :missing => @geo_api_msg  }
+	  	else
+		  	render :json => { :response_code => 500, :response_message => "Login failed" }
+     	end
+	  end
 	end
+
 
 	def offline
 		@user.update_attributes(:online => false,:last_active_at => Time.now)

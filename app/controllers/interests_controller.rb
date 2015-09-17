@@ -88,8 +88,9 @@ class InterestsController < ApplicationController
 			@interest << @int
 		end		
 		p "------------interest----#{@interest.inspect}"
-		p "=======matches=====#{@matches.inspect}"
+		# p "=======matches===#{@matches.inspect}"
 		@matches = Interest.view_matches_algo(@selected_interest, @user)		
+		p "++++++++++++++++++++#{@matches}++++++++++++++++++++++"
 			render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests",
 		 	:selected_interest => @interest,
 			:matches => @matches,

@@ -4,7 +4,7 @@ class AndroidPushWorker
   
   def perform(reciever,alert,badges,notification,invitation)
     @device = Device.where(:user_id => reciever.to_i)
-    gcm = GCM.new("AIzaSyDBo3GLq5Z3I12WTMLCLp-guCQWTQndBnI")
+    gcm = GCM.new("AIzaSyDGIkZOsPJIqf6p6m9dWuZq_bFtEvMNcnM")
     registration_ids= ["#{@device.last.device_id}"]
     options = {
          'data' => {

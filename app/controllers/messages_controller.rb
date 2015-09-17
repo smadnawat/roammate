@@ -28,14 +28,17 @@ class MessagesController < ApplicationController
 		@groups.each do |g|
 			user_list = {}
 			@all_messages = g.messages
-			user_list["last_message"] = @all_messages.order("created_at ASC").last
+			@mg = @all_messages.order("created_at ASC").last
+			user_list["last_message"] = @mg.attributes.slice("id","content","user_id","group_id").merge!("created_at"=> @mg.created_at.to_i)
 			user_list["total_unread_message_count"] = @all_messages.where('status = ?', false).count
 			if @user.id == g.group_admin
-				user_list["points"] = point_algo(@user.id, g.group_name.to_i)
-				user_list["user"] = User.find_by_id(g.group_name.to_i).profile
+				@p = point_algo(@user.id, g.group_name.to_i)
+				@prf = User.find_by_id(g.group_name.to_i).profile
+				user_list["user"] = @prf.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @prf.created_at.to_i , "points" => @p)
 			else
 				@points = point_algo(@user.id, g.group_admin)
-				user_list["user"] = User.find_by_id(g.group_admin).profile.attributes.merge(:points =>  @points)
+				@pp = User.find_by_id(g.group_admin).profile
+				user_list["user"] = @pp.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @pp.created_at.to_i , "points" => @points)
 			end
 			@inb << user_list
 		end
@@ -75,15 +78,16 @@ class MessagesController < ApplicationController
 	def get_messages
 		@group = Group.find_by_id(params[:group_id])
 		if @group.present?
-			@get_default_quetions = Question.where('interest_id = ? and status = ?',@user.active_interest, true )
+			@qs = Question.where('interest_id = ? and status = ?',@user.active_interest, true )
+		  @get_default_quetions = []
+		  @qs.each do |q|
+		  	@get_default_quetions << q.attributes.slice("id","question","interest_id","status").merge!("created_at"=> q.created_at.to_i)
+		  end
 			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at ASC")
 			m = []
 			if @get_previous_messages.present?
 				@get_previous_messages.each do |msgs|
-					msg = {}
-					m << msgs.user.profile.attributes.merge(:message => msgs.as_json(only:[:id,:content,:created_at]))
-					# msg["message"] = msgs.as_json(only:[:id,:content])
-					# m << msg
+					m << msgs.user.profile.attributes.merge(:message => msgs.attributes.slice("id","content").merge!("created_at"=> msgs.created_at.to_i) )
 				end
 			end
 			render :json => {
@@ -109,14 +113,23 @@ class MessagesController < ApplicationController
 				code = 400
 			else
 				@message = @user.messages.create(content: params[:message_content], group_id: @group.id, image: params[:image])
+				
 				@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 				message = "Message successfully created"
 				code = 200
+				@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at ASC")
+				@ms = []
+				if @get_previous_messages.present?
+					@get_previous_messages.each do |msgs|
+						@ms << msgs.user.profile.attributes.merge(:message => msgs.attributes.slice("id","content").merge!("created_at"=> msgs.created_at.to_i) )
+					end
+				end
 			end
 			
 			render :json => {
 							:response_code => code,
-							:message => message
+							:message => message,
+							:user_messages => @ms
 							}
 		else
 			render :json => {
