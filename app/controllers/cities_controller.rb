@@ -20,8 +20,10 @@ class CitiesController < ApplicationController
 	end
 
 	def get_user_cities
-		@user_cities = @user.cities
-		render :json => { :response_code => 200, :response_message => "All cities of user" ,:cities => @user_cities.as_json(only: [:id,:city_name])	}
+		@user_cities = @user.cities.paginate(:page => params[:page], :per_page => params[:size])
+		@max = @user_cities.total_pages
+		@total_entries = @user_cities.total_entries
+		render :json => { :response_code => 200, :response_message => "All cities of user" ,:cities => @user_cities.as_json(only: [:id,:city_name]), :pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}	}
 	end
 
 	def remove_city

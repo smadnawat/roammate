@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   post 'get_comments' => "comments#get_comments"
   post 'update_profile' => "profiles#update_profile"
   
+  get 'get_settings' => "notifications#get_settings"
+  get 'get_gender' => "notifications#get_gender"
   get 'my_notifications' => "notifications#my_notifications"
   get 'my_profile' => "profiles#my_profile"
   get 'get_roammate_to_add_in_group' => "invitations#get_roammate_to_add_in_group"
@@ -50,7 +52,7 @@ Rails.application.routes.draw do
   # get 'select_user_to_add' => 'invitations#select_user_to_add'
   # get 'select_user_to_add' => 'interests#select_user_to_add'
   post 'predefined_interests' => 'interests#predefined_interests'
-  get 'predefined_events' => 'events#predefined_events'
+  get 'get_predefined_events' => 'events#get_predefined_events'
   # post 'filter_user_selected_interest' => 'interests#filter_user_selected_interest'
   post 'signin' => "users#login"
   post 'selected_interest_list' => 'interests#selected_interest_list'

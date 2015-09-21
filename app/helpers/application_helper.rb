@@ -1,5 +1,4 @@
 module ApplicationHelper
-
 	def common_activities user,member
 		@interests = User.find_by_id(user).interests & User.find_by_id(member).interests
 		@interest = []
@@ -42,8 +41,8 @@ module ApplicationHelper
 				@eve[:image] = e.image.url
 				@event << @eve
 			end
-			@event
 		end
+		@event
 	end
 
 	def message_count user, group

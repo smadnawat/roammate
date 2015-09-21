@@ -113,7 +113,6 @@ class MessagesController < ApplicationController
 				code = 400
 			else
 				@message = @user.messages.create(content: params[:message_content], group_id: @group.id, image: params[:image])
-				
 				@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 				message = "Message successfully created"
 				code = 200

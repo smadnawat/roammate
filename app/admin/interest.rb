@@ -17,7 +17,9 @@ ActiveAdmin.register Interest do
     column "Icon" do |resources|
       image_tag resources.icon_url(:thumbnail)
     end
-
+    column "Colour" do |col|
+      col.color
+    end
     column "Banner" do |resources|
       image_tag resources.banner_url(:thumbnail)
     end

@@ -1,7 +1,7 @@
 class ProfilesController < ApplicationController
  
  include ApplicationHelper
- before_filter :check_user  ,only: [:view_matched_profile, :add_profile_picture,:update_profile, :my_profile]
+ before_filter :check_user , only: [:view_matched_profile, :add_profile_picture,:update_profile, :my_profile]
 
    
 	def profile_status

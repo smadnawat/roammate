@@ -73,7 +73,6 @@ class InterestsController < ApplicationController
 		 	end
 		 	p "------finally---after-- rmv ----#{@user.interests.pluck(:id)}"
 		 end
-		@events = predefined_events
 		@selected_interest = @user.interests
 		p "---selected------#{@selected_interest.pluck(:id)}"
 		@interest = []
@@ -89,8 +88,9 @@ class InterestsController < ApplicationController
 		end		
 		p "------------interest----#{@interest.inspect}"
 		# p "=======matches===#{@matches.inspect}"
-		@matches = Interest.view_matches_algo(@selected_interest, @user)		
-		p "++++++++++++++++++++#{@matches}++++++++++++++++++++++"
+		@matches = Interest.view_matches_algo(@selected_interest, @user)	
+		@events = predefined_events	
+		# p "++++++++++++@matches++++++++#{@matches}++++++++++++++++++++++"
 			render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests",
 		 	:selected_interest => @interest,
 			:matches => @matches,
@@ -99,7 +99,7 @@ class InterestsController < ApplicationController
 
 	def predefined_interests
 		@user_int = @user.interests.pluck(:id)
-	    @user_int.present? ? @interests = Interest.where("id NOT IN (?)",@user_int).all.paginate(:page => params[:page], :per_page => params[:size]) :  @interests = Interest.all.paginate(:page => params[:page], :per_page => params[:size])
+	  @user_int.present? ? @interests = Interest.where("id NOT IN (?)",@user_int).all.paginate(:page => params[:page], :per_page => params[:size]) :  @interests = Interest.all.paginate(:page => params[:page], :per_page => params[:size])
 		@max = @interests.total_pages.to_s
 		@total = @interests.total_entries.to_s
 		@per = @interests.per_page.to_s
@@ -112,6 +112,7 @@ class InterestsController < ApplicationController
 				@int[:image] =  i.image.url
 				@int[:icon] =  i.icon.url
 				@int[:banner]= i.banner.url
+				@int[:color]= i.color
 				@int[:description] = i.description
 				@interest << @int
 			end

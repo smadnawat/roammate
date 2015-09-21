@@ -11,7 +11,9 @@ class PostsController < ApplicationController
 	end
 
 	def get_posts
-		@posts = Post.all.order(created_at: "desc")
+		@posts = Post.all.order(created_at: "desc").paginate(:page => params[:page], :per_page => params[:size])
+		@max = @posts.total_pages
+		@total_entries = @posts.total_entries
 		@arr = []
 		@posts.each do |p|
 			@post = {}
@@ -24,16 +26,16 @@ class PostsController < ApplicationController
 			@post["user"] = p.user.profile.attributes.merge(:points =>  points)
 			@arr << @post
 		end
-		render :json => {:response_code => 200,:message => "All posts", :posts => @arr}
+		render :json => {:response_code => 200,:message => "All posts", :posts => @arr, :pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries} }
 	end
 
-	def create_comment
-		@post = Post.find_by_id(params[:post_id])
-		if @post.present?
-			@comment = @post.comments.create(:reply => params[:reply], :user_id => @user.id)
-			render :json => {:response_code => 200,:message => "Comment successfully created", :comment => @comment}
-		else
-			render :json => {:response_code => 500, :message => "Something went wrong."}
-		end
-	end
+	# def create_comment
+	# 	@post = Post.find_by_id(params[:post_id])
+	# 	if @post.present?
+	# 		@comment = @post.comments.create(:reply => params[:reply], :user_id => @user.id)
+	# 		render :json => {:response_code => 200,:message => "Comment successfully created", :comment => @comment}
+	# 	else
+	# 		render :json => {:response_code => 500, :message => "Something went wrong."}
+	# 	end
+	# end
 end

@@ -2,6 +2,18 @@ class NotificationsController < ApplicationController
 
 	before_filter :check_user
 
+	def get_settings
+		@set = {}
+		@set["new_message"]  = @user.message_notification ? "on" : "off"
+		@set["friend_request"] = @user.friend_request_notification ? "on" : "off"
+		@set["new_event"] = @user.new_event_notification ? "on" : "off"
+		@set["updates"] = @user.updates_notification ? "on" : "off"
+		render :json => {
+							:response_code => 200, :message => "Settings fetched successfully",
+							:settings => @set
+							}
+	end
+
 	def settings
 		@user.update_attributes(:message_notification => params[:new_message]=="off" ? false : true  ) if params[:new_message].present?
 		@user.update_attributes(:friend_request_notification => params[:friend_request]=="off" ? false : true ) if params[:friend_request].present?
@@ -18,12 +30,19 @@ class NotificationsController < ApplicationController
 							}
 	end
 
+	def get_gender
+		render :json => {
+							:response_code => 200, :message => "Gender get successfully", :gender => @user.profile.gender
+							}
+	end
+
 	def gender_update
 		@user.profile.update_attributes(:gender => params[:gender]) if params["gender"].present?
 		render :json => {
 							:response_code => 200, :message => "Setting updated"
 							}
 	end
+
 
 	def my_notifications
 		@notifications = Notification.where(reciever: @user.id)
