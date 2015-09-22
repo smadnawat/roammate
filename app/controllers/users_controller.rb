@@ -11,6 +11,8 @@ class UsersController < ApplicationController
 		@notification.destroy_all
 		@group = Group.where("group_name = ?",@user.id.to_s)
 		@group.destroy_all
+		@block = Block.where("member_id = ?", @user.id)
+		@block.destroy_all
 		@user.destroy
 		redirect_to admin_profiles_path
 	end

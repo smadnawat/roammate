@@ -29,7 +29,7 @@ class MessagesController < ApplicationController
 			user_list = {}
 			@all_messages = g.messages
 			@mg = @all_messages.order("created_at ASC").last
-			user_list["last_message"] = @mg.attributes.slice("id","content","user_id","group_id").merge!("created_at"=> @mg.created_at.to_i)
+			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("id","content","user_id","group_id").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = nil
 			user_list["total_unread_message_count"] = @all_messages.where('status = ?', false).count
 			if @user.id == g.group_admin
 				@p = point_algo(@user.id, g.group_name.to_i)
@@ -43,11 +43,10 @@ class MessagesController < ApplicationController
 			@inb << user_list
 		end
 			render :json => {
-								:response_code => 200,
-								:message => "data fetched successfully.", 
-								:inbox => @inb
-							}
-	
+										:response_code => 200,
+										:message => "data fetched successfully.", 
+										:inbox => @inb
+											}
 	end
 
 
@@ -112,8 +111,16 @@ class MessagesController < ApplicationController
 				message = "Message not created"
 				code = 400
 			else
-				@message = @user.messages.create(content: params[:message_content], group_id: @group.id, image: params[:image])
-				@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
+				@message = @user.messages.build(content: params[:message_content], group_id: @group.id, image: params[:image])
+				if @message.save
+					@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
+					@alert = "send message"
+					@group_users = @group.users.where('id != ?', @user.id)
+					@group_users.each do |snd|
+						@badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
+            snd.devices.each {|device| (device.device_type == "Android") ? AndroidPushWorker.perform_async(snd.id, "#{snd.profile.first_name.capitalize} send you a message", @badge, nil, nil ) : ApplePushWorker.perform_async(snd.id, "#{snd.profile.first_name.capitalize} send you a message", @badge, nil, nil ) } 
+          end
+				end
 				message = "Message successfully created"
 				code = 200
 				@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at ASC")
@@ -124,7 +131,6 @@ class MessagesController < ApplicationController
 					end
 				end
 			end
-			
 			render :json => {
 							:response_code => code,
 							:message => message,

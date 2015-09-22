@@ -1,6 +1,6 @@
 class RatingsController < ApplicationController
 
-	before_filter :check_user, :only => [:new_user_rating, :user_rerating]
+	before_filter :check_user, :only => [:new_user_rating]
 
 	def new_user_rating
 		@member = User.find_by_id(params[:member_id])

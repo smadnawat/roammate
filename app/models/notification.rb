@@ -24,6 +24,8 @@ class Notification < ActiveRecord::Base
   		return "#{user.profile.first_name} send you a chat invitation"
   	when "accept chat"
   		return "#{user.profile.first_name} has been accepted your chat invitation"
+    when "send message"
+      return "#{user.profile.first_name} has sent a message"
   	end
   end
 end

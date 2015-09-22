@@ -30,7 +30,10 @@ class Interest < ActiveRecord::Base
     
       @int_arr = []
       (t.interests&user.interests).each do |i|
-        @int_arr <<  i.icon.url
+        @list_interest = {}
+        @list_interest[:image] = i.icon.url 
+        @list_interest[:color] = i.color
+        @int_arr << @list_interest
       end  
       @intr[:profile] = t.profile.attributes.merge!(points: point_algo(t.id,user.id), :common_interest=> @int_arr)
       @final << @intr       

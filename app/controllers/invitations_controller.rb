@@ -33,7 +33,7 @@ class InvitationsController < ApplicationController
 				@group.users << @invitation.user
 				@group.users << @user
 				@alert = "accept chat"
-				@notification =Notification.create_notification(@user,@invitation.user,@alert,@invitation.id)
+				@notification = Notification.create_notification(@user,@invitation.user,@alert,@invitation.id)
 				@user.points.create(:pointable_type => "Accept Chat invite")
 				message = "Successfully accepted invitation"
 				code = 200
@@ -75,4 +75,4 @@ class InvitationsController < ApplicationController
 	end
 
 end
- 	
+	

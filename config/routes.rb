@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   post 'upload_file' => "upload_files#upload_file"
 
   #*****************************************************************************
-
+  post 'like_event' => "likes#like_event"
   post 'signin' => "users#login"
   post 'add_current_city' => "cities#add_current_city"
   post 'match_users' => "users#match_users"
@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   post 'create_comment' => "comments#create_comment"
   post 'get_comments' => "comments#get_comments"
   post 'update_profile' => "profiles#update_profile"
+  post 'block_unblock_users' => "blocks#block_unblock_users"
   
   get 'get_settings' => "notifications#get_settings"
   get 'get_gender' => "notifications#get_gender"

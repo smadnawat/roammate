@@ -34,6 +34,7 @@ class InterestsController < ApplicationController
 			@int[:icon] =  i.icon.url
 			@int[:banner]= i.banner.url
 			@int[:description] = i.description
+			@int[:color] = i.color
 			@interest << @int
 		end		
 		render :json => 
@@ -84,12 +85,13 @@ class InterestsController < ApplicationController
 			@int[:icon] =  i.icon.url
 			@int[:banner]= i.banner.url
 			@int[:description] = i.description
+			@int[:color] = i.color
 			@interest << @int
 		end		
 		p "------------interest----#{@interest.inspect}"
 		# p "=======matches===#{@matches.inspect}"
 		@matches = Interest.view_matches_algo(@selected_interest, @user)	
-		@events = predefined_events	
+		@events = predefined_events(@user)
 		# p "++++++++++++@matches++++++++#{@matches}++++++++++++++++++++++"
 			render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests",
 		 	:selected_interest => @interest,

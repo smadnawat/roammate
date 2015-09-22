@@ -22,6 +22,7 @@ class ProfilesController < ApplicationController
 			@ratable = false
 			@interests = common_activities(@user.id, @member.id)
 			@is_friend = is_friend(@user.id,@member.id)
+			@events = user_liked_events(@user)
 			@rating = "#{user_rating(@member.id)}%"
 			@positive_ratings_count = @member.ratings.where(:rate=>"1").count
 			@n = "#{@rating} of #{@positive_ratings_count} positive rates"
@@ -34,6 +35,8 @@ class ProfilesController < ApplicationController
 											:friendship_status => @is_friend ? (@is_friend.status ? "Friend" : "Request sent") : "Not friend" ,
 											:mutual_interests => @interests,
 											:mutual_interests_count => @interests.count,
+											:liked_events => @events,
+											:liked_events_count => @events.count,
 											:mutual_friends => @common_friends,
 											:mutual_friends_count => @mutual_friends.count,
 											:points => @points,
@@ -64,6 +67,7 @@ class ProfilesController < ApplicationController
 			@int[:icon] =  i.icon.url
 			@int[:banner]= i.banner.url
 			@int[:description] = i.description
+			@int[:color] = i.color
 			@intr << @int
 		end
 		@recieve = Invitation.where('reciever = ? and status = ?', @user.id, true).pluck(:user_id)

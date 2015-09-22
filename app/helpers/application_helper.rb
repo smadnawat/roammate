@@ -9,10 +9,31 @@ module ApplicationHelper
 				@int[:image] =  i.image.url
 				@int[:icon] =  i.icon.url
 				@int[:banner]= i.banner.url
-				@int[:description] = i.description				
+				@int[:description] = i.description		
+				@int[:color] = i.color
 				@interest << @int
 			end
 			return @interest
+	end
+
+	def user_liked_events user
+		if user.likes.present?
+			eve = []
+			user.likes.each do |e|
+				@even = {}
+				@even[:event_name] = e.event.event_name
+				@even[:place] = e.event.place
+				@even[:city] = e.event.city
+				@even[:link] = e.event.link
+				@even[:event_date] = e.event.event_date
+				@even[:host_name] = e.event.host_name
+				@even[:image] = e.event.image.url
+				eve << @even
+			end
+			eve
+		else
+			eve = []
+		end
 	end
 
 	def is_friend user,member
@@ -24,7 +45,7 @@ module ApplicationHelper
 		end
 	end
 
-	def predefined_events
+	def predefined_events user
 		@events = Event.where('event_date >= ?', Date.today)
 		@event = []
 		if @events.present?
@@ -39,6 +60,9 @@ module ApplicationHelper
 				@eve[:event_date] = e.event_date.to_date
 				@eve[:host_name] = e.host_name
 				@eve[:image] = e.image.url
+				@eve[:total_likes] = e.likes.where(status: true).count
+				@stat = user.likes.where('event_id = ?', e.id).first
+				@eve[:status] = @stat.present? ? @stat.status : false
 				@event << @eve
 			end
 		end

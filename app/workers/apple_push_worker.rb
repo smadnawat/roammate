@@ -3,14 +3,22 @@ class ApplePushWorker
 	include Sidekiq::Worker
 
   def perform(reciever,alert,badges,noti,invitation)
+  p "=============INSIDE THE WORKER============"
+  p "|"
+  p "|"
+  p "|"
+  p "|"
+  p "%%%%%%%%%%%%% Inside ApplePushWorker %%%%%%%%%%%%%%%%%%" 
+  logger.info "+++++++#{reciever}=======#{alert}++++++#{badges}======#{noti}+++++++#{invitation}======"
     pusher = Grocer.pusher(
-      certificate: Rails.root.join('MobiloitteDevApp.pem'),      # required
-      passphrase:  "Mobiloitte",                       # optional
+      certificate: Rails.root.join('MobiloitteDevelopmentAbdTesting.pem'),      # required
+      passphrase:  "Mobiloitte1",                       # optional
       gateway:     "gateway.sandbox.push.apple.com", # optional; See note below.
       port:        2195,                     # optional
       retries:     3                         # optional
     )
     @device = Device.where(:user_id => reciever.to_i)
+    p "++++++++Inside device ===>>>>     #{@device.inspect} +++++++++"
     notification = Grocer::Notification.new(
       :device_token => "#{@device.last.device_id}",
       :alert =>  alert,
@@ -22,6 +30,11 @@ class ApplePushWorker
       :content_available => true                  # optional; any truthy value will set 'content-available' to 1
       )
      pusher.push(notification)
+    p "|"
+    p "|"
+    p "|"
+    p "|"
+    p "=============Outside THE WORKER============"
   end
 end
 
