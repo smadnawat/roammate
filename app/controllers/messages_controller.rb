@@ -49,7 +49,6 @@ class MessagesController < ApplicationController
 											}
 	end
 
-
 	def special_messages
 		@active_interest = Interest.find_by_id(@user.active_interest)
 		if @active_interest.present?
@@ -75,6 +74,7 @@ class MessagesController < ApplicationController
 	end
 
 	def get_messages
+		 p "+++++++++++++#{params.inspect}+++++++++++++++++++++"
 		@group = Group.find_by_id(params[:group_id])
 		if @group.present?
 			@qs = Question.where('interest_id = ? and status = ?',@user.active_interest, true )
