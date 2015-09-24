@@ -23,7 +23,8 @@ class MessagesController < ApplicationController
 
 
 	def user_inbox
-		@groups = @user.groups
+		blocked_user_list(@user)
+		@arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)',@arr ) : @groups = @user.groups
 		@inb= []
 		@groups.each do |g|
 			user_list = {}
@@ -74,7 +75,7 @@ class MessagesController < ApplicationController
 	end
 
 	def get_messages
-		 p "+++++++++++++#{params.inspect}+++++++++++++++++++++"
+		p "+++++++++++++#{params.inspect}+++++++++++++++++++++"
 		@group = Group.find_by_id(params[:group_id])
 		if @group.present?
 			@qs = Question.where('interest_id = ? and status = ?',@user.active_interest, true )
@@ -119,7 +120,7 @@ class MessagesController < ApplicationController
 					@group_users.each do |snd|
 						@type = "Send message"
 						@badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
-            snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "#{@user.profile.first_name.capitalize} send you a message", @badge, nil, nil, @type, device.device_id ) : ApplePushWorker.perform_async( snd.id, "#{@user.profile.first_name.capitalize} send you a message", @badge, nil, nil, @type, device.device_id ) } 
+            snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "#{@user.profile.first_name.capitalize} send you a message", @badge, nil, nil, @type, device.device_id, @user.profile.image ) : ApplePushWorker.perform_async( snd.id, "#{@user.profile.first_name.capitalize} send you a message", @badge, nil, nil, @type, device.device_id, nil) } 
           end
 				end
 				message = "Message successfully created"

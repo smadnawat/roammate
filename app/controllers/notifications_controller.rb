@@ -45,6 +45,7 @@ class NotificationsController < ApplicationController
 
 
 	def my_notifications
+		p "++++++++++#{params.inspect}++++++++++++++++++++++++"
 		@notifications = Notification.where(reciever: @user.id)
 		if @notifications.present?		
 			@note = []
