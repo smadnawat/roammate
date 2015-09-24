@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-	before_filter :check_user, :only => [:create_post, :create_comment]
+	before_filter :check_user, :only => [:create_post, :get_posts]
 
 	def create_post
 		@post = @user.posts.build(title: params[:title], content: params[:content], image: params[:image],user_type: "user")
@@ -11,7 +11,8 @@ class PostsController < ApplicationController
 	end
 
 	def get_posts
-		@posts = Post.all.order(created_at: "desc").paginate(:page => params[:page], :per_page => params[:size])
+		blocked_user_list(@user)
+		@arr.present? ? @posts = Post.where('user_id NOT IN (?)', @arr ).order(created_at: "desc").paginate(:page => params[:page], :per_page => params[:size]) : @posts = Post.all.order(created_at: "desc").paginate(:page => params[:page], :per_page => params[:size])
 		@max = @posts.total_pages
 		@total_entries = @posts.total_entries
 		@arr = []

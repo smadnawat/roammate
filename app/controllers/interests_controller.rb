@@ -96,7 +96,7 @@ class InterestsController < ApplicationController
 			render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests",
 		 	:selected_interest => @interest,
 			:matches => @matches,
-			:events => @events	}	
+			:events => @events	}
 	end
 
 	def predefined_interests

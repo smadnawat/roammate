@@ -16,6 +16,23 @@ module ApplicationHelper
 			return @interest
 	end
 
+	# def user_is_block? user,member
+	# 	@ublock = Block.find_by_user_id_and_member_id_and_is_block(user, member, true)
+	# 	if @ublock.present?
+	# 		return true
+	# 	else
+	# 		return false
+	# 	end
+	# end
+
+	def blocked_user_list user
+		@arr = []
+		user.blocks.where(is_block: true).each do |blk|
+			@arr << blk.member_id
+		end
+		@arr
+	end
+
 	def user_liked_events user
 		if user.likes.present?
 			eve = []

@@ -32,7 +32,7 @@ class ProfilesController < ApplicationController
 			render :json => {
 											:response_code => 200, :message => "record successfully fetched",
 											:member_profile => @member.profile.attributes.merge(:last_active_at => @member.updated_at.to_date),
-											:friendship_status => @is_friend ? (@is_friend.status ? "Friend" : "Request sent") : "Not friend" ,
+											:friendship_status => @is_friend ? (@is_friend.status ? "Friend" : "Not friend") : "Not friend" ,
 											:mutual_interests => @interests,
 											:mutual_interests_count => @interests.count,
 											:liked_events => @events,

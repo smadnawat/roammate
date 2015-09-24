@@ -1,6 +1,6 @@
 class InvitationsController < ApplicationController
 
-	before_filter :check_user, :only => [:get_roammates_to_add_in_group, :add_member_as_roammate, :accept_or_decline_invitation, :add_member_to_group]
+	before_filter :check_user, :only => [:get_roammate_to_add_in_group, :add_member_as_roammate, :accept_or_decline_invitation, :add_member_to_group]
 
 	def add_member_as_roammate
 		@member = User.find_by_id(params[:member_id])
@@ -62,13 +62,13 @@ class InvitationsController < ApplicationController
 
 	def get_roammate_to_add_in_group
 		@members = Invitation.where("(user_id = ? or reciever = ?) and status = ?", @user.id, @user.id, true).paginate(:page => params[:page], :per_page => params[:size])
-		@ids = @members.pluck(:user_id) + @members.pluck(:reciever)	- [@user.id]
+		@ids = @members.pluck(:user_id) + @members.pluck(:reciever)	- [@user.id] - blocked_user_list(@user).uniq
 		if @ids.present?
 			friends = []
 			@ids.uniq.each do |user|
 				friends << Profile.find_by_id(user)
 			end
-			render :json => {:response_code => 200,:message => "Member successfully added in group.", :members => friends,:page => params[:page],:size => params[:size]}
+			render :json => {:response_code => 200,:message => "Member successfully fetched.", :members => friends,:page => params[:page],:size => params[:size]}
 		else
 			render :json => {:response_code => 500, :message => "Something went wrong."}
 		end

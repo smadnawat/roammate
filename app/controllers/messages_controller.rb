@@ -20,7 +20,7 @@ class MessagesController < ApplicationController
 		rate.destroy
 		redirect_to admin_chat_history_path
 	end
-	
+
 
 	def user_inbox
 		@groups = @user.groups
@@ -117,8 +117,9 @@ class MessagesController < ApplicationController
 					@alert = "send message"
 					@group_users = @group.users.where('id != ?', @user.id)
 					@group_users.each do |snd|
+						@type = "Send message"
 						@badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
-            snd.devices.each {|device| (device.device_type == "Android") ? AndroidPushWorker.perform_async(snd.id, "#{snd.profile.first_name.capitalize} send you a message", @badge, nil, nil ) : ApplePushWorker.perform_async(snd.id, "#{snd.profile.first_name.capitalize} send you a message", @badge, nil, nil ) } 
+            snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "#{@user.profile.first_name.capitalize} send you a message", @badge, nil, nil, @type, device.device_id ) : ApplePushWorker.perform_async( snd.id, "#{@user.profile.first_name.capitalize} send you a message", @badge, nil, nil, @type, device.device_id ) } 
           end
 				end
 				message = "Message successfully created"

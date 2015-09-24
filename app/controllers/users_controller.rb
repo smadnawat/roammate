@@ -66,7 +66,7 @@ class UsersController < ApplicationController
 			end
 
 		  if !Device.where("device_id =? and device_type= ? and user_id = ?", params[:device_id],params[:device_type],@user.id).present?
-		    @device = @user.devices.create(:device_id => params[:device_id],:device_type =>params[:device_type]) 
+		    @device = @user.devices.create(:device_id => params[:device_id],:device_type =>params[:device_type].downcase) 
 		  end
 	  else
 		 @status =false
