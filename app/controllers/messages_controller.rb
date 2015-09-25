@@ -30,7 +30,8 @@ class MessagesController < ApplicationController
 			user_list = {}
 			@all_messages = g.messages
 			@mg = @all_messages.order("created_at ASC").last
-			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("id","content","user_id","group_id").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = nil
+			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("id","content","user_id").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = nil
+			user_list["group_id"] = g.id
 			user_list["total_unread_message_count"] = @all_messages.where('status = ?', false).count
 			if @user.id == g.group_admin
 				@p = point_algo(@user.id, g.group_name.to_i)

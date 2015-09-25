@@ -59,13 +59,14 @@ class InvitationsController < ApplicationController
 			@group.users << @member if !@group.users.include?(@member)
 			render :json => {:response_code => 200,:message => "Member successfully added in group."}
 		else
-			render :json => {:response_code => 500, :message => "Something went wrong."}
+			render :json => {:response_code => 500, :message => "Members not found to add in group"}
 		end
 	end
 
 	def get_roammate_to_add_in_group
 		@members = Invitation.where("(user_id = ? or reciever = ?) and status = ?", @user.id, @user.id, true).paginate(:page => params[:page], :per_page => params[:size])
-		@ids = @members.pluck(:user_id) + @members.pluck(:reciever)	- [@user.id] - blocked_user_list(@user).uniq
+		@already_added_members = Group.find_by_id(params[:group_id]).users.pluck(:id)
+		@ids = @members.pluck(:user_id) + @members.pluck(:reciever)	- [@user.id] - blocked_user_list(@user).uniq - @already_added_members
 		if @ids.present?
 			friends = []
 			@ids.uniq.each do |user|

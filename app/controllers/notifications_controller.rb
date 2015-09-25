@@ -50,7 +50,7 @@ class NotificationsController < ApplicationController
 		if @notifications.present?		
 			@note = []
 			@notifications.each do |notice|
-				@pr = Profile.find_by_id(notice.reciever)#.attributes.merge!(:notice => notice)
+				@pr = Profile.find_by_id(notice.user_id)#.attributes.merge!(:notice => notice)
 				@p = {}
 				@p["user_id"] = @pr.id
 				@p["image"] = @pr.image
@@ -58,6 +58,9 @@ class NotificationsController < ApplicationController
 				@p["last_name"] = @pr.last_name
 				@p["noti_type"] = notice.notification_type
 				@p["message"] = notice.message
+				@p["created_at"] = notice.created_at.to_i
+				@p["is_friend"] = is_friend(notice.reciever, notice.user_id).present?
+				@p["is_friend"] ? @p["group_id"] = Group.where(group_admin: [notice.reciever, notice.user_id], group_name: [notice.reciever.to_s, notice.user_id.to_s]).first.id : @p["group_id"] = nil
 				@note << @p
 			end			
 			render :json => {
