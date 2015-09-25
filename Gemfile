@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 
 #################
+gem 'redis'
 gem 'sidekiq'
 gem 'gcm'
 gem 'grocer'
