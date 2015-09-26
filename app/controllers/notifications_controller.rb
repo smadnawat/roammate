@@ -46,11 +46,14 @@ class NotificationsController < ApplicationController
 
 	def my_notifications
 		p "++++++++++#{params.inspect}++++++++++++++++++++++++"
-		@notifications = Notification.where(reciever: @user.id)
+		@notifications = Notification.where(reciever: @user.id).paginate(:page => params[:page], :per_page => params[:size])
+		@max = @notifications.total_pages
+		@total_entries = @notifications.total_entries
 		if @notifications.present?		
 			@note = []
 			@notifications.each do |notice|
 				@pr = Profile.find_by_id(notice.user_id)#.attributes.merge!(:notice => notice)
+				p "+++++++++++++++++++#{notice.inspect}+++++++++++++++++++++++++++++"
 				@p = {}
 				@p["user_id"] = @pr.id
 				@p["image"] = @pr.image
@@ -60,12 +63,14 @@ class NotificationsController < ApplicationController
 				@p["message"] = notice.message
 				@p["created_at"] = notice.created_at.to_i
 				@p["is_friend"] = is_friend(notice.reciever, notice.user_id).present?
+				p "+++++++++++++++++#{@p["is_friend"]}++++++++++++++++++++"
 				@p["is_friend"] ? @p["group_id"] = Group.where(group_admin: [notice.reciever, notice.user_id], group_name: [notice.reciever.to_s, notice.user_id.to_s]).first.id : @p["group_id"] = nil
 				@note << @p
 			end			
 			render :json => {
 							:response_code => 200, :message => "record successfully fetched",
-							:notifications => @note
+							:notifications => @note,
+							:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 							}
 		else
 			render :json => {

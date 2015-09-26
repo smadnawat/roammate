@@ -1,5 +1,6 @@
 class InterestsController < ApplicationController
 
+	require 'will_paginate/array'
 	include ApplicationHelper
 	before_filter :check_user, :only => [:picked_interest_user_list, :predefined_interests, :selected_interest_list, :pre_selected_interests]
 
@@ -7,12 +8,16 @@ class InterestsController < ApplicationController
 		@interest = Interest.where('id = ?',params[:interest_id])
 		if @interest.present?
 			@user.update_attributes(active_interest: @interest.first.id)
-			@matches = Interest.view_matches_algo(@interest, @user)
+			@matches = Interest.view_matches_algo(@interest, @user, params[:page],params[:size])
+			p "++++++++++++#{@matches.inspect}+++++++++++++++++++"
+			# @max = @matches.total_pages
+			# @total_entries = @matches.total_entries
 			render :json => 
 							{ 
 							:response_code => 200, 
 							:response_message => "Successfully fetched selected interests",
-							:matches => @matches	
+							:matches => @matches,
+							:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 							}
 		else
 			render :json => 
@@ -68,6 +73,7 @@ class InterestsController < ApplicationController
 			end
 			p "-----after---added------#{@user.interests.pluck(:id)}"
 		 end
+		 p "+++++++++++++++@rmv = @pre_selected-(@now_selected&@pre_selected)+++++++++++++++++++++"
 		 if @rmv.present?
 		 	@rmv.each do |r|
 		 		@user.interests.delete(r)
@@ -90,13 +96,18 @@ class InterestsController < ApplicationController
 		end		
 		p "------------interest----#{@interest.inspect}"
 		# p "=======matches===#{@matches.inspect}"
-		@matches = Interest.view_matches_algo(@selected_interest, @user)	
+		@matches = Interest.view_matches_algo(@selected_interest, @user, params[:page],params[:size])	
+		# @max = @matches.total_pages
+		# @total_entries = @matches.total_entries
 		@events = predefined_events(@user)
 		# p "++++++++++++@matches++++++++#{@matches}++++++++++++++++++++++"
-			render :json => { :response_code => 200, :response_message => "Successfully fetched selected interests",
+			render :json => { 
+			:response_code => 200, :response_message => "Successfully fetched selected interests",
 		 	:selected_interest => @interest,
 			:matches => @matches,
-			:events => @events	}
+			:events => @events,
+			:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
+			}
 	end
 
 	def predefined_interests

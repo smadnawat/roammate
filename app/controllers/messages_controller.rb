@@ -24,13 +24,16 @@ class MessagesController < ApplicationController
 
 	def user_inbox
 		blocked_user_list(@user)
-		@arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)',@arr ) : @groups = @user.groups
+		@arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)',@arr ).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
+		@max = @groups.total_pages
+		@total_entries = @groups.total_entries
 		@inb= []
 		@groups.each do |g|
 			user_list = {}
 			@all_messages = g.messages
 			@mg = @all_messages.order("created_at ASC").last
-			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("id","content","user_id").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = nil
+			@quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
+			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question)
 			user_list["group_id"] = g.id
 			user_list["total_unread_message_count"] = @all_messages.where('status = ?', false).count
 			if @user.id == g.group_admin
@@ -47,7 +50,8 @@ class MessagesController < ApplicationController
 			render :json => {
 										:response_code => 200,
 										:message => "data fetched successfully.", 
-										:inbox => @inb
+										:inbox => @inb,
+										:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 											}
 	end
 
@@ -84,7 +88,9 @@ class MessagesController < ApplicationController
 		  @qs.each do |q|
 		  	@get_default_quetions << q.attributes.slice("id","question","interest_id","status").merge!("created_at"=> q.created_at.to_i)
 		  end
-			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at ASC")
+			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at ASC").paginate(:page => params[:page], :per_page => params[:size])
+			@max = @get_previous_messages.total_pages
+			@total_entries = @get_previous_messages.total_entries
 			m = []
 			if @get_previous_messages.present?
 				@get_previous_messages.each do |msgs|
@@ -95,7 +101,8 @@ class MessagesController < ApplicationController
 							:response_code => 200,
 							:message => "Message list",							
 							:predefined_messages => @get_default_quetions,
-							:user_messages => m
+							:user_messages => m,
+							:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 							}
 
 		else

@@ -1,5 +1,6 @@
 class Interest < ActiveRecord::Base
 
+	require 'will_paginate/array'
 	include ApplicationHelper
 	mount_uploader :image, AvatarUploader
 	mount_uploader :icon, IconUploader
@@ -17,7 +18,7 @@ class Interest < ActiveRecord::Base
 		@action = self.users - @users
 	end
 
-	def self.view_matches_algo selected_interest, user
+	def self.view_matches_algo selected_interest, user, page, size
 		matches = []
 		@final = []
 			@blok = blocked_user_list(user) + [user.id]
@@ -27,7 +28,10 @@ class Interest < ActiveRecord::Base
 					matches << match if match.current_city == user.current_city
 				end
 			end
-		matches.uniq.each do |t|
+
+			@matchups = matches.paginate(:page => page, :per_page => size)
+			# p "++++++++++++++++++#{@matchups.total_pages}+++++++++++++++++++++++++"
+		@matchups.uniq.each do |t|
 			@intr = {}
 			@int_arr = []
 			(t.interests&user.interests).each do |i|
@@ -37,7 +41,7 @@ class Interest < ActiveRecord::Base
 				@int_arr << @list_interest
 			end  
 			@intr[:profile] = t.profile.attributes.merge!(points: point_algo(t.id,user.id), :common_interest=> @int_arr)
-			@final << @intr       
+			@final << @intr
 		end
 		@final   
 	end

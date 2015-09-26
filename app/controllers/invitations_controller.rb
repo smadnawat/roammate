@@ -19,7 +19,7 @@ class InvitationsController < ApplicationController
 			end
 			render :json => {:response_code => code,:message => message}
 		else
-			render :json => {:response_code => 500,:message => "Something went wrong."}
+			render :json => {:response_code => 500,:message => "Member not present."}
 		end
 	end
 
@@ -65,6 +65,8 @@ class InvitationsController < ApplicationController
 
 	def get_roammate_to_add_in_group
 		@members = Invitation.where("(user_id = ? or reciever = ?) and status = ?", @user.id, @user.id, true).paginate(:page => params[:page], :per_page => params[:size])
+		@max = @members.total_pages
+		@total_entries = @members.total_entries
 		@already_added_members = Group.find_by_id(params[:group_id]).users.pluck(:id)
 		@ids = @members.pluck(:user_id) + @members.pluck(:reciever)	- [@user.id] - blocked_user_list(@user).uniq - @already_added_members
 		if @ids.present?
@@ -72,7 +74,7 @@ class InvitationsController < ApplicationController
 			@ids.uniq.each do |user|
 				friends << Profile.find_by_id(user)
 			end
-			render :json => {:response_code => 200,:message => "Member successfully fetched.", :members => friends,:page => params[:page],:size => params[:size]}
+			render :json => {:response_code => 200,:message => "Member successfully fetched.", :members => friends,:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}}
 		else
 			render :json => {:response_code => 500, :message => "Something went wrong."}
 		end
