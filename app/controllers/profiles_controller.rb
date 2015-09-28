@@ -1,7 +1,7 @@
 class ProfilesController < ApplicationController
  
  include ApplicationHelper
- before_filter :check_user , only: [:view_matched_profile, :add_profile_picture,:update_profile, :my_profile]
+ before_filter :check_user , only: [:get_profile_picture, :view_matched_profile, :add_profile_picture,:update_profile, :my_profile]
 
    
 	def profile_status
@@ -82,7 +82,7 @@ class ProfilesController < ApplicationController
 		@n = "#{@rating} of #{@positive_ratings_count} positive rates"
 
 		render :json => {:response_code => 200,:message => "Successfully fetched profile",
-		:profile => @profile.attributes.merge!(:my_points=> @points,:my_friends_count => @friends.count, :my_interest => @intr, :my_interest_count => @intr.count , :rate => @rating,:total_rating_users => @user.ratings.count,:positive_ratings_count => @positive_ratings_count,:msg => @n, :my_friends => @friends)}
+		:profile => @profile.attributes.merge!(:album => @user.albums.as_json(:only => [:image]) , :my_points=> @points,:my_friends_count => @friends.count, :my_interest => @intr, :my_interest_count => @intr.count , :rate => @rating,:total_rating_users => @user.ratings.count,:positive_ratings_count => @positive_ratings_count,:msg => @n, :my_friends => @friends)}
 	end
 
 	def update_profile
@@ -98,12 +98,20 @@ class ProfilesController < ApplicationController
 	end
 
 	def add_profile_picture
-	@image = @user.albums.build(image: params[:image], status: params[:status])
-		if @image.save
-			render :json => {:response_code => 200,:message => "Successfully changed porfile picture"}
+		if params[:album].present?
+			params[:album].each do |imgg|
+				@user.albums.create(image: "#{imgg}", status: false) if !Album.find_by_image_and_user_id("#{imgg}", @user.id)
+			end
+			@user.profile.update_attributes(image: params[:album].first )
+			render :json => {:response_code => 200,:message => "Successfully uploaded images"}
 		else
-			render :json => {:response_code => 500,:message => "Something went wrong."}
+			render :json => {:response_code => 500,:message => "Images not present."}
 		end
 	end
+
+	def get_profile_picture
+		@user.albums.present? ? (render :json => {:response_code => 200,:message => "Successfully fetched profile",:album => @user.albums.as_json(:only => [:image]) }) : (render :json => {:response_code => 500,:message => "No record found" })
+	end
+
 
 end

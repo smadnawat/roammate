@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   post 'update_profile' => "profiles#update_profile"
   post 'block_unblock_users' => "blocks#block_unblock_users"
   
+  get 'get_profile_picture' => 'profiles#get_profile_picture'
   get 'get_settings' => "notifications#get_settings"
   get 'get_gender' => "notifications#get_gender"
   get 'my_notifications' => "notifications#my_notifications"

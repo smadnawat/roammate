@@ -3,10 +3,10 @@ class ApplePushWorker
 	include Sidekiq::Worker
   sidekiq_options  :retry => false
 
-   def perform(reciever,alert,badges,noti,invitation,type, device, category)
+   def perform(reciever,alert,badges,noti,invitation,type, device, category, name, group_id)
     
     p"---------------INSIDE ApplePushWorker---------------------------"
-    logger.info"===================#{reciever.inspect}===#{alert.inspect}=============#{noti.inspect}=======#{badges.inspect}==============#{device.inspect}==========#{type.inspect}============#{invitation.inspect}================="
+    logger.info"=========#{name}==========#{reciever.inspect}===#{alert.inspect}=============#{noti.inspect}=======#{badges.inspect}==============#{device.inspect}==========#{type.inspect}============#{invitation.inspect}================="
     
     pusher = Grocer.pusher(
 
@@ -21,6 +21,8 @@ class ApplePushWorker
       :device_token => device.to_s,
       :alert =>  alert,
       :category => category,
+      :group_name => name,
+      :group_id => group_id,
       custom: {:notification_type => type,:invitation_id => invitation,:notification_id => noti},
       :badge => badges,
       :sound => "siren.aiff",         # optional

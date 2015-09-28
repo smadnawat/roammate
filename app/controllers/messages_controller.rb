@@ -35,7 +35,7 @@ class MessagesController < ApplicationController
 			@quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
 			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question)
 			user_list["group_id"] = g.id
-			user_list["total_unread_message_count"] = @all_messages.where('status = ?', false).count
+			user_list["total_unread_message_count"] = (@all_messages.where('status = ? and user_id != ?', false, @user.id ).count)
 			if @user.id == g.group_admin
 				@p = point_algo(@user.id, g.group_name.to_i)
 				@prf = User.find_by_id(g.group_name.to_i).profile
@@ -125,10 +125,12 @@ class MessagesController < ApplicationController
 					@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 					@alert = "send message"
 					@group_users = @group.users.where('id != ?', @user.id)
+					# @group_name = @group_users.map {|x| x.profile.first_name}.join(",")
 					@group_users.each do |snd|
+						@group_name =  @group.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
 						@type = "Send message"
 						@badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
-            snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "#{@user.profile.first_name.capitalize} send you a message", @badge, nil, nil, @type, device.device_id, @user.profile.image ) : ApplePushWorker.perform_async( snd.id, "#{@user.profile.first_name.capitalize} send you a message", @badge, nil, nil, @type, device.device_id, nil) } 
+            snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, @user.profile.image, @group_name, @group.id ) : ApplePushWorker.perform_async( snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, nil, @group_name, @group.id ) } if snd.message_notification
           end
 				end
 				message = "Message successfully created"

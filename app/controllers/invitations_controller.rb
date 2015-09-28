@@ -12,7 +12,7 @@ class InvitationsController < ApplicationController
 			else
 				@invitation = @user.invitations.create(reciever: @member.id, status: false)
 				@alert = "Send chat"
-				@notification = Notification.create_notification(@user,@member,@alert,@invitation.id) if @member.friend_request_notification
+				@notification = Notification.create_notification(@user,@member,@alert,@invitation.id) #if @member.friend_request_notification
 				@user.points.create(:pointable_type => "Send chat invite")
 				message = "Invitation successfully sent."
 				code = 200
@@ -59,7 +59,7 @@ class InvitationsController < ApplicationController
 			@group.users << @member if !@group.users.include?(@member)
 			render :json => {:response_code => 200,:message => "Member successfully added in group."}
 		else
-			render :json => {:response_code => 500, :message => "Members not found to add in group"}
+			render :json => {:response_code => 500, :message => "Member or group not exist."}
 		end
 	end
 
@@ -76,7 +76,7 @@ class InvitationsController < ApplicationController
 			end
 			render :json => {:response_code => 200,:message => "Member successfully fetched.", :members => friends,:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}}
 		else
-			render :json => {:response_code => 500, :message => "Something went wrong."}
+			render :json => {:response_code => 500, :message => "Members not found to add in group."}
 		end
 	end
 
