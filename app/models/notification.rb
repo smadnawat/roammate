@@ -28,9 +28,9 @@ class Notification < ActiveRecord::Base
   def self.alert(user,type)
   case type
   	when "Send chat"
-  		return "#{user.profile.first_name} send you a chat invitation"
+  		return "#{user.profile.first_name.capitalize} send you a chat invitation"
   	when "accept chat"
-  		return "#{user.profile.first_name} has been accepted your chat invitation"
+  		return "#{user.profile.first_name.capitalize} has accepted your chat invitation"
   	end
   end
 end

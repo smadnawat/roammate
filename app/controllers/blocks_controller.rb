@@ -10,7 +10,7 @@ class BlocksController < ApplicationController
 			params[:status] == "true" ? @status = "Blocked" : @status = "Unblocked"
 			render :json => {:response_code => 200,:message => "User #{@status} Successfully", :status => @status }
 		else
-			render :json => {:response_code => 500,:message => "Something went wrong." }
+			render :json => {:response_code => 500,:message => "Member not found." }
 		end
 	end
 

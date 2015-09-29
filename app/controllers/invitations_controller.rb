@@ -29,8 +29,8 @@ class InvitationsController < ApplicationController
 		if @invitation.present? && params[:action_type].present?
 			@notice = Notification.find_by_id(params[:notification_id])
 			p "+++++++++++++++++#{@notice.inspect}+++++++++++++++++++++++++++"
-			@notice.update_attributes(status: true, message: "#{@notice.user.profile.first_name.capitalize} is now your roammate")
 			if params[:action_type] == "Accept"
+				@notice.update_attributes(status: true, message: "#{@notice.user.profile.first_name.capitalize} is now your roammate")
 				@invitation.update_attributes(status: true)
 				@group = Group.create(group_admin: @invitation.user_id, group_name: "#{@user.id}")
 				@group.users << @invitation.user
@@ -42,6 +42,7 @@ class InvitationsController < ApplicationController
 				code = 200
 			elsif params[:action_type] == "Decline"
 				@invitation.destroy
+				@notice.destroy
 				message = "Successfully declineded invitation"
 				code = 200
 			end

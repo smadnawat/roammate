@@ -39,9 +39,9 @@ class LikesController < ApplicationController
 					end
 			else
 				render :json => {
-															:response_code => 500,
-															:message => "Something went wrong. "
-															}
+												:response_code => 500,
+												:message => "Something went wrong. "
+												}
 			end
 	end
 

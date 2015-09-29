@@ -20,9 +20,11 @@ class ProfilesController < ApplicationController
 			@group = Group.where("(group_admin = ?  and group_name = ?) or (group_admin = ?  and group_name = ?)",@user.id,@member.id.to_s,@member.id,@user.id.to_s ).first
 			@ratings = nil
 			@ratable = false
+			@on_off = @member.online
 			@interests = common_activities(@user.id, @member.id)
 			@is_friend = is_friend(@user.id,@member.id)
-			@events = user_liked_events(@user)
+			@is_blocked = user_is_block?(@user.id, @member.id)
+			@events = user_liked_events(@member)
 			@rating = "#{user_rating(@member.id)}%"
 			@positive_ratings_count = @member.ratings.where(:rate=>"1").count
 			@n = "#{@rating} of #{@positive_ratings_count} positive rates"
@@ -31,7 +33,7 @@ class ProfilesController < ApplicationController
 			end
 			render :json => {
 											:response_code => 200, :message => "record successfully fetched",
-											:member_profile => @member.profile.attributes.merge(:last_active_at => @member.updated_at.to_date),
+											:member_profile => @member.profile.attributes.merge(:last_active_at => @member.updated_at.to_i),
 											:friendship_status => @is_friend ? (@is_friend.status ? "Friend" : "Request sent") : "Not friend" ,
 											:mutual_interests => @interests,
 											:mutual_interests_count => @interests.count,
@@ -45,11 +47,13 @@ class ProfilesController < ApplicationController
 											:positive_ratings_count => @positive_ratings_count,
 											:msg => @n,
 											:can_rate => @ratable,
+											:is_blocked => @is_blocked,
+											:online_status =>  @on_off
 											}
 		else
 			render :json => {
 											:response_code => 500,
-											:message => "Something went wrong."
+											:message => "Member not present."
 											}
 		end
 	end
@@ -58,6 +62,7 @@ class ProfilesController < ApplicationController
 		@profile = @user.profile
 		@points = user_points(@user.id)
 		@interests = @user.interests
+		@events = user_liked_events(@user)
 		@intr = []
 		@interests.each do |i|
 			@int = {}
@@ -82,7 +87,7 @@ class ProfilesController < ApplicationController
 		@n = "#{@rating} of #{@positive_ratings_count} positive rates"
 
 		render :json => {:response_code => 200,:message => "Successfully fetched profile",
-		:profile => @profile.attributes.merge!(:album => @user.albums.as_json(:only => [:image]) , :my_points=> @points,:my_friends_count => @friends.count, :my_interest => @intr, :my_interest_count => @intr.count , :rate => @rating,:total_rating_users => @user.ratings.count,:positive_ratings_count => @positive_ratings_count,:msg => @n, :my_friends => @friends)}
+		:profile => @profile.attributes.merge!(:album => @user.albums.as_json(:only => [:image]), :liked_events => @events , :my_points=> @points,:my_friends_count => @friends.count, :my_interest => @intr, :my_interest_count => @intr.count , :rate => @rating,:total_rating_users => @user.ratings.count,:positive_ratings_count => @positive_ratings_count,:msg => @n, :my_friends => @friends)}
 	end
 
 	def update_profile

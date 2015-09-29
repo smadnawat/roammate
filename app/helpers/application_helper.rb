@@ -1,4 +1,5 @@
 module ApplicationHelper
+  
 	def common_activities user,member
 		@interests = User.find_by_id(user).interests & User.find_by_id(member).interests
 		@interest = []
@@ -16,14 +17,14 @@ module ApplicationHelper
 			return @interest
 	end
 
-	# def user_is_block? user,member
-	# 	@ublock = Block.find_by_user_id_and_member_id_and_is_block(user, member, true)
-	# 	if @ublock.present?
-	# 		return true
-	# 	else
-	# 		return false
-	# 	end
-	# end
+	def user_is_block? user,member
+		@ublock = Block.find_by_user_id_and_member_id_and_is_block(user, member, true)
+		if @ublock.present?
+			return true
+		else
+			return false
+		end
+	end
 
 	def blocked_user_list user
 		@arr = []
@@ -34,9 +35,10 @@ module ApplicationHelper
 	end
 
 	def user_liked_events user
-		if user.likes.present?
+		@likees = user.likes.where(status: true)
+    if @likees.present?
 			eve = []
-			user.likes.each do |e|
+			@likees.each do |e|
 				@even = {}
 				@even[:event_name] = e.event.event_name
 				@even[:place] = e.event.place
@@ -321,7 +323,7 @@ module ApplicationHelper
       @points +=  @common_friends_point_field.point
     end
 
-    # @same_current_city ? @points += @current_city_point_field.point : (City.find_by_city_name(@user2_current_city).country == City.find_by_city_name(@user1_current_city).country ? @points +=  (@current_city_point_field.point*90)/100 : @points)
+    @same_current_city ? @points += @current_city_point_field.point : (City.find_by_city_name(@user2_current_city).country == City.find_by_city_name(@user1_current_city).country ? @points +=  (@current_city_point_field.point*90)/100 : @points)
 
     case @common_cities
       when 0

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_filter :check_user, :only => [:match_users,:offline]
+	before_filter :check_user, :only => [:match_users,:online_offline]
 
 	def destroy_users
 		@user = User.find(params[:id])
@@ -55,7 +55,7 @@ class UsersController < ApplicationController
       if ( params[:city].present? and params[:state].present? and params[:country].present? )
     	  @add_current_location = @user.update_attributes(:latitude=> params[:latitude],:longitude => params[:longitude],:current_city => params[:city])     
 			  if !City.exists?(:city_name => params[:city].strip , :state=> params[:state].strip, :country=> params[:country].strip)
-			  	@user_city = @user.cities.create(:city_name => params[:city].strip,:state => params[:state].strip,:country => params[:country].strip,:status => false)
+			  	@user_city = @user.cities.create(:city_name => params[:city].strip,:state => params[:state].strip,:country => params[:country].strip,:status => true)
 			  else
 			  	@user_city = City.find_by_city_name(params[:city].strip)
 			  	@user.cities << @user_city if !@user.cities.exists?(@user_city)
@@ -63,6 +63,10 @@ class UsersController < ApplicationController
 			else
 			 	@geo_api_msg = "Please provide city,state,country all these are mendatory."
 			 	@status =false
+			end
+
+			if params[:image].present?
+				@user.albums.create(image: params[:image], status: false) if !Album.find_by_image_and_user_id(params[:image], @user.id)
 			end
 
 		  if !Device.where("device_id =? and device_type= ? and user_id = ?", params[:device_id],params[:device_type],@user.id).present?
@@ -86,9 +90,15 @@ class UsersController < ApplicationController
 	end
 
 
-	def offline
-		@user.update_attributes(:online => false,:last_active_at => Time.now)
-		render :json => { :response_code => 200, :response_message => "Successfull Logout"	}
+	def online_offline
+		if (params[:status] == true)
+			@user.update_attributes(:online => true,:last_active_at => Time.now)
+			msg = "Online"
+		else
+			@user.update_attributes(:online => false,:last_active_at => Time.now)
+			msg = "Offline"
+		end
+		render :json => { :response_code => 200, :response_message => msg }
 	end
 
 	# def match_users # incomplete service........ !!!!!!!!!!!

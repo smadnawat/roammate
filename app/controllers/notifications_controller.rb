@@ -39,7 +39,7 @@ class NotificationsController < ApplicationController
 	def gender_update
 		@user.profile.update_attributes(:gender => params[:gender]) if params["gender"].present?
 		render :json => {
-							:response_code => 200, :message => "Setting updated"
+							:response_code => 200, :message => "Gender updated"
 							}
 	end
 
@@ -51,6 +51,7 @@ class NotificationsController < ApplicationController
 		if @notifications.present?		
 			@note = []
 			@notifications.each do |notice|
+				p "+++++++++++++++++#{notice.inspect}++++++++++++++++++++++++++++"
 				@pr = Profile.find_by_id(notice.user_id)#.attributes.merge!(:notice => notice)
 				@p = {}
 				@p["user_id"] = @pr.id

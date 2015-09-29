@@ -2,19 +2,20 @@ class CitiesController < ApplicationController
  before_filter :check_user  
 
 	def add_current_city
-		if params[:current_city].present?
-		 @user_city =nil
-		 if !City.exists?(:city_name => params[:current_city].strip)
-		  	@user_city = @user.cities.create(:city_name => params[:current_city].strip)
+		if (params[:current_city] and params[:state] and params[:country]).present?
+		 	@user_city = nil
+		 	if !City.exists?(:city_name => params[:current_city].strip)
+		  	@user_city = City.create(:city_name => params[:current_city].strip, :state => params[:state].strip, :country => params[:country].strip, :status => true)
 		  	@user.points.create(:pointable_type => "Add New City")
+		 		@user.cities << @user_city if !@user.cities.exists?(@user_city)
 		  else
 		  	@user_city = City.find_by_city_name(params[:current_city].strip)
 		  	@user.cities << @user_city if !@user.cities.exists?(@user_city)
-		 end
+		 	end
 		  @current_city = @user.update_attributes(:current_city => params[:current_city].strip)
-   		  render :json => { :response_code => 200, :response_message => "#{@user_city.city_name} is added to current city" ,:current_city => @user.current_city 	}
+ 		  render :json => { :response_code => 200, :response_message => "#{@user_city.city_name} is added to current city" ,:current_city => @user.current_city 	}
 		else			
-     	 render :json => { :response_code => 500, :response_message => "Something wrong"}
+   	 	render :json => { :response_code => 500, :response_message => "Invalid or inappropriate data."}
 		end
 	end
 

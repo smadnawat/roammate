@@ -33,7 +33,7 @@ class MessagesController < ApplicationController
 			@all_messages = g.messages
 			@mg = @all_messages.order("created_at ASC").last
 			@quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
-			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question)
+			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
 			user_list["group_id"] = g.id
 			user_list["total_unread_message_count"] = (@all_messages.where('status = ? and user_id != ?', false, @user.id ).count)
 			if @user.id == g.group_admin
@@ -68,13 +68,13 @@ class MessagesController < ApplicationController
 			else
 				render :json => {
 												:response_code => 400,
-												:message => "No record found."
+												:message => "Messages not present"
 												}
 			end
 		else
 			render :json => {
 											:response_code => 500,
-											:message => "Something went wrong."
+											:message => "Your active interest not present"
 											}
 		end
 	end
@@ -88,7 +88,7 @@ class MessagesController < ApplicationController
 		  @qs.each do |q|
 		  	@get_default_quetions << q.attributes.slice("id","question","interest_id","status").merge!("created_at"=> q.created_at.to_i)
 		  end
-			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at ASC").paginate(:page => params[:page], :per_page => params[:size])
+			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
 			@max = @get_previous_messages.total_pages
 			@total_entries = @get_previous_messages.total_entries
 			m = []
@@ -135,7 +135,7 @@ class MessagesController < ApplicationController
 				end
 				message = "Message successfully created"
 				code = 200
-				@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at ASC")
+				@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at DESC")
 				@ms = []
 				if @get_previous_messages.present?
 					@get_previous_messages.each do |msgs|
@@ -151,7 +151,7 @@ class MessagesController < ApplicationController
 		else
 			render :json => {
 							:response_code => 500,
-							:message => "Something went wrong."
+							:message => "Group not found."
 							}
 		end
 	end

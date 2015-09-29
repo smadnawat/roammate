@@ -28,22 +28,26 @@ class Interest < ActiveRecord::Base
 					matches << match if match.current_city == user.current_city
 				end
 			end
-
 			@matchups = matches.paginate(:page => page, :per_page => size)
-			# p "++++++++++++++++++#{@matchups.total_pages}+++++++++++++++++++++++++"
-		@matchups.uniq.each do |t|
-			@intr = {}
-			@int_arr = []
-			(t.interests&user.interests).each do |i|
-				@list_interest = {}
-				@list_interest[:image] = i.icon.url 
-				@list_interest[:color] = i.color
-				@int_arr << @list_interest
-			end  
-			@intr[:profile] = t.profile.attributes.merge!(points: point_algo(t.id,user.id), :common_interest=> @int_arr)
-			@final << @intr
-		end
-		@final   
+			@mact = {}
+			@mact[:page] = page
+			@mact[:per_page] = size
+			@mact[:max_page] = @matchups.total_pages
+			@mact[:total_entries] = @matchups.total_entries
+			@matchups.uniq.each do |t|
+				@intr = {}
+				@int_arr = []
+				(t.interests&user.interests).each do |i|
+					@list_interest = {}
+					@list_interest[:image] = i.icon.url 
+					@list_interest[:color] = i.color
+					@int_arr << @list_interest
+				end  
+				@intr[:profile] = t.profile.attributes.merge!(points: point_algo(t.id,user.id), :common_interest=> @int_arr)
+				@final << @intr
+			end
+			 @final.map{|x| x.merge!(:pegination => @mact) }
+
 	end
 
 end

@@ -27,7 +27,7 @@ class PostsController < ApplicationController
 			@post["user"] = p.user.profile.attributes.merge(:points =>  points)
 			@arr << @post
 		end
-		render :json => {:response_code => 200,:message => "All posts", :posts => @arr, :pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries} }
+		render :json => {:response_code => 200,:message => "All posts fetched successsfully.", :posts => @arr, :pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries} }
 	end
 
 	# def create_comment
