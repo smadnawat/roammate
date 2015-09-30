@@ -13,13 +13,15 @@ class Notification < ActiveRecord::Base
         p "+++++++++++#{type}+++++++++++++++"
   	    @devices.each do |device|
   	       if device.device_type == "android"
+            p "+++++++++++++++++++++++android++++++++++++++++++++++++++++++8888"
   	       	 #p "============#{@notification.inspect}============#{reciever.inspect}"
   	         AndroidPushWorker.perform_async(reciever.id, @alert, badges, notification.id, invitation, type, device.device_id, image, nil, nil )
   	       else
             (type == "Send chat") ? @category = "ACTIONABLE" : @category = nil
             p "++++++++++++++++#{@category.inspect}+++++++++++++++++++++"
   	         ApplePushWorker.perform_async(reciever.id, @alert, badges, notification.id, invitation, type, device.device_id, @category, nil, nil)
-  	       end
+  	         p "+++++++++++++++++++++++apple++++++++++++++++++++++++++++++8888"
+           end
   	    end
       end
     end
