@@ -29,12 +29,16 @@ class MessagesController < ApplicationController
 		@total_entries = @groups.total_entries
 		@inb= []
 		@groups.each do |g|
+			g.users.each do |snd|
+				@grp_name =  g.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
+			end
 			user_list = {}
 			@all_messages = g.messages
 			@mg = @all_messages.order("created_at ASC").last
 			@quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
 			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
 			user_list["group_id"] = g.id
+			user_list["group_name"] = @grp_name
 			user_list["total_unread_message_count"] = (@all_messages.where('status = ? and user_id != ?', false, @user.id ).count)
 			if @user.id == g.group_admin
 				@p = point_algo(@user.id, g.group_name.to_i)
@@ -46,11 +50,12 @@ class MessagesController < ApplicationController
 				user_list["user"] = @pp.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @pp.created_at.to_i , "points" => @points)
 			end
 			@inb << user_list
+
 		end
 			render :json => {
 										:response_code => 200,
 										:message => "data fetched successfully.", 
-										:inbox => @inb,
+										:inbox => (@inb.sort_by { |k| k["last_message"]["created_at"]}).reverse,
 										:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 											}
 	end
@@ -94,6 +99,9 @@ class MessagesController < ApplicationController
 			m = []
 			if @get_previous_messages.present?
 				@get_previous_messages.each do |msgs|
+					# msgs.group.users.each do |read|
+						# msgs.update_attributes(status: true) if (msgs.user_id != @uesr.id)
+					# end
 					m << msgs.user.profile.attributes.merge(:message => msgs.attributes.slice("id","content").merge!("created_at"=> msgs.created_at.to_i) )
 				end
 			end
@@ -135,18 +143,17 @@ class MessagesController < ApplicationController
 				end
 				message = "Message successfully created"
 				code = 200
-				@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at DESC")
-				@ms = []
-				if @get_previous_messages.present?
-					@get_previous_messages.each do |msgs|
-						@ms << msgs.user.profile.attributes.merge(:message => msgs.attributes.slice("id","content").merge!("created_at"=> msgs.created_at.to_i) )
-					end
-				end
+				# @get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at DESC")
+				# @ms = []
+				# if @get_previous_messages.present?
+				# 	@get_previous_messages.each do |msgs|
+				# 		@ms << msgs.user.profile.attributes.merge(:message => msgs.attributes.slice("id","content").merge!("created_at"=> msgs.created_at.to_i) )
+				# 	end
+				# end
 			end
 			render :json => {
 							:response_code => code,
-							:message => message,
-							:user_messages => @ms
+							:message => message
 							}
 		else
 			render :json => {

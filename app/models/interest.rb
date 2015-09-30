@@ -1,5 +1,4 @@
 class Interest < ActiveRecord::Base
-
 	require 'will_paginate/array'
 	include ApplicationHelper
 	mount_uploader :image, AvatarUploader
@@ -22,19 +21,18 @@ class Interest < ActiveRecord::Base
 		matches = []
 		@final = []
 			@blok = blocked_user_list(user) + [user.id]
-			# p "++++++++++++#{@blok.inspect}+++++++++++++"
 			selected_interest.each do |interest|
 				interest.users.where('id NOT IN (?)',@blok).each do |match|
 					matches << match if match.current_city == user.current_city
 				end
 			end
-			@matchups = matches.paginate(:page => page, :per_page => size)
+			@matchups = matches.uniq.paginate(:page => page, :per_page => size)
 			@mact = {}
 			@mact[:page] = page
 			@mact[:per_page] = size
 			@mact[:max_page] = @matchups.total_pages
 			@mact[:total_entries] = @matchups.total_entries
-			@matchups.uniq.each do |t|
+			@matchups.each do |t|
 				@intr = {}
 				@int_arr = []
 				(t.interests&user.interests).each do |i|
@@ -46,7 +44,8 @@ class Interest < ActiveRecord::Base
 				@intr[:profile] = t.profile.attributes.merge!(points: point_algo(t.id,user.id), :common_interest=> @int_arr)
 				@final << @intr
 			end
-			 @final.map{|x| x.merge!(:pegination => @mact) }
+			return @final, @mact
+			 # @final.append(:pagination => @mact)
 
 	end
 

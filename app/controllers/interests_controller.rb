@@ -16,8 +16,8 @@ class InterestsController < ApplicationController
 							{ 
 							:response_code => 200, 
 							:response_message => "Successfully fetched selected interests",
-							:matches => @matches
-							# :pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
+							:matches => @matches.first ,
+							:pagination => @matches.last
 							}
 		else
 			render :json => 
@@ -104,9 +104,9 @@ class InterestsController < ApplicationController
 			render :json => { 
 			:response_code => 200, :response_message => "Successfully fetched selected interests",
 		 	:selected_interest => @interest,
-			:matches => @matches,
-			:events => @events
-			# :pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
+			:matches => @matches.first,
+			:events => @events,
+			:pagination => @matches.last
 			}
 	end
 

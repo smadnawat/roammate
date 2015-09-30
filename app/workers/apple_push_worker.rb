@@ -6,7 +6,7 @@ class ApplePushWorker
    def perform(reciever,alert,badges,noti,invitation,type, device, category, name, group_id)
     
     p"---------------INSIDE ApplePushWorker---------------------------"
-    logger.info"=========#{name}==========#{reciever.inspect}===#{alert.inspect}=============#{noti.inspect}=======#{badges.inspect}==============#{device.inspect}==========#{type.inspect}============#{invitation.inspect}===========#{group_id}======"
+    logger.info"=======category=#{category}========group_id==#{group_id}====notification_id=#{noti}=======group_name=#{name}========reciever_id==#{reciever.inspect}=======alert=#{alert.inspect}=========badges=#{badges.inspect}=============device_id=#{device.inspect}=========notification_type=#{type.inspect}==========invitation_id==#{invitation.inspect}======="
     
     pusher = Grocer.pusher(
 
