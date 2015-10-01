@@ -26,7 +26,7 @@ ActiveAdmin.register Question , :as => "Messages" do
             links +=  link_to 'Edit', edit_admin_message_path(resource)
             links += " / "  
             links += link_to 'Delete', edit_admin_message_path(resource), method: :delete,:data => { :confirm => 'Are you sure, you want to delete this profile?' }
-            links += " / "  
+            links += " / "
             links += link_to 'View', admin_message_path(resource)
 
        end

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   root "profiles#home"
   get 'profile_status/:id' => "profiles#profile_status" ,:as => "profile_status"
+  get 'report_status/:id' => "profiles#report_status" ,:as => "report_status"
   get 'message_status/:id' => "messages#message_status" ,:as => "message_status"
   get 'special_message_status/:id' => "messages#special_message_status" ,:as => "special_message_status"
   delete 'bad_rate/:id' => "messages#delete_bad_rating",:as => "delete_bad_rateing"
@@ -29,6 +30,7 @@ Rails.application.routes.draw do
   post 'update_profile' => "profiles#update_profile"
   post 'block_unblock_users' => "blocks#block_unblock_users"
   
+  get 'report_user' => 'reports#report_user'
   get 'get_profile_picture' => 'profiles#get_profile_picture'
   get 'get_settings' => "notifications#get_settings"
   get 'get_gender' => "notifications#get_gender"

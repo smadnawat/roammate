@@ -45,21 +45,21 @@ ActiveAdmin.register Profile do
       status_tag (resource.status ? "Active" : "Deactive"), (resource.status ? :ok : :error) 
     end    
     column :created_at
-    column "Actions" do |resource|
-        links = ''.html_safe
-        a do
-          if resource.status?
-            links += link_to 'Deactive', profile_status_path(resource),:data => { :confirm => 'Are you sure, you want to deactive this profile?' }
-          else
-           links += link_to 'Active', profile_status_path(resource),:data => { :confirm => 'Are you sure, you want to active this profile?' }
-           end
-           links += " / "
-           links +=  link_to 'Edit', edit_admin_profile_path(resource)
-         links += " / "  
-         links += link_to 'Delete', destroy_users_path(resource.user_id), method: :delete,:data => { :confirm => 'Are you sure, you want to delete this profile?' }
+      column "Actions" do |resource|
+          links = ''.html_safe
+            a do
+              if resource.status?
+                links += link_to 'Deactive', profile_status_path(resource),:data => { :confirm => 'Are you sure, you want to deactive this profile?' }
+              else
+               links += link_to 'Active', profile_status_path(resource),:data => { :confirm => 'Are you sure, you want to active this profile?' }
+               end
+             links += " / "
+             links +=  link_to 'Edit', edit_admin_profile_path(resource)
+             links += " / "  
+             links += link_to 'Delete', destroy_users_path(resource.user_id), method: :delete,:data => { :confirm => 'Are you sure, you want to delete this profile?' }
+            end
+         links
        end
-       links
-     end
   end
 
   filter :fb_email_cont, label: 'Search by email'

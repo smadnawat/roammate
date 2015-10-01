@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_filter :check_user, :only => [:match_users,:online_offline]
+	before_filter :check_user, :only => [:online_offline]
 
 	def destroy_users
 		@user = User.find(params[:id])
@@ -13,6 +13,8 @@ class UsersController < ApplicationController
 		@group.destroy_all
 		@block = Block.where("member_id = ?", @user.id)
 		@block.destroy_all
+		@report = Report.where("member_id = ?", @user.id)
+		@report.destroy_all
 		@user.destroy
 		redirect_to admin_profiles_path
 	end
@@ -43,7 +45,7 @@ class UsersController < ApplicationController
 		    end
 		  else		  
 	 		@user = User.create(user_id: params[:user_id], provider: params[:provider],authentication_token: params[:auth_token],online: true)
-			@profile = Profile.create(email: "#{params[:user_id]}@#{params[:provider]}.com", fb_email: params[:email],first_name: params[:first_name], image: params[:image] ,last_name: params[:last_name], gender: params[:gender], status: false, user_id: @user.id,dob: params[:dob],location: params[:address])
+			@profile = Profile.create(email: "#{params[:user_id]}@#{params[:provider]}.com", fb_email: params[:email],first_name: params[:first_name], image: params[:image] ,last_name: params[:last_name], gender: params[:gender], status: true, user_id: @user.id,dob: params[:dob],location: params[:address])
 		  	@signup_points = @user.points.create(:pointable_type => "Sign Up")
 		  	if @user and @profile
 		  	   @status =true
@@ -109,7 +111,7 @@ class UsersController < ApplicationController
 	# 			@users << user if !@users.exists?(:id=>user.id) and user.profile.current_city == @user.profile.current_city
 	# 		end
 	# 	end
-	# end
+	# endz
 
 	def catch_404
    	 render nothing: true

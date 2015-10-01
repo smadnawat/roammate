@@ -25,6 +25,7 @@ class MessagesController < ApplicationController
 	def user_inbox
 		blocked_user_list(@user)
 		@arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)',@arr ).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
+		# @arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?) or group_name NOT IN (?)',@arr, @arr.map{|x| x.to_s} ).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
 		@max = @groups.total_pages
 		@total_entries = @groups.total_entries
 		@inb= []
@@ -40,7 +41,7 @@ class MessagesController < ApplicationController
 			user_list["group_id"] = g.id
 			user_list["group_name"] = @grp_name
 			# user_list["total_unread_message_count"] = (@all_messages.where('status = ? and user_id != ?', false, @user.id ).count)
-			user_list["total_unread_message_count"] = (MessageCount.where('status = ? and user_id != ? and group_id = ?', false, @user.id, g.id ).count)
+			user_list["total_unread_message_count"] = (MessageCount.where('is_read = ? and user_id != ? and group_id = ?', false, @user.id, g.id ).count)
 			if @user.id == g.group_admin
 				@p = point_algo(@user.id, g.group_name.to_i)
 				@prf = User.find_by_id(g.group_name.to_i).profile
@@ -86,7 +87,6 @@ class MessagesController < ApplicationController
 	end
 
 	def get_messages
-		p "+++++++++++++#{params.inspect}+++++++++++++++++++++"
 		@group = Group.find_by_id(params[:group_id])
 		if @group.present?
 			@qs = Question.where('interest_id = ? and status = ?',@user.active_interest, true )
