@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150921140035) do
+ActiveRecord::Schema.define(version: 20151001054935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -180,6 +180,17 @@ ActiveRecord::Schema.define(version: 20150921140035) do
   add_index "likes", ["event_id"], name: "index_likes_on_event_id", using: :btree
   add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
 
+  create_table "message_counts", force: :cascade do |t|
+    t.integer  "group_id"
+    t.integer  "user_id"
+    t.boolean  "is_read"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "message_counts", ["group_id"], name: "index_message_counts_on_group_id", using: :btree
+  add_index "message_counts", ["user_id"], name: "index_message_counts_on_user_id", using: :btree
+
   create_table "messages", force: :cascade do |t|
     t.string   "content"
     t.string   "image"
@@ -336,6 +347,8 @@ ActiveRecord::Schema.define(version: 20150921140035) do
   add_foreign_key "invitations", "users"
   add_foreign_key "likes", "events"
   add_foreign_key "likes", "users"
+  add_foreign_key "message_counts", "groups"
+  add_foreign_key "message_counts", "users"
   add_foreign_key "messages", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "points", "users"

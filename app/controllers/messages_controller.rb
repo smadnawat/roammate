@@ -39,7 +39,8 @@ class MessagesController < ApplicationController
 			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
 			user_list["group_id"] = g.id
 			user_list["group_name"] = @grp_name
-			user_list["total_unread_message_count"] = (@all_messages.where('status = ? and user_id != ?', false, @user.id ).count)
+			# user_list["total_unread_message_count"] = (@all_messages.where('status = ? and user_id != ?', false, @user.id ).count)
+			user_list["total_unread_message_count"] = (MessageCount.where('status = ? and user_id != ? and group_id = ?', false, @user.id, g.id ).count)
 			if @user.id == g.group_admin
 				@p = point_algo(@user.id, g.group_name.to_i)
 				@prf = User.find_by_id(g.group_name.to_i).profile
@@ -94,6 +95,8 @@ class MessagesController < ApplicationController
 		  	@get_default_quetions << q.attributes.slice("id","question","interest_id","status").merge!("created_at"=> q.created_at.to_i)
 		  end
 			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
+			@msg_cnt = MessageCount.where(group_id: @group.id)
+			@msg_cnt.map{|x| x.update_attributes(is_read: true)} if @msg_cnt.present?
 			@max = @get_previous_messages.total_pages
 			@total_entries = @get_previous_messages.total_entries
 			m = []
@@ -130,6 +133,9 @@ class MessagesController < ApplicationController
 			else
 				@message = @user.messages.build(content: params[:message_content], group_id: @group.id, image: params[:image])
 				if @message.save
+					@group.users.where('id != ?', @user.id).each do |g_user|
+						@group.message_counts.create(user_id: g_user.id, is_read: false)
+					end
 					@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 					@alert = "send message"
 					@group_users = @group.users.where('id != ?', @user.id)

@@ -45,6 +45,7 @@ module ApplicationHelper
 				@even[:city] = e.event.city
 				@even[:link] = e.event.link
 				@even[:event_date] = e.event.event_date
+        @even[:event_time] = e.event.event_time
 				@even[:host_name] = e.event.host_name
 				@even[:image] = e.event.image.url
 				eve << @even
