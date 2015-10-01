@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   root "profiles#home"
   get 'profile_status/:id' => "profiles#profile_status" ,:as => "profile_status"
-  get 'report_status/:id' => "profiles#report_status" ,:as => "report_status"
+  # get 'report_status/:id' => "profiles#report_status" ,:as => "report_status"
   get 'message_status/:id' => "messages#message_status" ,:as => "message_status"
   get 'special_message_status/:id' => "messages#special_message_status" ,:as => "special_message_status"
   delete 'bad_rate/:id' => "messages#delete_bad_rating",:as => "delete_bad_rateing"
