@@ -10,12 +10,12 @@ class ProfilesController < ApplicationController
 		redirect_to admin_profiles_path
 	end
 
-	# def report_status
-	# 	p "++++++++++++#{params.inspect}++++++++++++++++++++"
-	# 	@profile = Profile.find(params[:id])
-	# 	@profile.status ? @profile.update_attributes(:status => false) : @profile.update_attributes(:status => true)
-	# 	redirect_to admin_reports_path
-	# end
+	def report_status
+		p "++++++++++++#{params.inspect}++++++++++++++++++++"
+		@profile = Profile.find(params[:id])
+		@profile.status ? @profile.update_attributes(:status => false) : @profile.update_attributes(:status => true)
+		redirect_to admin_reports_path
+	end
 
 	def view_matched_profile
 		@member = User.find_by_id(params[:member_id])

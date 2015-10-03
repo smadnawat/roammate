@@ -4,6 +4,7 @@ class InvitationsController < ApplicationController
 
 	def add_member_as_roammate
 		@member = User.find_by_id(params[:member_id])
+		p "+++++++#{@member.inspect}++++++++++++++++#{params.inspect}+++++++++"
 		if @member.present?
 			if Invitation.find_by_user_id_and_reciever(@user, @member) || Invitation.find_by_user_id_and_reciever(@member, @user)
 				message = "Already invited this member as your roammate"
@@ -24,6 +25,7 @@ class InvitationsController < ApplicationController
 
 	def accept_or_decline_invitation
 		@invitation = Invitation.find_by_id(params[:invitation_id])
+		p "++++++++++#{@invitation.inspect}+++++++++++++++++++++++#{params.inspect}+++++++++++++++++++"
 		if @invitation.present? && params[:action_type].present?
 			@notice = Notification.find_by_id(params[:notification_id])
 			if params[:action_type] == "Accept"
@@ -51,7 +53,7 @@ class InvitationsController < ApplicationController
 	end
 
 	def add_member_to_group
-		@member = User.find_by_id(params[:member_id])	
+		@member = User.find_by_id(params[:member_id])
 		@group = Group.find_by_id(params[:group_id])
 		if @member.present? && @group.present?
 			@group.users << @member if !@group.users.include?(@member)
