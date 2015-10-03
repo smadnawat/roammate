@@ -1,6 +1,6 @@
 class BlocksController < ApplicationController
 
-	before_filter :check_user, :only => [ :block_unblock_users ]
+	before_filter :check_user, :only => [ :block_unblock_users, :get_points]
 	
 	def block_unblock_users
 		@member = User.find_by_id(params[:member_id])
@@ -12,6 +12,11 @@ class BlocksController < ApplicationController
 		else
 			render :json => {:response_code => 500,:message => "Member not found." }
 		end
+	end
+
+	def get_points
+		@pnt = user_points(@user.id)
+		render :json => {:response_code => 200,:message => "Successfully fetched points", :points => @pnt }
 	end
 
 end

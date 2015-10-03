@@ -48,6 +48,8 @@ Rails.application.routes.draw do
   post '/gender_update' => "notifications#gender_update"
   post '/pre_selected_interests' => "interests#pre_selected_interests"
   get '/get_posts' => "posts#get_posts"
+  get 'add_user_current_city_status' => 'cities#add_user_current_city_status'
+  get 'get_points' => 'blocks#get_points'
   # get 'get_point' =>"points#get_point"
   # get 'get_profile' => "profiles#get_profile"
   get 'get_user_cities' => "cities#get_user_cities"

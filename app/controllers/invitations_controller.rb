@@ -12,7 +12,7 @@ class InvitationsController < ApplicationController
 			else
 				@invitation = @user.invitations.create(reciever: @member.id, status: false)
 				@alert = "Send chat"
-				@notification = Notification.create_notification(@user,@member,@alert,@invitation.id) #if @member.friend_request_notification
+				@notification = Notification.create_notification(@user,@member,@alert,@invitation.id,nil) #if @member.friend_request_notification
 				@user.points.create(:pointable_type => "Send chat invite")
 				message = "Invitation successfully sent."
 				code = 200
@@ -35,7 +35,8 @@ class InvitationsController < ApplicationController
 				@group.users << @invitation.user
 				@group.users << @user
 				@alert = "accept chat"
-				@notification = Notification.create_notification(@user,@invitation.user,@alert,@invitation.id)
+				@group_name =  @group.users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",")
+				@notification = Notification.create_notification(@user,@invitation.user,@alert,@invitation.id,@group_name)
 				@user.points.create(:pointable_type => "Accept Chat invite")
 				message = "Successfully accepted invitation"
 				code = 200
