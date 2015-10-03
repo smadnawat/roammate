@@ -9,9 +9,6 @@ class InterestsController < ApplicationController
 		if @interest.present?
 			@user.update_attributes(active_interest: @interest.first.id)
 			@matches = Interest.view_matches_algo(@interest, @user, params[:page],params[:size])
-			p "++++++++++++#{@matches.inspect}+++++++++++++++++++"
-			# @max = @matches.total_pages
-			# @total_entries = @matches.total_entries
 			render :json => 
 							{ 
 							:response_code => 200, 

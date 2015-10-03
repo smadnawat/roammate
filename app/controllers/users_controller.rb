@@ -72,6 +72,7 @@ class UsersController < ApplicationController
 			end
 
 		  if !Device.where("device_id =? and device_type= ? and user_id = ?", params[:device_id],params[:device_type],@user.id).present?
+		    Device.where("device_id =? and device_type= ?", params[:device_id],params[:device_type]).destroy_all
 		    @device = @user.devices.create(:device_id => params[:device_id],:device_type =>params[:device_type].downcase) 
 		  end
 	  else
@@ -102,16 +103,6 @@ class UsersController < ApplicationController
 		end
 		render :json => { :response_code => 200, :response_message => msg }
 	end
-
-	# def match_users # incomplete service........ !!!!!!!!!!!
-	# 	@interests = Interest.where("id IN (?)",params[:interests])
-	# 	@users=[]
-	# 	@interests.each do |interest|
-	# 		interest.users.each do |user|
-	# 			@users << user if !@users.exists?(:id=>user.id) and user.profile.current_city == @user.profile.current_city
-	# 		end
-	# 	end
-	# endz
 
 	def catch_404
    	 render nothing: true

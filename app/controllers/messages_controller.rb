@@ -25,7 +25,7 @@ class MessagesController < ApplicationController
 	def user_inbox
 		blocked_user_list(@user)
 		@arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)',@arr ).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
-		# @arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?) or group_name NOT IN (?)',@arr, @arr.map{|x| x.to_s} ).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
+		# @arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)',@arr )&@user.groups.where('group_admin NOT IN (?)',@arr.map{|x| x.to_s} ).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
 		@max = @groups.total_pages
 		@total_entries = @groups.total_entries
 		@inb= []
@@ -95,7 +95,7 @@ class MessagesController < ApplicationController
 		  	@get_default_quetions << q.attributes.slice("id","question","interest_id","status").merge!("created_at"=> q.created_at.to_i)
 		  end
 			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
-			@msg_cnt = MessageCount.where(group_id: @group.id)
+			@msg_cnt = MessageCount.where("group_id = ? and user_id = ? and is_read = ?", @group.id, @user.id, false)
 			@msg_cnt.map{|x| x.update_attributes(is_read: true)} if @msg_cnt.present?
 			@max = @get_previous_messages.total_pages
 			@total_entries = @get_previous_messages.total_entries
@@ -139,7 +139,6 @@ class MessagesController < ApplicationController
 					@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 					@alert = "send message"
 					@group_users = @group.users.where('id != ?', @user.id)
-					# @group_name = @group_users.map {|x| x.profile.first_name}.join(",")
 					@group_users.each do |snd|
 						@group_name =  @group.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
 						@type = "Send message"
@@ -149,13 +148,6 @@ class MessagesController < ApplicationController
 				end
 				message = "Message successfully created"
 				code = 200
-				# @get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at DESC")
-				# @ms = []
-				# if @get_previous_messages.present?
-				# 	@get_previous_messages.each do |msgs|
-				# 		@ms << msgs.user.profile.attributes.merge(:message => msgs.attributes.slice("id","content").merge!("created_at"=> msgs.created_at.to_i) )
-				# 	end
-				# end
 			end
 			render :json => {
 							:response_code => code,

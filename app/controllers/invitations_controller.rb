@@ -3,7 +3,6 @@ class InvitationsController < ApplicationController
 	before_filter :check_user, :only => [:get_roammate_to_add_in_group, :add_member_as_roammate, :accept_or_decline_invitation, :add_member_to_group]
 
 	def add_member_as_roammate
-		p "++++++++++#{params.inspect}++++++++"
 		@member = User.find_by_id(params[:member_id])
 		if @member.present?
 			if Invitation.find_by_user_id_and_reciever(@user, @member) || Invitation.find_by_user_id_and_reciever(@member, @user)
@@ -24,11 +23,9 @@ class InvitationsController < ApplicationController
 	end
 
 	def accept_or_decline_invitation
-		p "++++++++++++++++++#{params.inspect}+++++++++++++++++++++"
 		@invitation = Invitation.find_by_id(params[:invitation_id])
 		if @invitation.present? && params[:action_type].present?
 			@notice = Notification.find_by_id(params[:notification_id])
-			p "+++++++++++++++++#{@notice.inspect}+++++++++++++++++++++++++++"
 			if params[:action_type] == "Accept"
 				@notice.update_attributes(status: true, message: "#{@notice.user.profile.first_name.capitalize} is now your roammate")
 				@invitation.update_attributes(status: true)

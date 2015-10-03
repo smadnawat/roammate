@@ -30,13 +30,4 @@ class PostsController < ApplicationController
 		render :json => {:response_code => 200,:message => "All posts fetched successsfully.", :posts => @arr, :pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries} }
 	end
 
-	# def create_comment
-	# 	@post = Post.find_by_id(params[:post_id])
-	# 	if @post.present?
-	# 		@comment = @post.comments.create(:reply => params[:reply], :user_id => @user.id)
-	# 		render :json => {:response_code => 200,:message => "Comment successfully created", :comment => @comment}
-	# 	else
-	# 		render :json => {:response_code => 500, :message => "Something went wrong."}
-	# 	end
-	# end
 end
