@@ -32,9 +32,9 @@ class MessagesController < ApplicationController
 		@total_entries = @groups.total_entries if @groups.present?
 		@inb= []
 		@groups.each do |g|
-			g.users.each do |snd|
-				@grp_name =  g.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
-			end
+			# g.users.each do |snd|
+			# 	@grp_name =  g.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
+			# end
 			# user_list = {}
 			@all_messages = g.messages
 			@mg = @all_messages.order("created_at ASC").last
