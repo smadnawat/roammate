@@ -29,32 +29,45 @@ class MessagesController < ApplicationController
 		p "++++++++++++++++++#{params.inspect}+++++++++++++++++++++++++++"
 		p "+++++++++++++++++++++++#{@groups.inspect}++++++++++++++++++++++++++++++"
 		@max = @groups.total_pages if @groups.present?
+		p "+++++++++++++++++++++++#{@max.inspect}++++++++++++++++++++++++++++++"
 		@total_entries = @groups.total_entries if @groups.present?
 		@inb= []
+		p "+++++++++++++++++++++++++#{@total_entries.inspect}"
 		@groups.each do |g|
+			p "++++++++++++++"
 			g.users.each do |snd|
 				@grp_name =  g.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
 			end
+			p "++++++++++++++#{@grp_name.inspect}"
 			user_list = {}
 			@all_messages = g.messages
 			@mg = @all_messages.order("created_at ASC").last
+			p "++++++++++++++#{@mg.inspect}"
 			@quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
+			p "++++++++++++++++++++++++#{@quee.inspect}"
 			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
+			p "++++++++++++++++++++++++++++++#{user_list["last_message"]}"
 			user_list["group_id"] = g.id
 			user_list["group_name"] = @grp_name
 			# user_list["total_unread_message_count"] = (@all_messages.where('status = ? and user_id != ?', false, @user.id ).count)
 			user_list["total_unread_message_count"] = (MessageCount.where('is_read = ? and user_id = ? and group_id = ?', false, @user.id, g.id ).count)
+			p "++++++++++++++++++++++++++++++#{user_list["total_unread_message_count"]}"
 			if @user.id == g.group_admin
+				p "+++++++++++++ififififif++++++++++++++++++++++++++"
 				@p = point_algo(@user.id, g.group_name.to_i)
+				p "++++++++++++++++++++#{@p}++++++++++++"
 				@prf = User.find_by_id(g.group_name.to_i).profile
+				p "++++++++++++++++++++++++++++#{@prf.inspect}++++++++++++++"
 				user_list["user"] = @prf.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @prf.created_at.to_i , "points" => @p)
 			else
 				@points = point_algo(@user.id, g.group_admin)
+				p "+++++++++++++++++++++++#{@points.inspect}+++++++++++++++++++"
 				@pp = User.find_by_id(g.group_admin).profile
+				p "++++++++++++++++++++++++++#{@pp.inspect}++++++++++++++++"
 				user_list["user"] = @pp.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @pp.created_at.to_i , "points" => @points)
+				p "++++++++++++++++++++++#{user_list["user"]}+++++++"
 			end
 			@inb << user_list
-
 		end
 			render :json => {
 										:response_code => 200,
