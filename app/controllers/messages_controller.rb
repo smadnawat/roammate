@@ -38,10 +38,10 @@ class MessagesController < ApplicationController
 			user_list = {}
 			# @all_messages = g.messages
 			# @mg = @all_messages.order("created_at ASC").last
-			@quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
-			#@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
-			user_list["group_id"] = g.id
-			user_list["group_name"] = @grp_name
+			# @quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
+			# @mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
+			# user_list["group_id"] = g.id
+			# user_list["group_name"] = @grp_name
 			# user_list["total_unread_message_count"] = (@all_messages.where('status = ? and user_id != ?', false, @user.id ).count)
 			#user_list["total_unread_message_count"] = (MessageCount.where('is_read = ? and user_id = ? and group_id = ?', false, @user.id, g.id ).count)
 			if @user.id == g.group_admin
