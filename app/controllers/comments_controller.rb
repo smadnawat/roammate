@@ -33,7 +33,7 @@ class CommentsController < ApplicationController
 				@cm["user"] = c.user.profile
 				@arry << @cm
 			end
-			render :json => {:response_code => 200,:message => "Comments", :comments => @arry}
+			render :json => {:response_code => 200,:message => "Comments", :comments => @arry.reverse}
 		else
 			render :json => {:response_code => 500, :message => "Post not found."}
 		end
