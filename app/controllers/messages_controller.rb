@@ -31,7 +31,8 @@ class MessagesController < ApplicationController
 		@max = @groups.total_pages if @groups.present?
 		@total_entries = @groups.total_entries if @groups.present?
 		@inb= []
-		# @groups.each do |g|
+		@groups.compact.each do |g|
+			p'-------------------------helllo moto-------------------------'
 		# 	# g.users.each do |snd|
 		# 	# 	@grp_name =  g.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
 		# 	# end
@@ -54,7 +55,7 @@ class MessagesController < ApplicationController
 		# 		# user_list["user"] = @pp.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @pp.created_at.to_i , "points" => @points)
 		# 	end
 		# 	@inb << user_list
-		# end
+		end
 		p "=====#{@inb.inspect}===========#{@inb.count}-------------------------------------------"
 			render :json => {
 										:response_code => 200,
