@@ -24,14 +24,12 @@ class MessagesController < ApplicationController
 
 	def user_inbox
 		blocked_user_list(@user)
-		@arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)',@arr ).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
+		@arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)', @arr).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
 		# @arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)',@arr )&@user.groups.where('group_admin NOT IN (?)',@arr.map{|x| x.to_s} ).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
 		p "++++++++++++++++++#{params.inspect}+++++++++++++++++++++++++++"
 		p "+++++++++++++++++++++++#{@groups.inspect}++++++++++++++++++++++++++++++"
-		@max = @groups.total_pages if @groups.present?
-		@total_entries = @groups.total_entries if @groups.present?
 		@inb= []
-		@groups.compact.each do |g|
+		@groups.each do |g|
 			p'-------------------------helllo moto-------------------------'
 		# 	# g.users.each do |snd|
 		# 	# 	@grp_name =  g.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
@@ -56,6 +54,9 @@ class MessagesController < ApplicationController
 		# 	end
 		# 	@inb << user_list
 		end
+		@max = @groups.total_pages if @groups.present?
+		@total_entries = @groups.total_entries if @groups.present?
+		
 		p "=====#{@inb.inspect}===========#{@inb.count}-------------------------------------------"
 			render :json => {
 										:response_code => 200,

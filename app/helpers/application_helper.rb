@@ -27,11 +27,12 @@ module ApplicationHelper
 	end
 
 	def blocked_user_list user
-		@arr = []
-		user.blocks.where(is_block: true).each do |blk|
-			@arr << blk.member_id
-		end
-		@arr
+		@arr = user.blocks.where(is_block: true).pluck(:member_id)
+    # @arr = []
+		# user.blocks.where(is_block: true).each do |blk|
+		# 	@arr << blk.member_id
+		# end
+		# @arr
 	end
 
 	def user_liked_events user
