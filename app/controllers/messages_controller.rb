@@ -31,30 +31,30 @@ class MessagesController < ApplicationController
 		@max = @groups.total_pages if @groups.present?
 		@total_entries = @groups.total_entries if @groups.present?
 		@inb= []
-		@groups.each do |g|
-			# g.users.each do |snd|
-			# 	@grp_name =  g.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
-			# end
-		  #	user_list = {}
-			# @all_messages = g.messages
-			# @mg = @all_messages.order("created_at ASC").last
-			# @quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
-			# @mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
-			# user_list["group_id"] = g.id
-			# user_list["group_name"] = @grp_name
-			# user_list["total_unread_message_count"] = (@all_messages.where('status = ? and user_id != ?', false, @user.id ).count)
-			#user_list["total_unread_message_count"] = (MessageCount.where('is_read = ? and user_id = ? and group_id = ?', false, @user.id, g.id ).count)
-			if @user.id == g.group_admin
-				# @p = point_algo(@user.id, g.group_name.to_i)
-				# @prf = User.find_by_id(g.group_name.to_i).profile
-				# user_list["user"] = @prf.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @prf.created_at.to_i , "points" => @p)
-			else
-				# @points = point_algo(@user.id, g.group_admin)
-				# @pp = User.find_by_id(g.group_admin).profile
-				# user_list["user"] = @pp.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @pp.created_at.to_i , "points" => @points)
-			end
-			@inb << user_list
-		end
+		# @groups.each do |g|
+		# 	# g.users.each do |snd|
+		# 	# 	@grp_name =  g.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
+		# 	# end
+		#   #	user_list = {}
+		# 	# @all_messages = g.messages
+		# 	# @mg = @all_messages.order("created_at ASC").last
+		# 	# @quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
+		# 	# @mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
+		# 	# user_list["group_id"] = g.id
+		# 	# user_list["group_name"] = @grp_name
+		# 	# user_list["total_unread_message_count"] = (@all_messages.where('status = ? and user_id != ?', false, @user.id ).count)
+		# 	#user_list["total_unread_message_count"] = (MessageCount.where('is_read = ? and user_id = ? and group_id = ?', false, @user.id, g.id ).count)
+		# 	if @user.id == g.group_admin
+		# 		# @p = point_algo(@user.id, g.group_name.to_i)
+		# 		# @prf = User.find_by_id(g.group_name.to_i).profile
+		# 		# user_list["user"] = @prf.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @prf.created_at.to_i , "points" => @p)
+		# 	else
+		# 		# @points = point_algo(@user.id, g.group_admin)
+		# 		# @pp = User.find_by_id(g.group_admin).profile
+		# 		# user_list["user"] = @pp.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @pp.created_at.to_i , "points" => @points)
+		# 	end
+		# 	@inb << user_list
+		# end
 		p "=====#{@inb.inspect}===========#{@inb.count}-------------------------------------------"
 			render :json => {
 										:response_code => 200,
