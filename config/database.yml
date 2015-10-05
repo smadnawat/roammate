@@ -15,7 +15,6 @@ test:
   <<: *default
   database: roammate_test
 
-
 production:
   <<: *default
   database: roammate_production

@@ -120,7 +120,7 @@ class ProfilesController < ApplicationController
 	end
 
 	def get_profile_picture
-		@user.albums.present? ? (render :json => {:response_code => 200,:message => "Successfully fetched profile",:album => @user.albums.as_json(:only => [:image]) }) : (render :json => {:response_code => 500,:message => "No record found" })
+		@user.albums.present? ? (render :json => {:response_code => 200,:message => "Successfully fetched profile",:album => @user.albums.order('created_at DESC').all.as_json(:only => [:image]) }) : (render :json => {:response_code => 500,:message => "No record found" })
 	end
 
 
