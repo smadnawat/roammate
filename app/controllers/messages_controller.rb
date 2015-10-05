@@ -35,9 +35,9 @@ class MessagesController < ApplicationController
 			# g.users.each do |snd|
 			# 	@grp_name =  g.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
 			# end
-			# user_list = {}
-			@all_messages = g.messages
-			@mg = @all_messages.order("created_at ASC").last
+			user_list = {}
+			# @all_messages = g.messages
+			# @mg = @all_messages.order("created_at ASC").last
 			@quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
 			#@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
 			user_list["group_id"] = g.id
