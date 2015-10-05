@@ -11,7 +11,6 @@ class ProfilesController < ApplicationController
 	end
 
 	def report_status
-		p "++++++++++++#{params.inspect}++++++++++++++++++++"
 		@profile = Profile.find(params[:id])
 		@profile.status ? @profile.update_attributes(:status => false) : @profile.update_attributes(:status => true)
 		redirect_to admin_reports_path
@@ -93,7 +92,7 @@ class ProfilesController < ApplicationController
 		@n = "#{@rating} of #{@positive_ratings_count} positive rates"
 
 		render :json => {:response_code => 200,:message => "Successfully fetched profile",
-		:profile => @profile.attributes.merge!(:album => @user.albums.as_json(:only => [:image]), :liked_events => @events , :my_points=> @points,:my_friends_count => @friends.count, :my_interest => @intr, :my_interest_count => @intr.count , :rate => @rating,:total_rating_users => @user.ratings.count,:positive_ratings_count => @positive_ratings_count,:msg => @n, :my_friends => @friends)}
+		:profile => @profile.attributes.merge!(:user_current_city => @profile.user.current_city, :album => @user.albums.as_json(:only => [:image]), :liked_events => @events , :my_points=> @points,:my_friends_count => @friends.count, :my_interest => @intr, :my_interest_count => @intr.count , :rate => @rating,:total_rating_users => @user.ratings.count,:positive_ratings_count => @positive_ratings_count,:msg => @n, :my_friends => @friends)}
 	end
 
 	def update_profile

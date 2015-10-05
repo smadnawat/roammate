@@ -1,7 +1,7 @@
 class Notification < ActiveRecord::Base
   belongs_to :user
 
-  def self.create_notification(user,reciever,type,invitation,name)
+  def self.create_notification(user,reciever,type,invitation,name,group_id)
     logger.info"---------------------#{invitation.inspect}-------------"
   	@alert = alert(user,type)
   	notification = create(:user_id => user.id,:reciever => reciever.id,:notification_type => type,:message => @alert,:status => false)
@@ -15,7 +15,7 @@ class Notification < ActiveRecord::Base
   	       if device.device_type == "android"
             p "+++++++++++++++++++++++android++++++++++++++++++++++++++++++8888"
   	       	 #p "============#{@notification.inspect}============#{reciever.inspect}"
-  	         AndroidPushWorker.perform_async(reciever.id, @alert, badges, notification.id, invitation, type, device.device_id, image, name, nil )
+  	         AndroidPushWorker.perform_async(reciever.id, @alert, badges, notification.id, invitation, type, device.device_id, image, name, group_id )
   	       else
             (type == "Send chat") ? @category = "ACTIONABLE" : @category = nil
             p "++++++++++++++++#{@category.inspect}+++++++++++++++++++++"
