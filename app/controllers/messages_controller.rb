@@ -23,8 +23,9 @@ class MessagesController < ApplicationController
 
 
 	def user_inbox
-		blocked_user_list(@user)
-		@arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)', @arr).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
+		# blocked_user_list(@user)
+		# @arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)', @arr).paginate(:page => params[:page], :per_page => params[:size]) : 
+		@groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
 		# @arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)',@arr )&@user.groups.where('group_admin NOT IN (?)',@arr.map{|x| x.to_s} ).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
 		@inb= []
 		@groups.each do |g|
