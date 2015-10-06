@@ -60,8 +60,8 @@ class MessagesController < ApplicationController
 			render :json => {
 										:response_code => 200,
 										:message => "data fetched successfully.", 
-										:inbox => (@inb.compact.sort_by { |k| k["last_message"]["created_at"]}).reverse,
-										# :inbox => @inb,#.sort_by { |k| k["last_message"]["created_at"]}).reverse,
+										# :inbox => (@inb.compact.sort_by { |k| k["last_message"]["created_at"]}).reverse,
+										:inbox => @inb,#.sort_by { |k| k["last_message"]["created_at"]}).reverse,
 										:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 											}
 	end
