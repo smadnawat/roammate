@@ -48,7 +48,8 @@ class InterestsController < ApplicationController
 	end
 
 	def selected_interest_list
-		p ".........params--------#{params.inspect}--------"
+		p ".........params--------#{params[:interests].first}--------"
+		@user.update_attributes(active_interest: params[:interests].first)
 		@now_selected = params[:interests]
 		@pre_selected = @user.interests.pluck(:id)
 		@common = @now_selected&@pre_selected
