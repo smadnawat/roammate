@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 		@invitations.destroy_all
 		@notification = Notification.where("reciever = ?",@user.id)
 		@notification.destroy_all
-		@group = Group.where("group_name = ?",@user.id.to_s)
+		@group = Group.where("group_admin = ?",@user.id)
 		@group.destroy_all
 		@block = Block.where("member_id = ?", @user.id)
 		@block.destroy_all
@@ -47,6 +47,8 @@ class UsersController < ApplicationController
 	 		@user = User.create(user_id: params[:user_id], provider: params[:provider],authentication_token: params[:auth_token],online: true)
 			@profile = Profile.create(email: "#{params[:user_id]}@#{params[:provider]}.com", fb_email: params[:email],first_name: params[:first_name], image: params[:image] ,last_name: params[:last_name], gender: params[:gender], status: true, user_id: @user.id,dob: params[:dob],location: params[:address])
 		  	@signup_points = @user.points.create(:pointable_type => "Sign Up")
+		  	@album = [params[:image], "http://res.cloudinary.com/dklf0amce/image/upload/v1444192617/hun0lyh1ic2turqy2dag.png", "http://res.cloudinary.com/dklf0amce/image/upload/v1444192644/wkzmh7ulcaf4fmkvzgkt.png"]
+		  	@album.map{|x| @user.albums.create(image: x, status: false)}
 		  	if @user and @profile
 		  	   @status =true
 		  	else
@@ -67,9 +69,9 @@ class UsersController < ApplicationController
 			 	@status =false
 			end
 
-			if params[:image].present?
-				@user.albums.create(image: params[:image], status: false) if !Album.find_by_image_and_user_id(params[:image], @user.id)
-			end
+			# if params[:image].present?
+			# 	@user.albums.create(image: params[:image], status: false) if !Album.find_by_image_and_user_id(params[:image], @user.id)
+			# end
 
 		  if !Device.where("device_id =? and device_type= ? and user_id = ?", params[:device_id],params[:device_type],@user.id).present?
 		    Device.where("device_id =? and device_type= ?", params[:device_id],params[:device_type]).destroy_all

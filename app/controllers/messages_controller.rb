@@ -31,12 +31,13 @@ class MessagesController < ApplicationController
 		@groups.each do |g|
 			p'-------------------------helllo moto-------------------------'
 			g.users.each do |snd|
-				@grp_name =  g.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
+				@grp_name =  g.users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",")
 			end
 		  	user_list = {}
 			@all_messages = g.messages
 			@mg = @all_messages.order("created_at ASC").last
 			@quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
+			p "++++++++++++#{@quee.inspect}+++++++++++"
 			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
 			user_list["group_id"] = g.id
 			user_list["group_name"] = @grp_name
@@ -52,13 +53,12 @@ class MessagesController < ApplicationController
 			end
 			@inb << user_list
 		end
-		@max = @groups.total_pages# if @groups.present?
-		@total_entries = @groups.total_entries# if @groups.present?
+		@max = @groups.total_pages
+		@total_entries = @groups.total_entries
 		p "=====#{@inb.inspect}===========#{@inb.count}-------------------------------------------"
 			render :json => {
 										:response_code => 200,
 										:message => "data fetched successfully.", 
-										# :inbox => (@inb.compact.sort_by { |k| k["last_message"]["created_at"] if k["last_message"].present?}).reverse,
 										:inbox => (@inb.sort_by { |k| k["last_message"]["created_at"]}).reverse,
 										:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 											}
