@@ -19,7 +19,7 @@ class Notification < ActiveRecord::Base
   	       else
             (type == "Send chat") ? @category = "ACTIONABLE" : @category = nil
             p "++++++++++++++++#{@category.inspect}+++++++++++++++++++++"
-  	         ApplePushWorker.perform_async(reciever.id, @alert, badges, notification.id, invitation, type, device.device_id, @category, nil, nil)
+  	         ApplePushWorker.perform_async(reciever.id, @alert, badges, notification.id, invitation, type, device.device_id, @category, name, group_id)
   	         p "+++++++++++++++++++++++apple++++++++++++++++++++++++++++++8888"
            end
   	    end
