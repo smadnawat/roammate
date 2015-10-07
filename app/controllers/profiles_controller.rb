@@ -107,18 +107,19 @@ class ProfilesController < ApplicationController
 		end
 	end
 
-	# def add_profile_picture
-	# 	# p "+++++++#{params[:album].first[:id]}+++++++++++++++++++++++++"
-	# 	if params[:album].present?
-	# 		params[:album].each do |imgg|
-	# 			Album.find(imgg[:id]).update_attributes(image: imgg[:image]])
-	# 		end
-	# 		@user.profile.update_attributes(image: params[:album].first )
-	# 		render :json => {:response_code => 200,:message => "Successfully uploaded images"}
-	# 	else
-	# 		render :json => {:response_code => 500,:message => "Images not present."}
-	# 	end
-	# end
+	def add_profile_picture
+		# p "+++++++#{params[:album].first[:id]}+++++++++++++++++++++++++"
+		if params[:album].present?
+			params[:album].each do |imgg|
+				p "++++++++++++++++++++#{imgg}+++++++++++++++++++++#{imgg[:image]}"
+				Album.find(imgg[:id]).update_attributes(image: imgg[:image])
+			end
+			@user.profile.update_attributes(image: params[:album].first )
+			render :json => {:response_code => 200,:message => "Successfully uploaded images"}
+		else
+			render :json => {:response_code => 500,:message => "Images not present."}
+		end
+	end
 
 	# def add_profile_picture
 	# 	if params[:album].present?
