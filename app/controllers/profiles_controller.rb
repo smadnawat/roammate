@@ -108,10 +108,8 @@ class ProfilesController < ApplicationController
 	end
 
 	def add_profile_picture
-		# p "+++++++#{params[:album].first[:id]}+++++++++++++++++++++++++"
 		if params[:album].present?
 			params[:album].each do |imgg|
-				p "++++++++++++++++++++#{imgg}+++++++++++++++++++++#{imgg[:image]}"
 				Album.find(imgg[:id]).update_attributes(image: imgg[:image])
 			end
 			@user.profile.update_attributes(image: params[:album].first )
@@ -120,22 +118,6 @@ class ProfilesController < ApplicationController
 			render :json => {:response_code => 500,:message => "Images not present."}
 		end
 	end
-
-	# def add_profile_picture
-	# 	if params[:album].present?
-	# 		params[:album].each do |imgg|
-	# 			if (@user.albums.count < 4)
-	# 				@user.albums.create(image: "#{imgg}", status: false) if !Album.find_by_image_and_user_id("#{imgg}", @user.id)
-	# 			else
-	# 				@user.albums.update_attributes(image: "#{imgg}", status: false)
-	# 			end
-	# 		end
-	# 		@user.profile.update_attributes(image: params[:album].first )
-	# 		render :json => {:response_code => 200,:message => "Successfully uploaded images"}
-	# 	else
-	# 		render :json => {:response_code => 500,:message => "Images not present."}
-	# 	end
-	# end
 
 	def get_profile_picture
 		@user.albums.present? ? (render :json => {:response_code => 200,:message => "Successfully fetched profile",:album => @user.albums.order('created_at DESC').all.as_json(:only => [:image, :id]) }) : (render :json => {:response_code => 500,:message => "No record found" })
