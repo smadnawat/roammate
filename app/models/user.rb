@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
 	has_one :profile , dependent: :destroy
 	has_many :message_counts , dependent: :destroy
 	has_many :likes , dependent: :destroy
+	has_many :albums ,dependent: :destroy
 	has_many :reports , dependent: :destroy
 	has_and_belongs_to_many :cities , :join_table => "users_cities"
 	has_and_belongs_to_many :categories , :join_table => "users_categories"

@@ -64,6 +64,7 @@ class NotificationsController < ApplicationController
 				@p["created_at"] = notice.created_at.to_i
 				@p["is_friend"] = is_friend(notice.reciever, notice.user_id).present?
 				@p["is_friend"] ? @p["group_id"] = Group.where(group_admin: [notice.reciever, notice.user_id], group_name: [notice.reciever.to_s, notice.user_id.to_s]).first.id : @p["group_id"] = nil
+				@p["group_id"].present? ? @p["group_name"] = Group.find_by_id(@p["group_id"]).users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",") : @p["group_name"] = nil
 				notice.notification_type == "Send chat" ? @p["invitation_id"] = Invitation.where("reciever = ? and user_id = ?", notice.reciever,notice.user_id).first.id : @p["invitation_id"] = nil
 				@note << @p
 			end			
