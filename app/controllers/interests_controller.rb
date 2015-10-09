@@ -114,7 +114,7 @@ class InterestsController < ApplicationController
 		@max = @interests.total_pages.to_s
 		@total = @interests.total_entries.to_s
 		@per = @interests.per_page.to_s
-		if @interests.present?
+		# if @interests.present?
 			@interest = []
 			@interests.each do |i|
 				@int = {}
@@ -129,9 +129,9 @@ class InterestsController < ApplicationController
 			end
 			render :json => { :response_code => 200, :response_message => "Successfully fetched interests.",
 			 :interests => @interest ,:paging => {:max_page=> @max,:total_entries=> @total,:per_page => @per, :page => params[:page]} }
-		else
-			render :json => { :response_code => 500, :response_message => "Interests not found."}
-		end
+		# else
+		# 	render :json => { :response_code => 500, :response_message => "Interests not found."}
+		# end
 	end
 	
 end
