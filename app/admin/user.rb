@@ -5,7 +5,7 @@ ActiveAdmin.register User,:as => "Rating" do
   index download_links: [:csv] do
     selectable_column
     column "User Name" do |resources|
-       resources.profile.first_name
+       resources.profile.first_name + " " + resources.profile.last_name
     end
     column "Email" do |resources|
        resources.profile.fb_email

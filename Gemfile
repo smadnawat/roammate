@@ -12,8 +12,10 @@ gem 'will_paginate', '~> 3.0.6'
 gem 'pickadate-rails'
 gem 'activeadmin', github: 'activeadmin'
 gem 'devise'
+#################
 gem 'carrierwave'
 gem 'cloudinary'
+#################
 gem 'active_admin_theme'
 gem 'roo'
 gem 'iconv'

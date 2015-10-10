@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   post 'update_profile' => "profiles#update_profile"
   post 'block_unblock_users' => "blocks#block_unblock_users"
   
+  get 'click_on_event_link' => 'events#click_on_event_link'
   get 'report_user' => 'reports#report_user'
   get 'get_profile_picture' => 'profiles#get_profile_picture'
   get 'get_settings' => "notifications#get_settings"

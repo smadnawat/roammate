@@ -1,5 +1,5 @@
-class AvatarUploader < CarrierWave::Uploader::Base
-   include Cloudinary::CarrierWave
+class EventUploader < CarrierWave::Uploader::Base
+  include Cloudinary::CarrierWave
 
   version :display do
     process :eager => true
@@ -11,5 +11,5 @@ class AvatarUploader < CarrierWave::Uploader::Base
     process :resize_to_fit => [50, 50]
   end
 
-end
 
+end

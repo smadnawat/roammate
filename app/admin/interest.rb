@@ -38,8 +38,11 @@ ActiveAdmin.register Interest do
       f.input :interest_name
       label :Please_enter_interest_name,:class => "label_error" ,:id => "interest_name_label"
       f.input :image,:as => :file
+      label :Image_resolution_should_be_minimum_200x200,:class => "label_error" ,:id => "interest_image_label"
       f.input :icon,:as => :file
+      label :Icon_resolution_should_be_minimum_100x100,:class => "label_error" ,:id => "interest_icon_label"
       f.input :banner,:as => :file
+      label :Banner_resolution_should_be_minimum_200x600,:class => "label_error" ,:id => "interest_banner_label"
       f.input :color, input_html: { class: 'colorpicker' }
       f.input :description
       label :Please_enter_description,:class => "label_error" ,:id => "description_label"

@@ -1,6 +1,6 @@
 ActiveAdmin.register Event do
   menu priority: 7
-  permit_params :event_name, :place, :event_time,:image,:link, :city, :event_date,:host_name
+  permit_params :interest_id,:event_name, :place, :event_time,:image,:link, :city, :event_date,:host_name
 
   index download_links: [:csv] do
     selectable_column
@@ -17,8 +17,14 @@ ActiveAdmin.register Event do
     column "Date" do |resources|
       resources.event_date.to_date if resources.event_date.present?
     end
-    column "link" do |resources|
+     column "Likes" do |resources|
+      resources.likes.where(status: true).count
+    end
+    column "Link" do |resources|
       body link_to resources.link,"#{resources.link}",:target => "_blank"
+    end
+    column "Clicks on link" do |clk|
+      clk.click_count.to_i
     end
     column :city
     actions name: "Actions"
@@ -62,6 +68,7 @@ ActiveAdmin.register Event do
       label :Please_enter_link,:class => "label_error" ,:id => "link_label"
       f.input :city
       label :Please_enter_city,:class => "label_error" ,:id => "city_label"
+      f.input :interest_id, :as => :select, :collection => Interest.all.map{|u| ["#{u.interest_name}", u.id]},include_blank: false, allow_blank: false
     end
     f.actions
   end

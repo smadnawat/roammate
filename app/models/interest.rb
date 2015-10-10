@@ -3,13 +3,15 @@ class Interest < ActiveRecord::Base
 	include ApplicationHelper
 	mount_uploader :image, AvatarUploader
 	mount_uploader :icon, IconUploader
-	mount_uploader :banner, AvatarUploader
+	mount_uploader :banner, BannerUploader
 	belongs_to :category
+	has_many :events ,dependent: :destroy
 	has_many :questions ,dependent: :destroy
 	has_many :special_messages ,dependent: :destroy
 	has_and_belongs_to_many :users , :join_table => "users_interests" 
 	before_destroy :delete_interest_users
 	validates_presence_of  :image,:icon,:banner
+
 
 	def delete_interest_users
 		@users = self.users
@@ -46,7 +48,6 @@ class Interest < ActiveRecord::Base
 			end
 			return @final, @mact
 			 # @final.append(:pagination => @mact)
-
 	end
 
 end

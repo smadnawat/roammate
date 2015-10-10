@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151001121922) do
+ActiveRecord::Schema.define(version: 20151010130516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,13 +120,17 @@ ActiveRecord::Schema.define(version: 20151001121922) do
     t.string   "place"
     t.string   "link"
     t.string   "city"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.string   "event_time"
     t.string   "host_name"
     t.string   "image"
     t.datetime "event_date"
+    t.integer  "interest_id"
+    t.float    "click_count", default: 0.0
   end
+
+  add_index "events", ["interest_id"], name: "index_events_on_interest_id", using: :btree
 
   create_table "feedbacks", force: :cascade do |t|
     t.string   "content"
@@ -351,6 +355,7 @@ ActiveRecord::Schema.define(version: 20151001121922) do
   add_foreign_key "blocks", "users"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "events", "interests"
   add_foreign_key "feedbacks", "users"
   add_foreign_key "interests", "categories"
   add_foreign_key "invitations", "users"

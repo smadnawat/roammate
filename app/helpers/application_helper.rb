@@ -28,11 +28,6 @@ module ApplicationHelper
 
 	def blocked_user_list user
 		@arr = user.blocks.where(is_block: true).pluck(:member_id)
-    # @arr = []
-		# user.blocks.where(is_block: true).each do |blk|
-		# 	@arr << blk.member_id
-		# end
-		# @arr
 	end
 
 	def user_liked_events user
@@ -66,9 +61,9 @@ module ApplicationHelper
 		end
 	end
 
-	def predefined_events user
-		@events = Event.where('event_date >= ?', Date.today)
-		@event = []
+	def predefined_events user,interest
+		interest.present? ? @events = interest.events.where('event_date >= ?', Date.today) : @events = Event.where('event_date >= ?', Date.today)
+    @event = []
 		if @events.present?
 			@events.each do |e|
 				@eve = {}

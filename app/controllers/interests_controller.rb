@@ -9,12 +9,14 @@ class InterestsController < ApplicationController
 		if @interest.present?
 			@user.update_attributes(active_interest: @interest.first.id)
 			@matches = Interest.view_matches_algo(@interest, @user, params[:page],params[:size])
+			@events = predefined_events(@user, nil)
 			render :json => 
 							{ 
 							:response_code => 200, 
 							:response_message => "Successfully fetched selected interests",
 							:matches => @matches.first ,
-							:pagination => @matches.last
+							:pagination => @matches.last,
+							:events => @events
 							}
 		else
 			render :json => 
@@ -97,7 +99,7 @@ class InterestsController < ApplicationController
 		@matches = Interest.view_matches_algo(@selected_interest, @user, params[:page],params[:size])	
 		# @max = @matches.total_pages
 		# @total_entries = @matches.total_entries
-		@events = predefined_events(@user)
+		@events = predefined_events(@user, nil)
 		# p "++++++++++++@matches++++++++#{@matches}++++++++++++++++++++++"
 			render :json => { 
 			:response_code => 200, :response_message => "Successfully fetched selected interests",

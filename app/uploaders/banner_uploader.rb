@@ -1,4 +1,4 @@
-class AvatarUploader < CarrierWave::Uploader::Base
+class BannerUploader < CarrierWave::Uploader::Base
    include Cloudinary::CarrierWave
 
   version :display do
@@ -12,4 +12,3 @@ class AvatarUploader < CarrierWave::Uploader::Base
   end
 
 end
-
