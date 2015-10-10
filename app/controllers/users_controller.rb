@@ -96,7 +96,7 @@ class UsersController < ApplicationController
 
 
 	def online_offline
-		if (params[:status] == true)
+		if (params[:status] == "true")
 			@user.update_attributes(:online => true,:last_active_at => Time.now)
 			msg = "Online"
 		else

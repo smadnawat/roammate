@@ -1,4 +1,3 @@
-
 include ApplicationHelper
 ActiveAdmin.register Profile do
 
@@ -40,6 +39,9 @@ ActiveAdmin.register Profile do
     column :location
     column "Current city" do |resource|
       resource.user.current_city
+    end
+    column "Online Status" do |resource|
+      resource.user.online ? "On-line" : "Off-line"
     end
     column "Status" do |resource|
       status_tag (resource.status ? "Active" : "Deactive"), (resource.status ? :ok : :error) 

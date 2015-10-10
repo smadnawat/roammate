@@ -11,13 +11,6 @@ before_filter :last_click
          }
       end
   end 
-  
-  def check_user
-  	@user = User.find_by_id(params[:user_id])
-  	unless @user and @user.profile.status
-  		render :json => {:responseCode => 500,:responseMessage => "User doesn't exist."}
-  	end
-  end
 
   def last_click
     if !(params[:controller] == "users" and params[:action] == "login")
@@ -26,6 +19,13 @@ before_filter :last_click
         @user.update_attributes(:online => true,:updated_at => Time.now)
       end
     end
+  end
+  
+  def check_user
+  	@user = User.find_by_id(params[:user_id])
+  	unless @user and @user.profile.status
+  		render :json => {:responseCode => 500,:responseMessage => "User doesn't exist."}
+  	end
   end
 
 end

@@ -4,20 +4,7 @@ class CommentsController < ApplicationController
 		@post = Post.find_by_id(params[:post_id])
 		if @post.present?
 			@comment = @post.comments.create(:reply => params[:reply], :user_id => @user.id)
-			arr = []
-			@comments = @post.comments.each do |comment|
-				com = {}
-				com[:comment] = comment.reply
-				com[:created_at] = comment.created_at
-				com[:first_name] = comment.user.profile.first_name
-				com[:last_name] = comment.user.profile.last_name
-				com[:image] = comment.user.profile.image
-				com[:email] = comment.user.profile.email
-				com[:user_id] = comment.user_id
-				com[]
-				arr << com
-			end
-			render :json => {:response_code => 200,:message => "Comment successfully created", :comments => arr }
+			render :json => {:response_code => 200,:message => "Comment successfully created"}
 		else
 			render :json => {:response_code => 500, :message => "Post not found."}
 		end

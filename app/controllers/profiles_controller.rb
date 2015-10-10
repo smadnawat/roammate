@@ -6,13 +6,13 @@ class ProfilesController < ApplicationController
    
 	def profile_status
 		@profile = Profile.find(params[:id])
-		@profile.status ? @profile.update_attributes(:status => false) : @profile.update_attributes(:status => true)
+		@profile.status ? [@profile.update_attributes(:status => false), @profile.user.update_attributes(online: false)] : [@profile.update_attributes(:status => true), @profile.user.update_attributes(online: true)]
 		redirect_to admin_profiles_path
 	end
 
 	def report_status
 		@profile = Profile.find(params[:id])
-		@profile.status ? @profile.update_attributes(:status => false) : @profile.update_attributes(:status => true)
+		@profile.status ? [@profile.update_attributes(:status => false), @profile.user.update_attributes(online: false)] : [@profile.update_attributes(:status => true), @profile.user.update_attributes(online: true)]
 		redirect_to admin_reports_path
 	end
 
@@ -88,7 +88,6 @@ class ProfilesController < ApplicationController
 		@rating = "#{user_rating(@user.id)}%"
 		@positive_ratings_count = @user.ratings.where(:rate=>"1").count
 		@n = "#{@rating} of #{@positive_ratings_count} positive rates"
-
 		render :json => {:response_code => 200,:message => "Successfully fetched profile",
 		:profile => @profile.attributes.merge!(:user_current_city => @profile.user.current_city, :album => @user.albums.as_json(:only => [:image]), :liked_events => @events, :liked_events_count => @events.count, :my_points=> @points,:my_friends_count => @friends.count, :my_interest => @intr, :my_interest_count => @intr.count , :rate => @rating,:total_rating_users => @user.ratings.count,:positive_ratings_count => @positive_ratings_count,:msg => @n, :my_friends => @friends)}
 	end
