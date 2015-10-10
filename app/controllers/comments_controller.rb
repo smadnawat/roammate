@@ -14,6 +14,7 @@ class CommentsController < ApplicationController
 				com[:image] = comment.user.profile.image
 				com[:email] = comment.user.profile.email
 				com[:user_id] = comment.user_id
+				com[]
 				arr << com
 			end
 			render :json => {:response_code => 200,:message => "Comment successfully created", :comments => arr }
@@ -30,7 +31,7 @@ class CommentsController < ApplicationController
 				@cm={}
 				@cm["reply"] = c.reply
 				@cm["created_at"] = c.created_at
-				@cm["user"] = c.user.profile
+				@cm["user"] = c.user.profile.attributes.merge(:online_status => c.user.online)
 				@arry << @cm
 			end
 			render :json => {:response_code => 200,:message => "Comments", :comments => @arry.reverse}

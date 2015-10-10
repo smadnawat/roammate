@@ -25,7 +25,6 @@ class ProfilesController < ApplicationController
 			@group = Group.where("(group_admin = ?  and group_name = ?) or (group_admin = ?  and group_name = ?)",@user.id,@member.id.to_s,@member.id,@user.id.to_s ).first
 			@ratings = nil
 			@ratable = false
-			@on_off = @member.online
 			@interests = common_activities(@user.id, @member.id)
 			@is_friend = is_friend(@user.id,@member.id)
 			@is_blocked = user_is_block?(@user.id, @member.id)
@@ -52,8 +51,7 @@ class ProfilesController < ApplicationController
 											:positive_ratings_count => @positive_ratings_count,
 											:msg => @n,
 											:can_rate => @ratable,
-											:is_blocked => @is_blocked,
-											:online_status =>  @on_off
+											:is_blocked => @is_blocked
 											}
 		else
 			render :json => {

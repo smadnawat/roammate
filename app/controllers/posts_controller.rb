@@ -24,7 +24,7 @@ class PostsController < ApplicationController
 			@post["image"] = p.image.url
 			@post["created_at"] = p.created_at.to_i
 			points = user_points(p.user_id)
-			@post["user"] = p.user.profile.attributes.merge(:points =>  points)
+			@post["user"] = p.user.profile.attributes.merge(:points =>  points, :online_status => p.user.online)
 			@arr << @post
 		end
 		render :json => {:response_code => 200,:message => "All posts fetched successsfully.", :posts => @arr, :pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries} }
