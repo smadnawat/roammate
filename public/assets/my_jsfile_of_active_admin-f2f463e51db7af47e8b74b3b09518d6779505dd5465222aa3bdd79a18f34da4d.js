@@ -4,10 +4,91 @@ $(document).ready(function() {
  
   $('.label_error').hide();
   
+  var _URL = window.URL || window.webkitURL;
+  $("#interest_image").change(function (e) {
+    var file, img;
+    if ((file = this.files[0])) {
+    img = new Image();
+    img.onload = function () {
+      if (this.width < 200) {
+        $("#interest_image_label").show();
+        return false;
+        } 
+        else if (this.height < 200) {
+          $("#interest_image_label").show();
+          return false;
+        } 
+        else{
+          $("#interest_image_label").hide();
+        } 
+        };
+      img.src = _URL.createObjectURL(file);
+    }
+  });
+  $("#interest_icon").change(function (e) {
+    var file, img;
+    if ((file = this.files[0])) {
+    img = new Image();
+    img.onload = function () {
+      if (this.width < 100) {
+        $("#interest_icon_label").show();
+        return false;
+        } 
+        else if (this.height < 100) {
+          $("#interest_icon_label").show();
+          return false;
+        } 
+        else{
+          $("#interest_icon_label").hide();
+        } 
+        };
+      img.src = _URL.createObjectURL(file);
+    }
+  });
+  $("#interest_banner").change(function (e) {
+    var file, img;
+    if ((file = this.files[0])) {
+    img = new Image();
+    img.onload = function () {
+      if (this.width < 600) {
+        $("#interest_banner_label").show();
+        return false;
+        } 
+        else if (this.height < 200) {
+          $("#interest_banner_label").show();
+          return false;
+        } 
+        else{
+          $("#interest_banner_label").hide();
+        } 
+        };
+      img.src = _URL.createObjectURL(file);
+    }
+  });
+  $("#event_image").change(function (e) {
+    var file, img;
+    if ((file = this.files[0])) {
+    img = new Image();
+    img.onload = function () {
+      if (this.width < 600) {
+        $("#event_image_label").show();
+        return false;
+        } 
+        else if (this.height < 200) {
+          $("#event_image_label").show();
+          return false;
+        } 
+        else{
+          $("#event_image_label").hide();
+        } 
+        };
+      img.src = _URL.createObjectURL(file);
+    }
+  });
+
  $("#interest_submit_action").click(function() {
  	 name = $("#interest_interest_name").val();
    description = $("#interest_description").val();
-
    if (name.trim() == "") {
     $("#interest_name_label").show();
     $("#description_label").hide();

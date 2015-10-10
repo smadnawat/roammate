@@ -65,9 +65,27 @@ $(document).ready(function() {
       img.src = _URL.createObjectURL(file);
     }
   });
+  $("#event_image").change(function (e) {
+    var file, img;
+    if ((file = this.files[0])) {
+    img = new Image();
+    img.onload = function () {
+      if (this.width < 600) {
+        $("#event_image_label").show();
+        return false;
+        } 
+        else if (this.height < 200) {
+          $("#event_image_label").show();
+          return false;
+        } 
+        else{
+          $("#event_image_label").hide();
+        } 
+        };
+      img.src = _URL.createObjectURL(file);
+    }
+  });
 
-
- 
  $("#interest_submit_action").click(function() {
  	 name = $("#interest_interest_name").val();
    description = $("#interest_description").val();

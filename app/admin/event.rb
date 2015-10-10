@@ -58,6 +58,7 @@ ActiveAdmin.register Event do
       f.input :host_name
       label :Please_enter_host_name,:class => "label_error" ,:id => "host_name_label"
       f.input :image,:as => :file
+      label :Image_resolution_should_be_minimum_200x600,:class => "label_error" ,:id => "event_image_label"
       f.input :place
       label :Please_enter_place,:class => "label_error" ,:id => "place_label"
       f.input :event_time ,:class =>"time_holder"
