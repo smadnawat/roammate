@@ -41,7 +41,7 @@ class Interest < ActiveRecord::Base
 					@list_interest[:color] = i.color
 					@int_arr << @list_interest
 				end  
-				@intr[:profile] = t.profile.attributes.merge!(points: point_algo(t.id,user.id), :common_interest=> @int_arr)
+				@intr[:profile] = t.profile.attributes.merge!(:online_status => t.online, points: point_algo(t.id,user.id), :common_interest=> @int_arr)
 				@final << @intr
 			end
 			return @final, @mact

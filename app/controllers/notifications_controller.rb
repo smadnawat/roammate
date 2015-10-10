@@ -51,7 +51,7 @@ class NotificationsController < ApplicationController
 		if @notifications.present?		
 			@note = []
 			@notifications.each do |notice|
-				notice.update_attributes(status: true) if (notice.notification_type == "accept chat")
+				# notice.update_attributes(status: true) if (notice.notification_type == "accept chat")
 				@pr = Profile.find_by_id(notice.user_id)#.attributes.merge!(:notice => notice)
 				@p = {}
 				@p["user_id"] = @pr.id

@@ -44,12 +44,14 @@ class MessagesController < ApplicationController
 			user_list["total_unread_message_count"] = (MessageCount.where('is_read = ? and user_id = ? and group_id = ?', false, @user.id, g.id ).count)
 			if @user.id == g.group_admin
 				@p = point_algo(@user.id, g.group_name.to_i)
-				@prf = User.find_by_id(g.group_name.to_i).profile
-				user_list["user"] = @prf.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @prf.created_at.to_i , "points" => @p)
+				@upro = User.find_by_id(g.group_name.to_i)
+				@prf = @upro.profile
+				user_list["user"] = @prf.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @prf.created_at.to_i , "points" => @p, "online_status" => @upro.online)
 			else
 				@points = point_algo(@user.id, g.group_admin)
-				@pp = User.find_by_id(g.group_admin).profile
-				user_list["user"] = @pp.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @pp.created_at.to_i , "points" => @points)
+				@upro = User.find_by_id(g.group_admin)
+				@pp = @upro.profile
+				user_list["user"] = @pp.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @pp.created_at.to_i , "points" => @points, "online_status" => @upro.online)
 			end
 			@inb << user_list
 		end

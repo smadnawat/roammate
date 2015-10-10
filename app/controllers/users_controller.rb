@@ -44,7 +44,7 @@ class UsersController < ApplicationController
 		       @status =false
 		    end
 		  else		  
-	 		@user = User.create(user_id: params[:user_id], provider: params[:provider],authentication_token: params[:auth_token],online: true)
+	 		@user = User.create(user_id: params[:user_id], provider: params[:provider],authentication_token: params[:auth_token])
 			@profile = Profile.create(email: "#{params[:user_id]}@#{params[:provider]}.com", fb_email: params[:email],first_name: params[:first_name], image: params[:image] ,last_name: params[:last_name], gender: params[:gender], status: true, user_id: @user.id,dob: params[:dob],location: params[:address])
 		  	@signup_points = @user.points.create(:pointable_type => "Sign Up")
 		  	@album = [params[:image], "http://res.cloudinary.com/dklf0amce/image/upload/v1444192617/hun0lyh1ic2turqy2dag.png", "http://res.cloudinary.com/dklf0amce/image/upload/v1444192644/wkzmh7ulcaf4fmkvzgkt.png"]

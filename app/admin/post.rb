@@ -74,7 +74,7 @@ ActiveAdmin.register Post do
       f.input :image,:as => :file
       if params[:action] != "edit"
         f.input :admin_user_id,:input_html => {:value => current_admin_user.id,:readonly=>true }
-        f.input :user_type,:input_html => {:value => "admin",:readonly=>true } 
+        f.input :user_type,:input_html => {:value => "Roammate",:readonly=>true } 
       end
     end
     f.actions
