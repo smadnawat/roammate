@@ -36,5 +36,14 @@ ActiveAdmin.register User,:as => "Rating" do
 
      filter :profile_first_name_cont , :as => :string , :label => "Search By Name"
      filter :current_city_cont , :as => :string , :label => "Search By City"
-
+    controller do
+      def index
+        if current_admin_user.is_admin #|| Group.set_access_for_current_admin(current_admin_user).include?("Banner list")
+         p "++00000000000++++++++#{current_admin_user.is_admin}+++++++++++++"
+         super
+        else
+         redirect_to :back ,:alert => "You are not allowed to access this Page!"
+        end
+      end
+    end
 end

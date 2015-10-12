@@ -84,5 +84,17 @@ ActiveAdmin.register Profile do
     f.actions
   end
 
+
+  controller do
+      def index
+        if current_admin_user.is_admin #|| Group.set_access_for_current_admin(current_admin_user).include?("Banner list")
+         p "++00000000000++++++++#{current_admin_user.is_admin}+++++++++++++"
+         super
+        else
+         redirect_to :back ,:alert => "You are not allowed to access this Page!"
+        end
+      end
+    end
+
 end
 

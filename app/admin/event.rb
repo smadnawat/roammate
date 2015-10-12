@@ -74,4 +74,25 @@ ActiveAdmin.register Event do
     f.actions
   end
 
+
+  controller do
+    def edit
+      if current_admin_user.is_admin #|| Group.set_access_for_current_admin(current_admin_user).include?("Banner list")
+       super
+      else
+       redirect_to :back ,:alert => "You are not allowed to perform this action!"
+      end
+    end
+  end
+
+   controller do
+    def destroy
+      if current_admin_user.is_admin #|| Group.set_access_for_current_admin(current_admin_user).include?("Banner list")
+       super
+      else
+       redirect_to :back ,:alert => "You are not allowed to perform this action!"
+      end
+    end
+  end
+
 end

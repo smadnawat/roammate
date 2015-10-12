@@ -38,3 +38,22 @@ $skinBorderWindowColor: #F0C2B2!default;
 .your_class {
 width: 50%;
 }
+
+
+#wrapper .flashes .flash {
+    background-image: none;
+    color: #ffffff;
+    text-shadow: none;
+}
+body.logged_in .flash {
+    background-color: red;
+    background-image: linear-gradient(180deg, #f7f1d3, #f5edc5);
+    border-bottom: 1px solid #eee098;
+    color: #cb9810;
+    font-size: 1.1em;
+    font-weight: bold;
+    line-height: 1em;
+    padding: 13px 30px 11px;
+    position: relative;
+    text-shadow: 0 1px 0 #fafafa;
+}

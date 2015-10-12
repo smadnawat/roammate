@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-@admin_user = AdminUser.create(email: "admin@example.com", password: "password")
+@admin_user = AdminUser.create(email: "admin@example.com", password: "password", is_admin: true)
 
 @user1 = User.create(provider: "facebook", user_id: "11111",authentication_token: "5abcdefghjklm1234r",latitude: 28.6433175,longitude: 77.3381894,current_city: "Ghaziabad",online: true,address: "411, Sector 3, Vaishali, Ghaziabad, Uttar Pradesh 201012, India")
 @user2 = User.create(provider: "facebook", user_id: "22222",authentication_token: "oabcdefgijklm1234d",latitude: 26.3975746,longitude: 86.1599149,current_city: "Rajnagar",online: true,address: "Madhubani - Rajnagar - Khutauna Road, Rajnagar, Bihar 847235, India")

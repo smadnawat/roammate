@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
 
-before_filter :last_click
+  before_filter :last_click
 
   rescue_from ActionController::RoutingError do |exception|
       respond_to do |format|
@@ -26,6 +26,13 @@ before_filter :last_click
   	unless @user and @user.profile.status
   		render :json => {:responseCode => 500,:responseMessage => "User doesn't exist."}
   	end
+  end
+
+
+  # Admin +++++++++++++++++++++++++++++++++++++++++++
+
+  def after_sign_in_path_for(user)
+    user.is_admin ? admin_dashboard_path : new_admin_event_path
   end
 
 end

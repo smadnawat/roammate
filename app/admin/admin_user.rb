@@ -1,12 +1,13 @@
 ActiveAdmin.register AdminUser do
-  menu false
+  # menu false
+  menu priority: 0
   permit_params :email, :password, :password_confirmation
-  actions :all, :except => [:new, :destroy]
+  actions :all, :except => [:destroy]
   config.filters = false
 
   index download_links: [:csv] do
     selectable_column
-    id_column
+    # id_column
     column :email
     column :current_sign_in_at
     column :sign_in_count
@@ -39,6 +40,17 @@ ActiveAdmin.register AdminUser do
       end
     end
   end
+
+  controller do
+      def index
+        if current_admin_user.is_admin #|| Group.set_access_for_current_admin(current_admin_user).include?("Banner list")
+         p "++00000000000++++++++#{current_admin_user.is_admin}+++++++++++++"
+         super
+        else
+         redirect_to :back ,:alert => "You are not allowed to access this Page!"
+        end
+      end
+    end
 
 
 end
