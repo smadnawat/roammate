@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get '/get_posts' => "posts#get_posts"
   get 'add_user_current_city_status' => 'cities#add_user_current_city_status'
   get 'get_points' => 'blocks#get_points'
+  get 'leave_group' => 'invitations#leave_group'
   # get 'get_point' =>"points#get_point"
   # get 'get_profile' => "profiles#get_profile"
   get 'get_user_cities' => "cities#get_user_cities"

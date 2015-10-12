@@ -1,6 +1,6 @@
 class InvitationsController < ApplicationController
 
-	before_filter :check_user, :only => [:get_roammate_to_add_in_group, :add_member_as_roammate, :accept_or_decline_invitation, :add_member_to_group]
+	before_filter :check_user, :only => [:leave_group, :get_roammate_to_add_in_group, :add_member_as_roammate, :accept_or_decline_invitation, :add_member_to_group]
 
 	def add_member_as_roammate
 		@member = User.find_by_id(params[:member_id])
@@ -78,6 +78,15 @@ class InvitationsController < ApplicationController
 			render :json => {:response_code => 200,:message => "Member successfully fetched.", :members => friends,:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}}
 		else
 			render :json => {:response_code => 500, :message => "Members not found to add in group."}
+		end
+	end
+
+	def leave_group
+		if @group = Group.find_by_id(params[:group_id])
+			@user.groups -= [@group]
+			render :json => {:response_code => 200,:message => "Successfully removed group"}
+		else
+			render :json => {:response_code => 500,:message => "Group not found"}
 		end
 	end
 

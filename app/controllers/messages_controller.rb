@@ -137,8 +137,9 @@ class MessagesController < ApplicationController
 			else
 				@message = @user.messages.build(content: params[:message_content], group_id: @group.id, image: params[:image])
 				if @message.save
-					@group.users.where('id != ?', @user.id).each do |g_user|
-						@group.message_counts.create(user_id: g_user.id, is_read: false)
+					# @group.users.where('id != ?', @user.id).each do |g_user|
+					@group.users.each do |g_user|
+						@group.message_counts.create(user_id: g_user.id)
 					end
 					@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 					@alert = "send message"
@@ -165,21 +166,28 @@ class MessagesController < ApplicationController
 		end
 	end
 
+	# def remove_message
+	# 	if @message = Message.find_by_id(params[:message_id])
+			
+	# 	else
 
-	def delete_message
-		@message = Message.find_by_id_and_user_id(params[:message_id], @user.id)
-		if @message.present?
-			@message.destroy
-			message = "Successfully deleted message"
-			code = 200
-		else
-			message = "Message not found"
-			code = 400
-		end
-		render :json => {
-										:response_code => code,
-										:message => message
-										}
-	end
+	# 	end
+	# end
+
+	# def delete_message
+	# 	@message = Message.find_by_id_and_user_id(params[:message_id], @user.id)
+	# 	if @message.present?
+	# 		@message.destroy
+	# 		message = "Successfully deleted message"
+	# 		code = 200
+	# 	else
+	# 		message = "Message not found"
+	# 		code = 400
+	# 	end
+	# 	render :json => {
+	# 									:response_code => code,
+	# 									:message => message
+	# 									}
+	# end
 
 end
