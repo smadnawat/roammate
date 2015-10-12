@@ -57,11 +57,10 @@ class MessagesController < ApplicationController
 		end
 		@max = @groups.total_pages
 		@total_entries = @groups.total_entries
-		p "=====#{@inb.inspect}===========#{@inb.count}-------------------------------------------"
 			render :json => {
 										:response_code => 200,
 										:message => "data fetched successfully.", 
-										:inbox => (@inb.sort_by { |k| k["last_message"]["created_at"]}).reverse,
+										:inbox => (@inb.compact.sort_by { |k| k["last_message"].present? ? k["last_message"]["created_at"] : 1111111111111111111111 }).reverse ,
 										:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 											}
 	end
