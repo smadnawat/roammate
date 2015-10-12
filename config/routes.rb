@@ -41,7 +41,6 @@ Rails.application.routes.draw do
   get 'special_messages' => "messages#special_messages"
   get 'add_member_to_group' => "invitations#add_member_to_group"
   get 'delete_message' => "messages#delete_message"
-  get 'user_inbox' => "messages#user_inbox"
   post 'accept_or_decline_invitation' => "invitations#accept_or_decline_invitation"
   get 'view_matched_profile' => "profiles#view_matched_profile"
   get 'add_member_as_roammate' => "invitations#add_member_as_roammate"
@@ -52,6 +51,7 @@ Rails.application.routes.draw do
   get 'add_user_current_city_status' => 'cities#add_user_current_city_status'
   get 'get_points' => 'blocks#get_points'
   get 'leave_group' => 'invitations#leave_group'
+  get 'user_inbox' => 'messages#user_inbox'
   # get 'get_point' =>"points#get_point"
   # get 'get_profile' => "profiles#get_profile"
   get 'get_user_cities' => "cities#get_user_cities"

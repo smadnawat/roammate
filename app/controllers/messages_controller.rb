@@ -168,26 +168,25 @@ class MessagesController < ApplicationController
 
 	# def remove_message
 	# 	if @message = Message.find_by_id(params[:message_id])
-			
+
 	# 	else
 
 	# 	end
 	# end
 
-	# def delete_message
-	# 	@message = Message.find_by_id_and_user_id(params[:message_id], @user.id)
-	# 	if @message.present?
-	# 		@message.destroy
-	# 		message = "Successfully deleted message"
-	# 		code = 200
-	# 	else
-	# 		message = "Message not found"
-	# 		code = 400
-	# 	end
-	# 	render :json => {
-	# 									:response_code => code,
-	# 									:message => message
-	# 									}
-	# end
+	def delete_message
+		if @message = Message.find_by_id_and_user_id(params[:message_id], @user.id)
+			@message.destroy
+			message = "Successfully deleted message"
+			code = 200
+		else
+			message = "Message not found"
+			code = 400
+		end
+		render :json => {
+										:response_code => code,
+										:message => message
+										}
+	end
 
 end
