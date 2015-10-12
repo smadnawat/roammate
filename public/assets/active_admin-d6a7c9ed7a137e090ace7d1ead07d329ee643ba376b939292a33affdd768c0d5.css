@@ -4155,20 +4155,24 @@ input[type='radio']:checked:before {
 .your_class {
   width: 50%;
 }
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
 
+/* line 43, /home/shekhar.madnawat/Desktop/roammate/app/assets/stylesheets/active_admin.css.scss */
+#wrapper .flashes .flash {
+  background-image: none;
+  color: #ffffff;
+  text-shadow: none;
+}
 
- */
-
- 
+/* line 48, /home/shekhar.madnawat/Desktop/roammate/app/assets/stylesheets/active_admin.css.scss */
+body.logged_in .flash {
+  background-color: red;
+  background-image: linear-gradient(180deg, #f7f1d3, #f5edc5);
+  border-bottom: 1px solid #eee098;
+  color: #cb9810;
+  font-size: 1.1em;
+  font-weight: bold;
+  line-height: 1em;
+  padding: 13px 30px 11px;
+  position: relative;
+  text-shadow: 0 1px 0 #fafafa;
+}
