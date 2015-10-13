@@ -30,4 +30,8 @@ class PostsController < ApplicationController
 		render :json => {:response_code => 200,:message => "All posts fetched successsfully.", :posts => @arr, :pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries} }
 	end
 
+	def admin_post
+		render :json => {:response_code => 200,:message => "Admin posts fetched successsfully.", :admin_post => Post.where(admin_user_id: 1).as_json(only: [:content, :admin_user_id, :user_type]) }
+	end
+
 end

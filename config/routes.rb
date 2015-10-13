@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   get 'get_points' => 'blocks#get_points'
   get 'leave_group' => 'invitations#leave_group'
   get 'user_inbox' => 'messages#user_inbox'
+  get 'admin_post' => 'posts#admin_post'
   # get 'get_point' =>"points#get_point"
   # get 'get_profile' => "profiles#get_profile"
   get 'get_user_cities' => "cities#get_user_cities"

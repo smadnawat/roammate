@@ -70,7 +70,8 @@ ActiveAdmin.register SpecialMessage do
       super
       if params[:special_message][:city].present?
       @city = City.find(params[:special_message][:city])
-      @city.users.each do |snd|
+      @interest = Interest.find(params[:special_message][:interest_id])
+      @city.users.select{|x|(x.interests.include?(@interest))}.each do |snd|
         @type = "Admin message"
         @badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
         snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil ) : ApplePushWorker.perform_async( snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil ) } if snd.message_notification
