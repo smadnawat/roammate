@@ -44,6 +44,7 @@ ActiveAdmin.register SpecialMessage do
       label :Please_enter_message,:class => "label_error" ,:id => "message_new_label"
       f.input :interest_id, :as => :select, :collection => Interest.all.map{|u| ["#{u.interest_name}", u.id]},include_blank: false, allow_blank: false
       f.input :city, :as => :select, :collection => City.all.map{|u| ["#{u.city_name}", u.id]},include_blank: true, allow_blank: false
+      f.input :profile, :as => :select, :collection => Profile.all.map{|u| ["#{u.first_name} #{u.last_name}", u.id]},include_blank: true, allow_blank: false
     end
     f.actions
   end
@@ -68,12 +69,20 @@ ActiveAdmin.register SpecialMessage do
     def create
       p "++++++++++++++++++++#{params.inspect}++++++"
       super
-      
+      if params[:special_message][:city].present?
       @city = City.find(params[:special_message][:city])
       @city.users.each do |snd|
         @type = "Admin message"
         @badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
         snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil ) : ApplePushWorker.perform_async( snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil ) } if snd.message_notification
+      end
+      else
+        @interest = Interest.find(params[:special_message][:interest_id])
+        @interest.users.each do |snd|
+        @type = "Admin message"
+        @badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
+        snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil ) : ApplePushWorker.perform_async( snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil ) } if snd.message_notification
+      end
       end
     end
 

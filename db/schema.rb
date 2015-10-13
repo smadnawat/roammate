@@ -301,9 +301,9 @@ ActiveRecord::Schema.define(version: 20151012113038) do
   create_table "special_messages", force: :cascade do |t|
     t.string   "content"
     t.integer  "interest_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.boolean  "status"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "status",      default: true
   end
 
   add_index "special_messages", ["interest_id"], name: "index_special_messages_on_interest_id", using: :btree

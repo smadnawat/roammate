@@ -106,7 +106,7 @@ class InterestsController < ApplicationController
 		 	:selected_interest => @interest,
 			:matches => @matches.first,
 			:events => @events,
-			:pagination => @matches.last
+			:pagination => @matches.last.merge!(:interest_count => Interest.all.count)
 			}
 	end
 
