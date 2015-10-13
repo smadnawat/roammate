@@ -72,28 +72,28 @@
 @category4 = Category.create(category_name: "Category4")
 @category5 = Category.create(category_name: "Category5")
 
-@interest1  = @category1.interests.create(interest_name: "interest1", description: "description1", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
-@interest2  = @category1.interests.create(interest_name: "interest2", description: "description2", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
-@interest3  = @category2.interests.create(interest_name: "interest3", description: "description3", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
-@interest4  = @category2.interests.create(interest_name: "interest4", description: "description4", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
-@interest5  = @category3.interests.create(interest_name: "interest5", description: "description5", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
-@interest6  = @category3.interests.create(interest_name: "interest6", description: "description6", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
-@interest7  = @category4.interests.create(interest_name: "interest7", description: "description7", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
-@interest8  = @category4.interests.create(interest_name: "interest8", description: "description8", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
-@interest9  = @category5.interests.create(interest_name: "interest9", description: "description9", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
-@interest10 = @category5.interests.create(interest_name: "interest10", description: "description10", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
+# @interest1  = @category1.interests.create(interest_name: "interest1", description: "description1", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
+# @interest2  = @category1.interests.create(interest_name: "interest2", description: "description2", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
+# @interest3  = @category2.interests.create(interest_name: "interest3", description: "description3", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
+# @interest4  = @category2.interests.create(interest_name: "interest4", description: "description4", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
+# @interest5  = @category3.interests.create(interest_name: "interest5", description: "description5", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
+# @interest6  = @category3.interests.create(interest_name: "interest6", description: "description6", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
+# @interest7  = @category4.interests.create(interest_name: "interest7", description: "description7", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
+# @interest8  = @category4.interests.create(interest_name: "interest8", description: "description8", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
+# @interest9  = @category5.interests.create(interest_name: "interest9", description: "description9", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
+# @interest10 = @category5.interests.create(interest_name: "interest10", description: "description10", image: "v1437647939/pgk1tslryt8vymvbejyo.png" , icon: "v1437647939/pgk1tslryt8vymvbejyo.png" )
 
 
-@question1  = @category1.questions.create(question: "This is question 1?",interest_id: @interest2.id)
-@question2  = @category1.questions.create(question: "This is question 2?",interest_id: @interest4.id)
-@question3  = @category2.questions.create(question: "This is question 3?",interest_id: @interest2.id)
-@question4  = @category2.questions.create(question: "This is question 4?",interest_id: @interest4.id)
-@question5  = @category3.questions.create(question: "This is question 5?",interest_id: @interest10.id)
-@question6  = @category3.questions.create(question: "This is question 6?",interest_id: @interest9.id)
-@question7  = @category4.questions.create(question: "This is question 7?",interest_id: @interest4.id)
-@question8  = @category4.questions.create(question: "This is question 8?",interest_id: @interest3.id)
-@question9  = @category5.questions.create(question: "This is question 9?",interest_id: @interest4.id)
-@question10 = @category5.questions.create(question: "This is question 10?",interest_id: @interest3.id)
+# @question1  = @category1.questions.create(question: "This is question 1?",interest_id: @interest2.id)
+# @question2  = @category1.questions.create(question: "This is question 2?",interest_id: @interest4.id)
+# @question3  = @category2.questions.create(question: "This is question 3?",interest_id: @interest2.id)
+# @question4  = @category2.questions.create(question: "This is question 4?",interest_id: @interest4.id)
+# @question5  = @category3.questions.create(question: "This is question 5?",interest_id: @interest10.id)
+# @question6  = @category3.questions.create(question: "This is question 6?",interest_id: @interest9.id)
+# @question7  = @category4.questions.create(question: "This is question 7?",interest_id: @interest4.id)
+# @question8  = @category4.questions.create(question: "This is question 8?",interest_id: @interest3.id)
+# @question9  = @category5.questions.create(question: "This is question 9?",interest_id: @interest4.id)
+# @question10 = @category5.questions.create(question: "This is question 10?",interest_id: @interest3.id)
 
 
 @feedback1 = @user1.feedbacks.create(content: "content1")
@@ -102,30 +102,30 @@
 @feedback4 = @user4.feedbacks.create(content: "content4")
 @feedback5 = @user5.feedbacks.create(content: "content5")
 
-@event1 = Event.create(event_name: "event1", place: "place1", city: "Ghaziabad",host_name: "Company name", image: "v1437647939/pgk1tslryt8vymvbejyo.png",link: "http://www.mobiloitte.com/",event_date: "2015-09-14",event_time: "5:00 PM" )
-@event2 = Event.create(event_name: "event2", place: "place2", city: "New Delhi",host_name: "Company name", image: "v1437647939/pgk1tslryt8vymvbejyo.png",link: "http://www.mobiloitte.com/",event_date: "2015-09-16",event_time: "5:00 PM" )
-@event3 = Event.create(event_name: "event3", place: "place3", city: "Rajnagar",host_name: "Company name", image: "v1437647939/pgk1tslryt8vymvbejyo.png",link: "http://www.mobiloitte.com/",event_date: "2015-09-20",event_time: "5:00 PM" )
-@event4 = Event.create(event_name: "event4", place: "place4", city: "city4",host_name: "Company name", image: "v1437647939/pgk1tslryt8vymvbejyo.png",link: "http://www.mobiloitte.com/",event_date: "2015-09-21",event_time: "5:00 PM" )
-@event5 = Event.create(event_name: "event5", place: "place5", city: "city5",host_name: "Company name", image: "v1437647939/pgk1tslryt8vymvbejyo.png",link: "http://www.mobiloitte.com/",event_date: "2015-09-22",event_time: "5:00 PM" )
+# @event1 = Event.create(event_name: "event1", place: "place1", city: "Ghaziabad",host_name: "Company name", image: "v1437647939/pgk1tslryt8vymvbejyo.png",link: "http://www.mobiloitte.com/",event_date: "2015-09-14",event_time: "5:00 PM" )
+# @event2 = Event.create(event_name: "event2", place: "place2", city: "New Delhi",host_name: "Company name", image: "v1437647939/pgk1tslryt8vymvbejyo.png",link: "http://www.mobiloitte.com/",event_date: "2015-09-16",event_time: "5:00 PM" )
+# @event3 = Event.create(event_name: "event3", place: "place3", city: "Rajnagar",host_name: "Company name", image: "v1437647939/pgk1tslryt8vymvbejyo.png",link: "http://www.mobiloitte.com/",event_date: "2015-09-20",event_time: "5:00 PM" )
+# @event4 = Event.create(event_name: "event4", place: "place4", city: "city4",host_name: "Company name", image: "v1437647939/pgk1tslryt8vymvbejyo.png",link: "http://www.mobiloitte.com/",event_date: "2015-09-21",event_time: "5:00 PM" )
+# @event5 = Event.create(event_name: "event5", place: "place5", city: "city5",host_name: "Company name", image: "v1437647939/pgk1tslryt8vymvbejyo.png",link: "http://www.mobiloitte.com/",event_date: "2015-09-22",event_time: "5:00 PM" )
 
 @city1 = City.create(city_name: "Ghaziabad", state: "Uttar Pradesh", country: "India", status: false)
 @city2 = City.create(city_name: "New Delhi", state: "Delhi", country: "India", status: false)
 @city3 = City.create(city_name: "Rajnagar", state: "Bihar", country: "India", status: false)
 
-@user1.interests << [@interest1,@interest3,@interest9]
-@user2.interests << [@interest1,@interest4,@interest7] 
-@user3.interests << [@interest2,@interest3,@interest1] 
-@user4.interests << [@interest3,@interest10,@interest1] 
-@user5.interests << [@interest6,@interest5,@interest7,@interest1] 
+# @user1.interests << [@interest1,@interest3,@interest9]
+# @user2.interests << [@interest1,@interest4,@interest7] 
+# @user3.interests << [@interest2,@interest3,@interest1] 
+# @user4.interests << [@interest3,@interest10,@interest1] 
+# @user5.interests << [@interest6,@interest5,@interest7,@interest1] 
 
-@invitation1 = @user1.invitations.create(:reciever => 2,:status => true)
-@invitation2 = @user1.invitations.create(:reciever => 3,:status => true)
-@invitation3 = @user1.invitations.create(:reciever => 4,:status => true)
-@invitation4 = @user3.invitations.create(:reciever => 2,:status => true)
-@invitation5 = @user3.invitations.create(:reciever => 5,:status => true)
-@invitation7 = @user5.invitations.create(:reciever => 1,:status => true)
-@invitation8 = @user5.invitations.create(:reciever => 2,:status => true)
-@invitation9 = @user5.invitations.create(:reciever => 4,:status => true)
+# @invitation1 = @user1.invitations.create(:reciever => 2,:status => true)
+# @invitation2 = @user1.invitations.create(:reciever => 3,:status => true)
+# @invitation3 = @user1.invitations.create(:reciever => 4,:status => true)
+# @invitation4 = @user3.invitations.create(:reciever => 2,:status => true)
+# @invitation5 = @user3.invitations.create(:reciever => 5,:status => true)
+# @invitation7 = @user5.invitations.create(:reciever => 1,:status => true)
+# @invitation8 = @user5.invitations.create(:reciever => 2,:status => true)
+# @invitation9 = @user5.invitations.create(:reciever => 4,:status => true)
 
 @service_point1  = ServicePoint.create(service: "Sign Up", point: 100)
 @service_point2  = ServicePoint.create(service: "First Post to Newsfeed", point: 50)
@@ -156,14 +156,14 @@
 @points7 = @user4.points.create(pointable_type: "First Post to Newsfeed")
 @points8 = @user5.points.create(pointable_type: "Send chat invite")
 
-@special_message1  = @interest1.special_messages.create(content: "this is demo message", status: false)
-@special_message2  = @interest2.special_messages.create(content: "this is demo message", status: false)
-@special_message3  = @interest3.special_messages.create(content: "this is demo message", status: false)
-@special_message4  = @interest4.special_messages.create(content: "this is demo message", status: false)
-@special_message5  = @interest5.special_messages.create(content: "this is demo message", status: false)
-@special_message6  = @interest6.special_messages.create(content: "this is demo message", status: false)
-@special_message7  = @interest7.special_messages.create(content: "this is demo message", status: false)
-@special_message8  = @interest8.special_messages.create(content: "this is demo message", status: false)
-@special_message9  = @interest9.special_messages.create(content: "this is demo message", status: false)
-@special_message10 = @interest10.special_messages.create(content: "this is demo message", status: false)
-@special_message11 = @interest4.special_messages.create(content: "this is demo message", status: false)
+# @special_message1  = @interest1.special_messages.create(content: "this is demo message", status: false)
+# @special_message2  = @interest2.special_messages.create(content: "this is demo message", status: false)
+# @special_message3  = @interest3.special_messages.create(content: "this is demo message", status: false)
+# @special_message4  = @interest4.special_messages.create(content: "this is demo message", status: false)
+# @special_message5  = @interest5.special_messages.create(content: "this is demo message", status: false)
+# @special_message6  = @interest6.special_messages.create(content: "this is demo message", status: false)
+# @special_message7  = @interest7.special_messages.create(content: "this is demo message", status: false)
+# @special_message8  = @interest8.special_messages.create(content: "this is demo message", status: false)
+# @special_message9  = @interest9.special_messages.create(content: "this is demo message", status: false)
+# @special_message10 = @interest10.special_messages.create(content: "this is demo message", status: false)
+# @special_message11 = @interest4.special_messages.create(content: "this is demo message", status: false)
