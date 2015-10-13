@@ -27,7 +27,7 @@ ActiveAdmin.register SpecialMessage do
           links += " / "
           links +=  link_to 'Edit', edit_admin_special_message_path(resource)
           links += " / "  
-          links += link_to 'Delete', edit_admin_special_message_path(resource), method: :delete,:data => { :confirm => 'Are you sure, you want to delete this profile?' }
+          links += link_to 'Delete', admin_special_message_path(resource), method: :delete,:data => { :confirm => 'Are you sure, you want to delete this profile?' }
           links += " / "  
           links += link_to 'View', admin_special_message_path(resource)
 
@@ -44,7 +44,6 @@ ActiveAdmin.register SpecialMessage do
       label :Please_enter_message,:class => "label_error" ,:id => "message_new_label"
       f.input :interest_id, :as => :select, :collection => Interest.all.map{|u| ["#{u.interest_name}", u.id]},include_blank: false, allow_blank: false
       f.input :city, :as => :select, :collection => City.all.map{|u| ["#{u.city_name}", u.id]},include_blank: true, allow_blank: false
-      f.input :profile, :as => :select, :collection => Profile.all.map{|u| ["#{u.first_name} #{u.last_name}", u.id]},include_blank: true, allow_blank: false
     end
     f.actions
   end
@@ -93,7 +92,7 @@ ActiveAdmin.register SpecialMessage do
        redirect_to :back ,:alert => "You are not allowed to access this Page!"
       end
     end
-    
+
   end
 
 end
