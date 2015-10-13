@@ -106,7 +106,7 @@ class InterestsController < ApplicationController
 		 	:selected_interest => @interest,
 			:matches => @matches.first,
 			:events => @events,
-			:pagination => @matches.last.merge!(:interest_count => Interest.all.count)
+			:pagination => @matches.last
 			}
 	end
 
@@ -130,7 +130,7 @@ class InterestsController < ApplicationController
 				@interest << @int
 			end
 			render :json => { :response_code => 200, :response_message => "Successfully fetched interests.",
-			 :interests => @interest ,:paging => {:max_page=> @max,:total_entries=> @total,:per_page => @per, :page => params[:page]} }
+			 :interests => @interest ,:paging => {:max_page=> @max,:total_entries=> @total,:per_page => @per, :page => params[:page], :interest_count => Interest.all.count } }
 		# else
 		# 	render :json => { :response_code => 500, :response_message => "Interests not found."}
 		# end
