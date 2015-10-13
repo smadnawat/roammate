@@ -18,7 +18,7 @@ ActiveAdmin.register Interest do
       image_tag resources.icon_url(:thumbnail)
     end
     column "Colour" do |col|
-      col.color
+      status_tag col.color, :style => "background: #{col.color}!important;"
     end
     column "Banner" do |resources|
       image_tag resources.banner_url(:thumbnail)

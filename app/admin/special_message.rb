@@ -93,6 +93,7 @@ ActiveAdmin.register SpecialMessage do
        redirect_to :back ,:alert => "You are not allowed to access this Page!"
       end
     end
+    
   end
 
 end
