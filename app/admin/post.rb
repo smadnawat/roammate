@@ -8,20 +8,20 @@ ActiveAdmin.register Post do
       if resources.user_id.present?
           resources.user.profile.first_name
         else
-          "Admin user"
+          "Team Roammate"
         end
     end
     column "User type" do |resources|
       resources.user_type
     end
     column "Post" do |resources|
-      resources.title
+      resources.content
     end
     column "City" do |resources|
       if resources.user_id.present?
-          resources.user.profile.first_name
+          resources.user.current_city
       else
-          "Admin location"
+          "Roammate location"
       end
     end
     column "Date" do |resources|
