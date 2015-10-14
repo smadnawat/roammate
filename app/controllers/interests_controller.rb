@@ -62,7 +62,7 @@ class InterestsController < ApplicationController
 			p "------rmv----#{@rmv}"
 		# else
 		# 	@add = params[:interests]
-
+		p "+++++++++++++#{params[:interests].count}+++++++++++++++++"
 		# end
 		 if @add.present?
 			@add.each do |t|
@@ -99,7 +99,7 @@ class InterestsController < ApplicationController
 		@matches = Interest.view_matches_algo(@selected_interest, @user, params[:page],params[:size])	
 		# @max = @matches.total_pages
 		# @total_entries = @matches.total_entries
-		@events = predefined_events(@user, nil)
+		params[:interests].count == 1 ? @events = predefined_events(@user, Interest.find_by_id(params[:interests])) : @events = predefined_events(@user, nil)
 		# p "++++++++++++@matches++++++++#{@matches}++++++++++++++++++++++"
 			render :json => { 
 			:response_code => 200, :response_message => "Successfully fetched selected interests",
