@@ -6,6 +6,7 @@ class Notification < ActiveRecord::Base
   	@alert = alert(user,type)
   	notification = create(:user_id => user.id,:reciever => reciever.id,:notification_type => type,:message => @alert,:status => false)
   	if reciever.friend_request_notification
+      p "+++++++++++++reciever.friend_request_notification==#{reciever.friend_request_notification}+++++++++++++++++"
       badges = Notification.where("reciever = ? and status = ?",reciever.id ,false).count
       image = user.profile.image
     	@devices = reciever.devices
@@ -35,5 +36,5 @@ class Notification < ActiveRecord::Base
   		return "#{user.profile.first_name.capitalize} has accepted your chat invitation"
   	end
   end
-  
+
 end
