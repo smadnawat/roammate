@@ -35,4 +35,5 @@ class Notification < ActiveRecord::Base
   		return "#{user.profile.first_name.capitalize} has accepted your chat invitation"
   	end
   end
+  
 end

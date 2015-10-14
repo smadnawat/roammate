@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151012113038) do
+ActiveRecord::Schema.define(version: 20151014094514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 20151012113038) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.boolean  "is_delete",  default: false
+    t.integer  "message_id"
   end
 
   add_index "message_counts", ["group_id"], name: "index_message_counts_on_group_id", using: :btree

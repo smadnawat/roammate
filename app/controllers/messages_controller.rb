@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
 
 	include ApplicationHelper
-	before_filter :check_user, :only => [:user_inbox, :create_new_message, :delete_message, :create_new_group, :special_messages,:get_messages]
+	before_filter :check_user, :only => [:delete_chat, :user_inbox, :create_new_message, :delete_message, :create_new_group, :special_messages,:get_messages]
 
 	def message_status
 		@message = Question.find(params[:id])
@@ -97,7 +97,8 @@ class MessagesController < ApplicationController
 		  @qs.each do |q|
 		  	@get_default_quetions << q.attributes.slice("id","question","interest_id","status").merge!("created_at"=> q.created_at.to_i)
 		  end
-			@get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
+			@get_previous_messages = Message.where(id: (@group.message_counts.where("user_id = ? and is_delete = ?", @user.id, false).pluck(:message_id))).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
+			# @get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
 			@msg_cnt = MessageCount.where("group_id = ? and user_id = ? and is_read = ?", @group.id, @user.id, false)
 			@msg_cnt.map{|x| x.update_attributes(is_read: true)} if @msg_cnt.present?
 			@max = @get_previous_messages.total_pages
@@ -138,13 +139,13 @@ class MessagesController < ApplicationController
 				if @message.save
 					# @group.users.where('id != ?', @user.id).each do |g_user|
 					@group.users.each do |g_user|
-						@group.message_counts.create(user_id: g_user.id)
+						@group.message_counts.create(user_id: g_user.id, message_id: @message.id)
 					end
 					@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 					@alert = "send message"
 					@group_users = @group.users.where('id != ?', @user.id)
 					@group_users.each do |snd|
-						@group_name =  @group.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
+						@group_name =  @group.users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",")
 						@type = "Send message"
 						@badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
             p "+++++++++++++++#{snd.inspect}++++++++++++"
@@ -167,13 +168,15 @@ class MessagesController < ApplicationController
 		end
 	end
 
-	# def remove_message
-	# 	if @message = Message.find_by_id(params[:message_id])
-
-	# 	else
-
-	# 	end
-	# end
+	def delete_chat
+		if @group = Group.find_by_id(params[:group_id])
+			@message_cnt = MessageCount.where("group_id = ? and user_id = ?", @group.id, @user.id)
+			@message_cnt.update_all(is_delete: true)
+			render :json => {:response_code => 200,	:message => "Chat deleted successfully." }
+		else
+			render :json => {:response_code => 500,	:message => "Group not found." }
+		end
+	end
 
 	def delete_message
 		if @message = Message.find_by_id_and_user_id(params[:message_id], @user.id)

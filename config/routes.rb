@@ -40,7 +40,8 @@ Rails.application.routes.draw do
   get 'get_roammate_to_add_in_group' => "invitations#get_roammate_to_add_in_group"
   get 'special_messages' => "messages#special_messages"
   get 'add_member_to_group' => "invitations#add_member_to_group"
-  get 'delete_message' => "messages#delete_message"
+  # get 'delete_message' => "messages#delete_message"
+  get 'delete_chat' => 'messages#delete_chat'
   post 'accept_or_decline_invitation' => "invitations#accept_or_decline_invitation"
   get 'view_matched_profile' => "profiles#view_matched_profile"
   get 'add_member_as_roammate' => "invitations#add_member_as_roammate"
