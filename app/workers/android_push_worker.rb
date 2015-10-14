@@ -1,6 +1,7 @@
 require 'gcm'
 class AndroidPushWorker
   include Sidekiq::Worker
+  sidekiq_options  :retry => false
 
     def perform(reciever,alert,badges,notification,invitation,type, device_id, image, name, group_id)
       p "=======image=#{image}========group_id==#{group_id}====notification_id=#{notification}=======group_name=#{name}========reciever_id==#{reciever.inspect}=======alert=#{alert.inspect}=========badges=#{badges.inspect}=============device_id=#{device_id.inspect}=========notification_type=#{type.inspect}==========invitation_id==#{invitation.inspect}======="

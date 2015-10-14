@@ -147,6 +147,8 @@ class MessagesController < ApplicationController
 						@group_name =  @group.users.where('id != ?', snd.id).map {|x| x.profile.first_name}.join(",")
 						@type = "Send message"
 						@badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
+            p "+++++++++++++++#{snd.inspect}++++++++++++"
+            p "++++++++++++++++#{snd.devices.inspect}"
             snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, @user.profile.image, @group_name, @group.id ) : ApplePushWorker.perform_async( snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, nil, @group_name, @group.id ) } if snd.message_notification
           end
 				end
