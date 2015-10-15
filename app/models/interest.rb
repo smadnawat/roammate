@@ -72,7 +72,6 @@ class Interest < ActiveRecord::Base
 	# 				@int_arr << @list_interest
 	# 			end  
 	# 			@matches << match.profile.attributes.merge!(:online_status => match.online, points: point_algo(match.id,user.id), :common_interest => @int_arr ) if match.current_city == user.current_city
-				
 	# 		end
 	# 		@final << @int.merge!(:users => @matches, :events => predefined_events(user, interest) )
 	# 	end

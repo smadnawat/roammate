@@ -113,12 +113,11 @@ class MessagesController < ApplicationController
 			end
 			render :json => {
 							:response_code => 200,
-							:message => "Message list",							
+							:message => "Message list",
 							:predefined_messages => @get_default_quetions,
 							:user_messages => m,
 							:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 							}
-
 		else
 			render :json => {
 							:response_code => 500,
