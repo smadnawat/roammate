@@ -20899,10 +20899,12 @@ $(document).ready(function() {
     img.onload = function () {
       if (this.width < 200) {
         $("#interest_image_label").show();
+        $("#interest_image").val('')
         return false;
         } 
         else if (this.height < 200) {
           $("#interest_image_label").show();
+          $("#interest_image").val('')
           return false;
         } 
         else{
@@ -20919,10 +20921,12 @@ $(document).ready(function() {
     img.onload = function () {
       if (this.width < 100) {
         $("#interest_icon_label").show();
+        $("#interest_icon").val('')
         return false;
         } 
         else if (this.height < 100) {
           $("#interest_icon_label").show();
+          $("#interest_icon").val('')
           return false;
         } 
         else{
@@ -20939,10 +20943,12 @@ $(document).ready(function() {
     img.onload = function () {
       if (this.width < 600) {
         $("#interest_banner_label").show();
+        $("#interest_banner").val('')
         return false;
         } 
         else if (this.height < 200) {
           $("#interest_banner_label").show();
+          $("#interest_banner").val('')
           return false;
         } 
         else{
@@ -20959,10 +20965,12 @@ $(document).ready(function() {
     img.onload = function () {
       if (this.width < 600) {
         $("#event_image_label").show();
+        $("#event_image").val('')
         return false;
         } 
         else if (this.height < 200) {
           $("#event_image_label").show();
+          $("#event_image").val('')
           return false;
         } 
         else{
