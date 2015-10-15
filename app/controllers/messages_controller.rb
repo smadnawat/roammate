@@ -34,10 +34,9 @@ class MessagesController < ApplicationController
 				@grp_name =  g.users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",")
 			end
 		  	user_list = {}
-			@all_messages = g.messages
+			@all_messages = Message.where(id: (g.message_counts.where("user_id = ? and is_delete = ?", @user.id, false).pluck(:message_id)))
 			@mg = @all_messages.order("created_at ASC").last
 			@quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
-			p "++++++++++++#{@quee.inspect}+++++++++++"
 			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
 			user_list["group_id"] = g.id
 			user_list["group_name"] = @grp_name
@@ -148,8 +147,6 @@ class MessagesController < ApplicationController
 						@group_name =  @group.users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",")
 						@type = "Send message"
 						@badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
-            p "+++++++++++++++#{snd.inspect}++++++++++++"
-            p "++++++++++++++++#{snd.devices.inspect}"
             snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, @user.profile.image, @group_name, @group.id ) : ApplePushWorker.perform_async( snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, nil, @group_name, @group.id ) } if snd.message_notification
           end
 				end

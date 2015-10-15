@@ -22,32 +22,61 @@ class Interest < ActiveRecord::Base
 	def self.view_matches_algo selected_interest, user, page, size
 		matches = []
 		@final = []
-			@blok = blocked_user_list(user) + [user.id]
-			selected_interest.each do |interest|
-				interest.users.where('id NOT IN (?)',@blok).each do |match|
-					matches << match if match.current_city == user.current_city
-				end
+		@blok = blocked_user_list(user) + [user.id]
+		selected_interest.each do |interest|
+			interest.users.where('id NOT IN (?)',@blok).each do |match|
+				matches << match if match.current_city == user.current_city
 			end
-			@matchups = matches.uniq.paginate(:page => page, :per_page => size)
-			@mact = {}
-			@mact[:page] = page
-			@mact[:per_page] = size
-			@mact[:max_page] = @matchups.total_pages
-			@mact[:total_entries] = @matchups.total_entries
-			@matchups.each do |t|
-				@intr = {}
-				@int_arr = []
-				(t.interests&user.interests).each do |i|
-					@list_interest = {}
-					@list_interest[:image] = i.icon.url 
-					@list_interest[:color] = i.color
-					@int_arr << @list_interest
-				end  
-				@intr[:profile] = t.profile.attributes.merge!(:online_status => t.online, points: point_algo(t.id,user.id), :common_interest=> @int_arr)
-				@final << @intr
-			end
-			return @final, @mact
-			 # @final.append(:pagination => @mact)
+		end
+		@matchups = matches.uniq.paginate(:page => page, :per_page => size)
+		@mact = {}
+		@mact[:page] = page
+		@mact[:per_page] = size
+		@mact[:max_page] = @matchups.total_pages
+		@mact[:total_entries] = @matchups.total_entries
+		@matchups.each do |t|
+			@intr = {}
+			@int_arr = []
+			(t.interests&user.interests).each do |i|
+				@list_interest = {}
+				@list_interest[:image] = i.icon.url 
+				@list_interest[:color] = i.color
+				@int_arr << @list_interest
+			end  
+			@intr[:profile] = t.profile.attributes.merge!(:online_status => t.online, points: point_algo(t.id,user.id), :common_interest=> @int_arr)
+			@final << @intr
+		end
+		return @final, @mact
 	end
+
+	# def self.view_matches_algo selected_interest, user, page, size
+	# 	@matches = []
+	# 	@final = []
+	# 	@blok = blocked_user_list(user) + [user.id]
+	# 	selected_interest.each do |interest|
+	# 		@int = {}
+	# 		@int[:id] =  interest.id
+	# 		@int[:interest_name] =  interest.interest_name
+	# 		@int[:image] =  interest.image.url
+	# 		@int[:icon] =  interest.icon.url
+	# 		@int[:banner]= interest.banner.url
+	# 		@int[:description] = interest.description
+	# 		@int[:color] = interest.color
+	# 		interest.users.where('id NOT IN (?)',@blok).each do |match|
+	# 			@intr = {}
+	# 			@int_arr = []
+	# 			(match.interests&user.interests).each do |i|
+	# 				@list_interest = {}
+	# 				@list_interest[:image] = i.icon.url 
+	# 				@list_interest[:color] = i.color
+	# 				@int_arr << @list_interest
+	# 			end  
+	# 			@matches << match.profile.attributes.merge!(:online_status => match.online, points: point_algo(match.id,user.id), :common_interest => @int_arr ) if match.current_city == user.current_city
+				
+	# 		end
+	# 		@final << @int.merge!(:users => @matches, :events => predefined_events(user, interest) )
+	# 	end
+	# 	return @final
+	# end
 
 end
