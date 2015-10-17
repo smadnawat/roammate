@@ -5,7 +5,7 @@ class InterestsController < ApplicationController
 	before_filter :check_user, :only => [:picked_interest_user_list, :predefined_interests, :pre_selected_interests]
 
 	def picked_interest_user_list
-		@interest = Interest.where('id = ?',params[:interest_id])
+		@interest = Interest.where(id: params[:interest_id])
 		if @interest.present?
 			@user.update_attributes(active_interest: @interest.first.id)
 			@matches = Interest.view_matches_algo(@interest, @user, params[:page],params[:size])
