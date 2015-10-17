@@ -1,8 +1,8 @@
 class CommentsController < ApplicationController
 
+before_filter :check_user, :only => [:create_comment, :get_comments]
 	def create_comment
-		@post = Post.find_by_id(params[:post_id])
-		if @post.present?
+		if @post = Post.find_by_id(params[:post_id])
 			@comment = @post.comments.create(:reply => params[:reply], :user_id => @user.id)
 			render :json => {:response_code => 200,:message => "Comment successfully created"}
 		else
@@ -11,8 +11,7 @@ class CommentsController < ApplicationController
 	end
 
 	def get_comments
-		@post = Post.find_by_id(params[:post_id])
-		if @post.present?
+		if @post = Post.find_by_id(params[:post_id])
 			@arry =[]
 			@post.comments.order(created_at: "desc").each do |c|
 				@cm={}

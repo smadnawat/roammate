@@ -23,7 +23,7 @@ class PostsController < ApplicationController
 			@post["content"] = p.content
 			@post["image"] = p.image.url
 			@post["created_at"] = p.created_at.to_i
-			@points = user_points(p.user_id)
+			@points = user_points(User.find(p.user_id))
 			@post["user"] = p.user.profile.attributes.merge(:points =>  @points, :online_status => p.user.online)
 			@arr << @post
 		end

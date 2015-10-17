@@ -19,7 +19,7 @@ class ProfilesController < ApplicationController
 	def view_matched_profile
 		@member = User.find_by_id(params[:member_id])
 		if @member.present?
-			@points = point_algo(@user.id,@member.id)
+			@points = point_algo(@user,@member)
 			@mutual_friends = common_friends(@user.id, @member.id)
 			@common_friends = Profile.where('id IN (?)', @mutual_friends)
 			@group = Group.where("(group_admin = ?  and group_name = ?) or (group_admin = ?  and group_name = ?)",@user.id,@member.id.to_s,@member.id,@user.id.to_s ).first
@@ -63,7 +63,7 @@ class ProfilesController < ApplicationController
 
 	def my_profile
 		@profile = @user.profile
-		@points = user_points(@user.id)
+		@points = user_points(@user)
 		@interests = @user.interests
 		@events = user_liked_events(@user)
 		@intr = []

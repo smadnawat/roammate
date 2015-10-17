@@ -3,8 +3,7 @@ class InvitationsController < ApplicationController
 	before_filter :check_user, :only => [:leave_group, :get_roammate_to_add_in_group, :add_member_as_roammate, :accept_or_decline_invitation, :add_member_to_group]
 
 	def add_member_as_roammate
-		@member = User.find_by_id(params[:member_id])
-		if @member.present?
+		if @member = User.find_by_id(params[:member_id])
 			if Invitation.find_by_user_id_and_reciever(@user, @member) || Invitation.find_by_user_id_and_reciever(@member, @user)
 				message = "Already invited this member as your roammate"
 				code = 400

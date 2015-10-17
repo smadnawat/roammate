@@ -27,7 +27,7 @@ module ApplicationHelper
 	end
 
 	def blocked_user_list user
-		@arr = user.blocks.where(is_block: true).pluck(:member_id)
+		@arr = user.blocks.where(is_block: true).map(&:member_id)
 	end
 
 	def user_liked_events user
@@ -139,8 +139,7 @@ module ApplicationHelper
   end	
 
   def user_points user
-	  @user1 = User.find_by_id(user)
-    @points = @user1.points
+    @points = user.points
     @point_sum =0
     if @points.present?
        @points.each do |p|          
@@ -154,8 +153,8 @@ module ApplicationHelper
   end
     
   def point_algo current,second
-  	@user = User.find(current)
-    @second_user = User.find(second)
+  	@user = current
+    @second_user = second
     @distance = @user.distance_to([@second_user.latitude,@second_user.longitude],:km).round(2)
     @last_activity_hour = (Time.now - @second_user.updated_at)/3600
     @last_active_hour = @second_user.online ? -1 : (Time.now - (@second_user.last_active_at != nil ? @second_user.last_active_at : @second_user.updated_at))/3600
@@ -163,32 +162,32 @@ module ApplicationHelper
     @user1_age =@user.profile.dob
     @user2_age =@second_user.profile.dob
     if !@user1_age.nil? and !@user2_age.nil?
-       if @user1_age > @user2_age
-			@age_difference = (@user1_age-@user2_age).to_i/365
-       else
-			@age_difference = (@user2_age-@user1_age).to_i/365
-       end
+     if @user1_age > @user2_age
+		   @age_difference = (@user1_age-@user2_age).to_i/365
+     else
+		   @age_difference = (@user2_age-@user1_age).to_i/365
+     end
     else
       @age_difference = 0
     end
     @user1_sex = @user.profile.gender
-    @user2_sex =@second_user.profile.gender
-    if @user1_sex != @user2_sex
-      @gender_type = "different"
-    else
-      @gender_type = "same"
-    end
+    @user2_sex = @second_user.profile.gender
+    # if @user1_sex != @user2_sex
+    #   @gender_type = "different"
+    # else
+    #   @gender_type = "same"
+    # end
     @common_cities = @user.cities&@second_user.cities
     @user1_current_city = @user.current_city
     @user2_current_city = @second_user.current_city
     @user1_current_city == @user2_current_city ?  @same_current_city = true :  @same_current_city = false
-    @common_activities = common_activities(current,second).count
-    @common_friends = common_friends(current,second).count
+    @common_activities = common_activities(current.id,second.id).count
+    @common_friends = common_friends(current.id,second.id).count
     @ratings = user_rating(@second_user.id)
     @rating_users = @second_user.ratings.count
 
     @points = 0
-
+    
     @distance_point_field = ServicePoint.find_by_service("current location distance")
     @last_activity_point_field  = ServicePoint.find_by_service("last activity")
     @last_active_point_field = ServicePoint.find_by_service("last active")
@@ -278,8 +277,8 @@ module ApplicationHelper
       @points +=  (@age_point_field.point*30)/100
     end
 
-    if @gender_type == "different"
-       @points += @age_point_field.point
+    if @user1_sex != @user2_sex
+       @points += @gender_point_field.point
     end
 
     case @common_activities
@@ -353,7 +352,7 @@ module ApplicationHelper
     else 
       @points 
     end
-    @points += user_points(@second_user.id)
+    @points += user_points(@second_user)
 	end
 
 end

@@ -23,11 +23,10 @@ class Interest < ActiveRecord::Base
 		matches = []
 		@final = []
 		@blok = blocked_user_list(user) + [user.id]
-		selected_interest.each do |interest|
-			interest.users.where('id NOT IN (?)',@blok).each do |match|
-				matches << match if match.current_city == user.current_city
-			end
+		selected_interest.includes(:users).where("users.id NOT IN (?) and users.current_city = ?",@blok,user.current_city).references(:users).each do |interest|
+			matches << interest.users
 		end
+		matches = matches.flatten
 		@matchups = matches.uniq.paginate(:page => page, :per_page => size)
 		@mact = {}
 		@mact[:page] = page
@@ -43,7 +42,7 @@ class Interest < ActiveRecord::Base
 				@list_interest[:color] = i.color
 				@int_arr << @list_interest
 			end  
-			@intr[:profile] = t.profile.attributes.merge!(:online_status => t.online, points: point_algo(t.id,user.id), :common_interest=> @int_arr)
+			@intr[:profile] = t.profile.attributes.merge!(:online_status => t.online, points: point_algo(t,user), :common_interest=> @int_arr)
 			@final << @intr
 		end
 		return @final, @mact

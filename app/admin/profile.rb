@@ -33,7 +33,7 @@ ActiveAdmin.register Profile do
       image_tag(resources.image, :size => "80x50") if resources.image.present?
     end
     column "Point" do |resource|
-      user_points(resource.user.id)
+      user_points(resource.user)
     end
     column "Online Status" do |resource|
       status_tag (resource.user.online ? "On-line" : "Off-line"), (resource.user.online ? :ok : :error) 

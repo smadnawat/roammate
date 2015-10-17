@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
     if !(params[:controller] == "users" and params[:action] == "login")
       @user = User.find_by_id(params[:user_id])
       if @user.present?
-        @user.update_attributes(:online => true,:updated_at => Time.now)
+        @user.update_column(:updated_at,Time.now)
       end
     end
   end

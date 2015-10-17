@@ -3,9 +3,12 @@ ActiveAdmin.register_page "Chat" do
 	content do
 		@user1 = User.find(params[:user1])
 		@user2 = User.find(params[:user2])
-		@sendmsgs = @user1.messages.where("reciever = ?",params[:user2]).order(:created_at)
-		@rcvmsgs = @user2.messages.where("reciever = ?",params[:user1]).order(:created_at)
+		@group = Group.where(group_name: [@user1.id.to_s, @user2.id.to_s], group_admin: [@user1.id, @user2.id]).first
+		p "++++++++++++++++++#{@group.inspect}"
+		@sendmsgs = @user1.messages.where("user_id = ? and group_id = ?",params[:user1], @group.id).order(:created_at)
+		@rcvmsgs = @user2.messages.where("user_id = ? and group_id = ?",params[:user2], @group.id).order(:created_at)
 		@msgs = []
+		p "+++++++++#{@sendmsgs.inspect}++++++++++++++++++++"
 		if !@sendmsgs.blank?
 			@sendmsgs.each do |s|
 			 @msgs << s

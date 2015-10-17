@@ -42,13 +42,13 @@ class MessagesController < ApplicationController
 			user_list["group_name"] = @grp_name
 			user_list["total_unread_message_count"] = (MessageCount.where('is_read = ? and user_id = ? and group_id = ?', false, @user.id, g.id ).count)
 			if @user.id == g.group_admin
-				@p = point_algo(@user.id, g.group_name.to_i)
 				@upro = User.find_by_id(g.group_name.to_i)
+				@p = point_algo(@user, @upro )
 				@prf = @upro.profile
 				user_list["user"] = @prf.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @prf.created_at.to_i , "points" => @p, "online_status" => @upro.online)
 			else
-				@points = point_algo(@user.id, g.group_admin)
 				@upro = User.find_by_id(g.group_admin)
+				@points = point_algo(@user, @upro)
 				@pp = @upro.profile
 				user_list["user"] = @pp.attributes.slice("id","first_name","last_name","image","gender","status","user_id").merge!("created_at"=> @pp.created_at.to_i , "points" => @points, "online_status" => @upro.online)
 			end
@@ -97,9 +97,8 @@ class MessagesController < ApplicationController
 		  	@get_default_quetions << q.attributes.slice("id","question","interest_id","status").merge!("created_at"=> q.created_at.to_i)
 		  end
 			@get_previous_messages = Message.where(id: (@group.message_counts.where("user_id = ? and is_delete = ?", @user.id, false).pluck(:message_id))).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
-			# @get_previous_messages = Message.where('group_id = ?', @group.id).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
 			@msg_cnt = MessageCount.where("group_id = ? and user_id = ? and is_read = ?", @group.id, @user.id, false)
-			@msg_cnt.map{|x| x.update_attributes(is_read: true)} if @msg_cnt.present?
+			@msg_cnt.update_all(is_read: true) if @msg_cnt.present?
 			@max = @get_previous_messages.total_pages
 			@total_entries = @get_previous_messages.total_entries
 			m = []
@@ -137,7 +136,7 @@ class MessagesController < ApplicationController
 				if @message.save
 					# @group.users.where('id != ?', @user.id).each do |g_user|
 					@group.users.each do |g_user|
-						@group.message_counts.create(user_id: g_user.id, message_id: @message.id)
+						@group.message_counts.create(user_id: g_user.id, message_id: @message.id, is_read: false)
 					end
 					@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 					@alert = "send message"
@@ -167,7 +166,7 @@ class MessagesController < ApplicationController
 	def delete_chat
 		if @group = Group.find_by_id(params[:group_id])
 			@message_cnt = MessageCount.where("group_id = ? and user_id = ?", @group.id, @user.id)
-			@message_cnt.update_all(is_delete: true)
+			@message_cnt.update_all(is_delete: true, is_read: true ) if @message_cnt.present?
 			render :json => {:response_code => 200,	:message => "Chat deleted successfully." }
 		else
 			render :json => {:response_code => 500,	:message => "Group not found." }

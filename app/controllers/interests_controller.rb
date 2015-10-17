@@ -2,7 +2,7 @@ class InterestsController < ApplicationController
 
 	require 'will_paginate/array'
 	include ApplicationHelper
-	before_filter :check_user, :only => [:picked_interest_user_list, :predefined_interests, :selected_interest_list, :pre_selected_interests]
+	before_filter :check_user, :only => [:picked_interest_user_list, :predefined_interests, :pre_selected_interests]
 
 	def picked_interest_user_list
 		@interest = Interest.where('id = ?',params[:interest_id])
@@ -50,25 +50,32 @@ class InterestsController < ApplicationController
 	end
 
 	def selected_interest_list
+		@user = User.includes(:interests).where(:id => params[:user_id]).first
 		@user.update_attributes(active_interest: params[:interests].first)
 		@now_selected = params[:interests]
-		@pre_selected = @user.interests.pluck(:id)
+		@pre_selected = @user.interests.map(&:id)
 		@common = @now_selected&@pre_selected
 			@add = @now_selected-(@now_selected&@pre_selected) #if @common.present?
 			@rmv = @pre_selected-(@now_selected&@pre_selected) #if @common.present?
-		 if @add.present?
-			@add.each do |t|
-				@a=Interest.find_by_id(t)
- 				if !@user.interests.include?(@a)
-					@user.interests << @a if @a.present?
-				end
-			end
-		 end
-		 if @rmv.present?
-		 	@rmv.each do |r|
-		 		@user.interests.delete(r)
-		 	end
-		 end
+		 	@add_interests = Interest.find(@add)
+		 	@rmv_interests = Interest.find(@rmv)
+		 	intersets_to_add = @add_interests - @user.interests
+		 	p "=======#{intersets_to_add}==========#{@add_interests}==========#{@user.interests}=============="
+		 	@user.interests << intersets_to_add unless intersets_to_add.blank?
+		 	@user.interests.delete(@rmv_interests) unless @rmv_interests.blank?
+		 # if @add.present?
+			# @add.each do |t|
+			# 	@a=Interest.find_by_id(t)
+ 		# 		if !@user.interests.include?(@a)
+			# 		@user.interests << @a if @a.present?
+			# 	end
+			# end
+		 # end
+		 # if @rmv.present?
+		 # 	@rmv.each do |r|
+		 # 		@user.interests.delete(r)
+		 # 	end
+		 # end
 		@selected_interest = @user.interests
 		@interest = []
 		@selected_interest.each do |i|
