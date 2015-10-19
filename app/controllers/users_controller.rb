@@ -82,7 +82,7 @@ class UsersController < ApplicationController
 	  end
 
 	  if @status
-	  	@points = user_points(@user)
+	  	@points = user_points(@user, ServicePoint.all)
 	  	@user.update_attributes(:created_at => Time.now,:online => true)
 	  	render :json => { :response_code => 200, :response_message => "Successfull login",:profile => @profile.as_json(except: [:created_at,:updated_at]) ,:points => @points 	}
 	  else
@@ -107,7 +107,7 @@ class UsersController < ApplicationController
 	end
 
 	def catch_404
-   	 render nothing: true
-  end
+ 	 render nothing: true
+	end
 
 end

@@ -62,7 +62,7 @@ module ApplicationHelper
 	end
 
 	def predefined_events user,interest
-		interest.present? ? @events = interest.events.where('event_date >= ?', Date.today) : @events = Event.where('event_date >= ?', Date.today)
+		interest.present? ? @events = Event.includes(:likes).where('event_date >= ? and interest_id = ?', Date.today,interest.id)  : @events = Event.includes(:likes).where('event_date >= ?', Date.today)
     @event = []
 		if @events.present?
 			@events.each do |e|
@@ -73,11 +73,11 @@ module ApplicationHelper
 				@eve[:link] = e.link
 				@eve[:city] = e.city
 				@eve[:event_time] = e.event_time
-				@eve[:event_date] = e.event_date.to_date
+				@eve[:event_date] = e.event_date.strftime("%d %B")
 				@eve[:host_name] = e.host_name
 				@eve[:image] = e.image.url
-				@eve[:total_likes] = e.likes.where(status: true).count
-				@stat = user.likes.where('event_id = ?', e.id).first
+				@eve[:total_likes] = e.likes.map{|l| l if l.status == true}.count
+				@stat =  e.likes.map{|l| l if l.user_id == user.id}.first#.count      user.likes .where('event_id = ?', e.id).first
 				@eve[:status] = @stat.present? ? @stat.status : false
 				@event << @eve
 			end
@@ -138,13 +138,13 @@ module ApplicationHelper
 	    end 
   end	
 
-  def user_points user
+  def user_points user,service_points
     @points = user.points
     @point_sum =0
     if @points.present?
        @points.each do |p|          
-         @point = ServicePoint.find_by_service(p.pointable_type)
-         @point_sum = @point_sum + @point.point
+         @point = service_points.select{|x| x.service == p.pointable_type}.first.try(:point) #ServicePoint.find_by_service(p.pointable_type)
+         @point_sum = @point_sum + @point
        end
     else
        @point_sum = 0
@@ -187,172 +187,172 @@ module ApplicationHelper
     @rating_users = @second_user.ratings.count
 
     @points = 0
-    
-    @distance_point_field = ServicePoint.find_by_service("current location distance")
-    @last_activity_point_field  = ServicePoint.find_by_service("last activity")
-    @last_active_point_field = ServicePoint.find_by_service("last active")
-    @age_point_field = ServicePoint.find_by_service("age")
-    @gender_point_field = ServicePoint.find_by_service("gender")
-    @common_activities_point_field = ServicePoint.find_by_service("common activities")
-    @common_friends_point_field = ServicePoint.find_by_service("common friends")
-    @common_cities_point_field = ServicePoint.find_by_service("common cities")
-    @current_city_point_field = ServicePoint.find_by_service("city lived in")
-    @user_rating_point_field = ServicePoint.find_by_service("user ratings")
+    service_points = ServicePoint.all
+    @distance_point_field = service_points.select{|x| x.service == "current location distance"}.first.try(:point)
+    @last_activity_point_field  = service_points.select{|x| x.service == "last activity"}.first.try(:point) 
+    @last_active_point_field = service_points.select{|x| x.service == "last active"}.first.try(:point) 
+    @age_point_field = service_points.select{|x| x.service == "age"}.first.try(:point) 
+    @gender_point_field = service_points.select{|x| x.service == "gender"}.first.try(:point) 
+    @common_activities_point_field = service_points.select{|x| x.service == "common activities"}.first.try(:point) 
+    @common_friends_point_field = service_points.select{|x| x.service == "common friends"}.first.try(:point) 
+    @common_cities_point_field = service_points.select{|x| x.service == "common cities"}.first.try(:point) 
+    @current_city_point_field = service_points.select{|x| x.service == "city lived in"}.first.try(:point) 
+    @user_rating_point_field = service_points.select{|x| x.service == "user ratings"}.first.try(:point) 
 
     case @distance
       when 0 .. 6
-        @points +=  @distance_point_field.point
+        @points +=  @distance_point_field
       when 6 .. 11
-        @points +=  (@distance_point_field.point*90)/100
+        @points +=  (@distance_point_field*90)/100
       when 11 .. 16
-        @points +=  (@distance_point_field.point*80)/100
+        @points +=  (@distance_point_field*80)/100
       when 16 .. 21 
-        @points +=  (@distance_point_field.point*70)/100
+        @points +=  (@distance_point_field*70)/100
       when 21 .. 31
-        @points +=  (@distance_point_field.point*60)/100
+        @points +=  (@distance_point_field*60)/100
     else 
-      @points +=  (@distance_point_field.point*50)/100
+      @points +=  (@distance_point_field*50)/100
     end 
 
     case @last_activity_hour
       when 0 .. 1 
-        @points +=  @last_activity_point_field.point
+        @points +=  @last_activity_point_field
       when 1 .. 2 
-        @points +=  (@last_activity_point_field.point*90)/100
+        @points +=  (@last_activity_point_field*90)/100
       when 2 .. 3
-        @points +=  (@last_activity_point_field.point*80)/100
+        @points +=  (@last_activity_point_field*80)/100
       when 3 .. 4 
-        @points +=  (@last_activity_point_field.point*70)/100
+        @points +=  (@last_activity_point_field*70)/100
       when 4 .. 5
-        @points +=  (@last_activity_point_field.point*60)/100
+        @points +=  (@last_activity_point_field*60)/100
       when 5 .. 6
-        @points +=  (@last_activity_point_field.point*50)/100
+        @points +=  (@last_activity_point_field*50)/100
       when 6 .. 12
-        @points +=  (@last_activity_point_field.point*40)/100
+        @points +=  (@last_activity_point_field*40)/100
       when 12 .. 24
-        @points +=  (@last_activity_point_field.point*30)/100
+        @points +=  (@last_activity_point_field*30)/100
     else 
-      @points +=  (@last_activity_point_field.point*20)/100
+      @points +=  (@last_activity_point_field*20)/100
     end 
 
     case @last_active_hour     
       when -1
-        @points +=  @last_active_point_field.point
+        @points +=  @last_active_point_field
       when 0 .. 1 
-        @points +=  (@last_active_point_field.point*90)/100
+        @points +=  (@last_active_point_field*90)/100
       when 1 .. 2
-        @points +=  (@last_active_point_field.point*80)/100
+        @points +=  (@last_active_point_field*80)/100
       when 2 .. 3 
-        @points +=  (@last_active_point_field.point*70)/100
+        @points +=  (@last_active_point_field*70)/100
       when 3 .. 4
-        @points +=  (@last_active_point_field.point*60)/100
+        @points +=  (@last_active_point_field*60)/100
       when 4 .. 5
-        @points +=  (@last_active_point_field.point*50)/100
+        @points +=  (@last_active_point_field*50)/100
       when 5 .. 6
-        @points +=  (@last_active_point_field.point*40)/100
+        @points +=  (@last_active_point_field*40)/100
       when 6 .. 12
-        @points +=  (@last_active_point_field.point*30)/100
+        @points +=  (@last_active_point_field*30)/100
       when 12 .. 24
-        @points +=  (@last_active_point_field.point*20)/100
+        @points +=  (@last_active_point_field*20)/100
     else 
-      @points +=  (@last_active_point_field.point*10)/100
+      @points +=  (@last_active_point_field*10)/100
     end 
 
     case @age_difference    
       when 0 .. 4 
-        @points +=  @age_point_field.point
+        @points +=  @age_point_field
       when 4 .. 6
-        @points +=  (@age_point_field.point*90)/100
+        @points +=  (@age_point_field*90)/100
       when 6 .. 9 
-        @points +=  (@age_point_field.point*80)/100
+        @points +=  (@age_point_field*80)/100
       when 9 .. 11
-        @points +=  (@age_point_field.point*70)/100
+        @points +=  (@age_point_field*70)/100
       when 11 .. 16
-        @points +=  (@age_point_field.point*60)/100
+        @points +=  (@age_point_field*60)/100
       when 16 .. 21
-        @points +=  (@age_point_field.point*50)/100
+        @points +=  (@age_point_field*50)/100
       when 21 .. 31
-        @points +=  (@age_point_field.point*40)/100
+        @points +=  (@age_point_field*40)/100
     else 
-      @points +=  (@age_point_field.point*30)/100
+      @points +=  (@age_point_field*30)/100
     end
 
     if @user1_sex != @user2_sex
-       @points += @gender_point_field.point
+       @points += @gender_point_field
     end
 
     case @common_activities
       when 0
         
       when 1
-        @points +=  (@common_activities_point_field.point*30)/100
+        @points +=  (@common_activities_point_field*30)/100
       when 2
-        @points +=  (@common_activities_point_field.point*40)/100
+        @points +=  (@common_activities_point_field*40)/100
       when 3
-        @points +=  (@common_activities_point_field.point*50)/100
+        @points +=  (@common_activities_point_field*50)/100
       when 4
-        @points +=  (@common_activities_point_field.point*60)/100
+        @points +=  (@common_activities_point_field*60)/100
       when 5
-        @points +=  (@common_activities_point_field.point*70)/100
+        @points +=  (@common_activities_point_field*70)/100
       when 6
-        @points +=  (@common_activities_point_field.point*80)/100
+        @points +=  (@common_activities_point_field*80)/100
       when 7
-        @points +=  (@common_activities_point_field.point*90)/100
+        @points +=  (@common_activities_point_field*90)/100
     else 
-      @points += @common_activities_point_field.point
+      @points += @common_activities_point_field
     end 
 
     case @common_friends
       when 0 .. 6 
-        @points +=  (@common_friends_point_field.point*40)/100
+        @points +=  (@common_friends_point_field*40)/100
       when 6 .. 11
-        @points +=  (@common_friends_point_field.point*50)/100
+        @points +=  (@common_friends_point_field*50)/100
       when 11 .. 21 
-        @points +=  (@common_friends_point_field.point*60)/100
+        @points +=  (@common_friends_point_field*60)/100
       when 21 .. 31
-        @points +=  (@common_friends_point_field.point*70)/100
+        @points +=  (@common_friends_point_field*70)/100
       when 31 .. 41
-        @points +=  (@common_friends_point_field.point*80)/100
+        @points +=  (@common_friends_point_field*80)/100
       when 41 .. 51
-        @points +=  (@common_friends_point_field.point*90)/100
+        @points +=  (@common_friends_point_field*90)/100
     else 
-      @points +=  @common_friends_point_field.point
+      @points +=  @common_friends_point_field
     end
 
-    @same_current_city ? @points += @current_city_point_field.point : (City.find_by_city_name(@user2_current_city).city_name == City.find_by_city_name(@user1_current_city).city_name ? @points +=  (@current_city_point_field.point*90)/100 : @points)
+    @same_current_city ? @points += @current_city_point_field :  @points +=  (@current_city_point_field*90)/100  #(City.find_by_city_name(@user2_current_city).city_name == City.find_by_city_name(@user1_current_city).city_name ? @points +=  (@current_city_point_field*90)/100 : @points)
 
     case @common_cities
       when 0
 
       when 1
-        @points +=  (@common_cities_point_field.point*60)/100
+        @points +=  (@common_cities_point_field*60)/100
       when 2
-        @points +=  (@common_cities_point_field.point*70)/100
+        @points +=  (@common_cities_point_field*70)/100
       when 3
-        @points +=  (@common_cities_point_field.point*80)/100
+        @points +=  (@common_cities_point_field*80)/100
       when 4
-        @points +=  (@common_cities_point_field.point*90)/100
+        @points +=  (@common_cities_point_field*90)/100
     else 
-      @points +=  @common_cities_point_field.point
+      @points +=  @common_cities_point_field
     end
 
     case @ratings
       when 100
-        @points += @user_rating_point_field.point
+        @points += @user_rating_point_field
       when 90 .. 100
-        @points +=  (@user_rating_point_field.point.point*90)/100
+        @points +=  (@user_rating_point_field*90)/100
       when 80 .. 90
-        @points +=  (@user_rating_point_field.point.point*80)/100
+        @points +=  (@user_rating_point_field*80)/100
       when 70 .. 80
-        @points +=  (@user_rating_point_field.point.point*70)/100
+        @points +=  (@user_rating_point_field*70)/100
       when 60 .. 70
-        @points +=  (@user_rating_point_field.point.point*60)/100
+        @points +=  (@user_rating_point_field*60)/100
       when 50 .. 60
-        @points +=  (@user_rating_point_field.point.point*50)/100
+        @points +=  (@user_rating_point_field*50)/100
     else 
       @points 
     end
-    @points += user_points(@second_user)
+    @points += user_points(@second_user,service_points)
 	end
 
 end

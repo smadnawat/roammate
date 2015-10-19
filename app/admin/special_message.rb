@@ -66,7 +66,6 @@ ActiveAdmin.register SpecialMessage do
   controller do
 
     def create
-      p "++++++++++++++++++++#{params.inspect}++++++"
       super
       if params[:special_message][:city].present?
       @city = City.find(params[:special_message][:city])
@@ -74,14 +73,14 @@ ActiveAdmin.register SpecialMessage do
       @city.users.select{|x|(x.interests.include?(@interest))}.each do |snd|
         @type = "Admin message"
         @badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
-        snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil ) : ApplePushWorker.perform_async( snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil ) } if snd.message_notification
+        snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil, nil ) : ApplePushWorker.perform_async( snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil, nil ) } if snd.message_notification
       end
       else
         @interest = Interest.find(params[:special_message][:interest_id])
         @interest.users.each do |snd|
         @type = "Admin message"
         @badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
-        snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil ) : ApplePushWorker.perform_async( snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil ) } if snd.message_notification
+        snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil, nil ) : ApplePushWorker.perform_async( snd.id, "Admin: #{params[:special_message][:content]}", @badge, nil, nil, @type, device.device_id, nil, nil, nil, nil ) } if snd.message_notification
       end
       end
     end

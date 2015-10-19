@@ -11,7 +11,7 @@ before_filter :check_user, :only => [:create_comment, :get_comments]
 	end
 
 	def get_comments
-		if @post = Post.find_by_id(params[:post_id])
+		if @post = Post.includes(:comments).find_by_id(params[:post_id])
 			@arry =[]
 			@post.comments.order(created_at: "desc").each do |c|
 				@cm={}

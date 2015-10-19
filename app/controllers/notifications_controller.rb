@@ -32,20 +32,21 @@ class NotificationsController < ApplicationController
 
 	def get_gender
 		render :json => {
-							:response_code => 200, :message => "Gender get successfully", :gender => @user.profile.gender
-							}
+										:response_code => 200, :message => "Gender get successfully", :gender => @user.profile.gender
+										}
 	end
 
 	def gender_update
 		@user.profile.update_attributes(:gender => params[:gender]) if params["gender"].present?
 		render :json => {
-							:response_code => 200, :message => "Gender updated"
-							}
+										:response_code => 200, :message => "Gender updated"
+										}
 	end
 
 
 	def my_notifications
-		@notifications = Notification.where(reciever: @user.id).paginate(:page => params[:page], :per_page => params[:size])
+		@user = User.includes(:groups,:profile).where(:id => params[:user_id]).first
+		@notifications = Notification.includes(:user).where(reciever: @user.id).paginate(:page => params[:page], :per_page => params[:size])
 		@max = @notifications.total_pages
 		@total_entries = @notifications.total_entries
 		if @notifications.present?		
@@ -63,7 +64,20 @@ class NotificationsController < ApplicationController
 				@p["message"] = notice.message
 				@p["created_at"] = notice.created_at.to_i
 				@p["is_friend"] = is_friend(notice.reciever, notice.user_id).present?
-				@p["is_friend"] ? @p["group_id"] = Group.where(group_admin: [notice.reciever, notice.user_id], group_name: [notice.reciever.to_s, notice.user_id.to_s]).first.id : @p["group_id"] = nil
+				
+				if @p["is_friend"]
+					@grp = Group.includes(:users).where(group_admin: [notice.reciever, notice.user_id], group_name: [notice.reciever.to_s, notice.user_id.to_s]).first
+					@p["group_id"] = @grp.id
+					@grp.users.count == 2 ? @p["group_user_id"] = @grp.users.where("id != ?", @p["user_id"]).first.id : @p["group_user_id"] = nil
+				else
+					@p["group_id"] = nil
+					@p["group_user_id"] = nil
+				end
+
+
+				# @p["is_friend"] ? @p["group_id"] = Group.where(group_admin: [notice.reciever, notice.user_id], group_name: [notice.reciever.to_s, notice.user_id.to_s]).first.id : @p["group_id"] = nil
+				# @p["group_id"].present? ? (@p["chat_type"] = )
+				# g.users.count == 2 ? chat_type = "single" : chat_type = "multiple"
 				@p["group_id"].present? ? @p["group_name"] = Group.find_by_id(@p["group_id"]).users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",") : @p["group_name"] = nil
 				notice.notification_type == "Send chat" ? @p["invitation_id"] = Invitation.where("reciever = ? and user_id = ?", notice.reciever,notice.user_id).first.id : @p["invitation_id"] = nil
 				@note << @p

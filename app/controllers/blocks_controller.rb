@@ -15,7 +15,7 @@ class BlocksController < ApplicationController
 	end
 
 	def get_points
-		@pnt = user_points(@user)
+		@pnt = user_points(@user, ServicePoint.all)
 		render :json => {:response_code => 200,:message => "Successfully fetched points", :points => @pnt }
 	end
 

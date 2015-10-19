@@ -50,8 +50,8 @@ class InterestsController < ApplicationController
 	end
 
 	def selected_interest_list
-		@user = User.includes(:interests).where(:id => params[:user_id]).first
-		@user.update_attributes(active_interest: params[:interests].first)
+		@user = User.includes(:interests,:profile,:cities).where(:id => params[:user_id]).first
+		# @user.update_attributes(active_interest: params[:interests].first)
 		@now_selected = params[:interests]
 		@pre_selected = @user.interests.map(&:id)
 		@common = @now_selected&@pre_selected
@@ -60,7 +60,6 @@ class InterestsController < ApplicationController
 		 	@add_interests = Interest.find(@add)
 		 	@rmv_interests = Interest.find(@rmv)
 		 	intersets_to_add = @add_interests - @user.interests
-		 	p "=======#{intersets_to_add}==========#{@add_interests}==========#{@user.interests}=============="
 		 	@user.interests << intersets_to_add unless intersets_to_add.blank?
 		 	@user.interests.delete(@rmv_interests) unless @rmv_interests.blank?
 		 # if @add.present?

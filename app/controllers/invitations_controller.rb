@@ -68,9 +68,10 @@ class InvitationsController < ApplicationController
 		@already_added_members = Group.find_by_id(params[:group_id]).users.pluck(:id)
 		@ids = @members.pluck(:user_id) + @members.pluck(:reciever)	- [@user.id] - blocked_user_list(@user).uniq - @already_added_members
 		if @ids.present?
+			@profile = Profile.find(@ids)
 			friends = []
 			@ids.uniq.each do |user|
-				friends << Profile.find_by_id(user)
+				friends << @profile.select{|x| x}
 			end
 			render :json => {:response_code => 200,:message => "Member successfully fetched.", :members => friends,:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}}
 		else

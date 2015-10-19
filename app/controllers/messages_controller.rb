@@ -23,13 +23,13 @@ class MessagesController < ApplicationController
 
 
 	def user_inbox
+		@user = User.includes(:groups,:profile,:messages).where(:id => params[:user_id]).first
 		# blocked_user_list(@user)
 		# @arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)', @arr).paginate(:page => params[:page], :per_page => params[:size]) : 
 		@groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
 		# @arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)',@arr )&@user.groups.where('group_admin NOT IN (?)',@arr.map{|x| x.to_s} ).paginate(:page => params[:page], :per_page => params[:size]) : @groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
 		@inb= []
-		@groups.each do |g|
-			p'-------------------------helllo moto-------------------------'
+		@groups.includes(:users, :messages).each do |g|
 			g.users.each do |snd|
 				@grp_name =  g.users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",")
 			end
@@ -40,6 +40,8 @@ class MessagesController < ApplicationController
 			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
 			user_list["group_id"] = g.id
 			user_list["group_name"] = @grp_name
+			g.users.count == 2 ? chat_type = "single" : chat_type = "multiple"
+			user_list["group_type"] = chat_type
 			user_list["total_unread_message_count"] = (MessageCount.where('is_read = ? and user_id = ? and group_id = ?', false, @user.id, g.id ).count)
 			if @user.id == g.group_admin
 				@upro = User.find_by_id(g.group_name.to_i)
@@ -89,14 +91,14 @@ class MessagesController < ApplicationController
 	end
 
 	def get_messages
-		@group = Group.find_by_id(params[:group_id])
+		@group = Group.includes(:users).find_by_id(params[:group_id])
 		if @group.present?
 			@qs = Question.where('interest_id = ? and status = ?',@user.active_interest, true )
 		  @get_default_quetions = []
 		  @qs.each do |q|
 		  	@get_default_quetions << q.attributes.slice("id","question","interest_id","status").merge!("created_at"=> q.created_at.to_i)
 		  end
-			@get_previous_messages = Message.where(id: (@group.message_counts.where("user_id = ? and is_delete = ?", @user.id, false).pluck(:message_id))).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
+			@get_previous_messages = Message.includes(:user).where(id: (@group.message_counts.where("user_id = ? and is_delete = ?", @user.id, false).pluck(:message_id))).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
 			@msg_cnt = MessageCount.where("group_id = ? and user_id = ? and is_read = ?", @group.id, @user.id, false)
 			@msg_cnt.update_all(is_read: true) if @msg_cnt.present?
 			@max = @get_previous_messages.total_pages
@@ -110,10 +112,12 @@ class MessagesController < ApplicationController
 					m << msgs.user.profile.attributes.merge(:message => msgs.attributes.slice("id","content").merge!("created_at"=> msgs.created_at.to_i) )
 				end
 			end
+			@group.users.count == 2 ? chat_type = "single" : chat_type = "multiple"
 			render :json => {
 							:response_code => 200,
 							:message => "Message list",
 							:predefined_messages => @get_default_quetions,
+							:chat_type => chat_type,
 							:user_messages => m,
 							:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 							}
@@ -145,7 +149,7 @@ class MessagesController < ApplicationController
 						@group_name =  @group.users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",")
 						@type = "Send message"
 						@badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
-            snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, @user.profile.image, @group_name, @group.id ) : ApplePushWorker.perform_async( snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, nil, @group_name, @group.id ) } if snd.message_notification
+            snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, @user.profile.image, @group_name, @group.id, nil ) : ApplePushWorker.perform_async( snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, nil, @group_name, @group.id, nil ) } if snd.message_notification
           end
 				end
 				message = "Message successfully created"

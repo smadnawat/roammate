@@ -63,7 +63,7 @@ class ProfilesController < ApplicationController
 
 	def my_profile
 		@profile = @user.profile
-		@points = user_points(@user)
+		@points = user_points(@user,ServicePoint.all)
 		@interests = @user.interests
 		@events = user_liked_events(@user)
 		@intr = []

@@ -22,8 +22,8 @@ class Interest < ActiveRecord::Base
 	def self.view_matches_algo selected_interest, user, page, size
 		matches = []
 		@final = []
-		@blok = blocked_user_list(user) + [user.id]
-		selected_interest.includes(:users).where("users.id NOT IN (?) and users.current_city = ?",@blok,user.current_city).references(:users).each do |interest|
+		@blok = blocked_user_list(user) + [user.id] + user_friends(user)
+		selected_interest.includes(users: [:profile,:cities]).where("users.id NOT IN (?) and users.current_city = ?",@blok.uniq,user.current_city).references(:users).each do |interest|
 			matches << interest.users
 		end
 		matches = matches.flatten
@@ -42,10 +42,17 @@ class Interest < ActiveRecord::Base
 				@list_interest[:color] = i.color
 				@int_arr << @list_interest
 			end  
-			@intr[:profile] = t.profile.attributes.merge!(:online_status => t.online, points: point_algo(t,user), :common_interest=> @int_arr)
+			@intr[:profile] = t.profile.attributes.merge!(:online_status => t.online, points: point_algo(t,user), :common_interest=> @int_arr, :common_interest_count=> @int_arr.count)
 			@final << @intr
 		end
 		return @final, @mact
+	end
+
+
+	def self.user_friends user
+		acc = user.invitations.pluck(:reciever)
+		snd = Invitation.where("reciever = ?", user.id).pluck(:user_id)
+		(acc + snd).uniq
 	end
 
 	# def self.view_matches_algo selected_interest, user, page, size

@@ -16,28 +16,28 @@ class LikesController < ApplicationController
 								message = "UnLike created successfully"
 							end
 							render :json => {
-															:response_code => code,
-															:status => @like.status,
-															:count => Like.where("event_id =? and status =?", @event.id, true).count,
-															:message => message
-															}
+											:response_code => code,
+											:status => @like.status,
+											:count => Like.where("event_id =? and status =?", @event.id, true).count,
+											:message => message
+											}
 					else
 							@like = @user.likes.build(:user_id => params[:user_id], :event_id => params[:event_id], :status => true )
 							@like.save
 							code = 200
 							message = "Like created successfully"
 							render :json => {
-															:response_code => code,
-															:status => @like.status,
-															:count => Like.where("event_id =? and status =?", @event.id, true).count,
-															:message => message
-															}
+											:response_code => code,
+											:status => @like.status,
+											:count => Like.where("event_id =? and status =?", @event.id, true).count,
+											:message => message
+											}
 					end
 			else
 				render :json => {
-												:response_code => 500,
-												:message => "Something went wrong"
-												}
+								:response_code => 500,
+								:message => "Something went wrong"
+								}
 			end
 	end
 

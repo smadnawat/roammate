@@ -6,14 +6,11 @@ class RatingsController < ApplicationController
 		@member = User.find_by_id(params[:member_id])
 		@group = Group.where("(group_admin = ?  and group_name = ?) or (group_admin = ?  and group_name = ?)",@user.id,@member.id.to_s,@member.id,@user.id.to_s ).first
 		if @group.present?
-			p "++++++++++++++++After group present++++++++++++++++++"
 			if @group.users.count < 3 and @member.present?	and  message_count(@user, @group)
 				 if @member.ratings.where("rater_id = ?",@user.id).count < 1
-				 	p "++++++++++++++++Under if++++++++++++++++++"
 					@ratings = @member.ratings.create(rate:  params[:rate], rater_id: @user.id, reason: params[:reason])
 					@user.points.create(:pointable_type => "Rate Roammate")
 				 else
-				 	p "++++++++++++++++Under else++++++++++++++++++"
 				 	@ratings = @member.ratings.where(rater_id: @user.id).first.update_attributes(rate: params[:rate])
 				 end				
 					render :json => {
