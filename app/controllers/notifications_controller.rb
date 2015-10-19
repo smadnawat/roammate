@@ -32,12 +32,12 @@ class NotificationsController < ApplicationController
 
 	def get_gender
 		render :json => {
-										:response_code => 200, :message => "Gender get successfully", :gender => @user.profile.gender
+										:response_code => 200, :message => "Gender get successfully", :gender => @user.search_gender
 										}
 	end
 
 	def gender_update
-		@user.profile.update_attributes(:gender => params[:gender]) if params["gender"].present?
+		@user.update_attributes(:gender => params[:gender]) if params["gender"].present?
 		render :json => {
 										:response_code => 200, :message => "Gender updated"
 										}

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151014094514) do
+ActiveRecord::Schema.define(version: 20151019153501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -332,6 +332,7 @@ ActiveRecord::Schema.define(version: 20151014094514) do
     t.boolean  "friend_request_notification", default: true
     t.boolean  "new_event_notification",      default: true
     t.boolean  "updates_notification",        default: true
+    t.string   "search_gender",               default: ""
   end
 
   create_table "users_categories", id: false, force: :cascade do |t|
