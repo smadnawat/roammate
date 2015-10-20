@@ -149,6 +149,8 @@ class MessagesController < ApplicationController
 					@group.users.each do |g_user|
 						@group.message_counts.create(user_id: g_user.id, message_id: @message.id, is_read: false)
 					end
+					@msg_cnt = MessageCount.where("group_id = ? and user_id = ? and is_read = ?", @group.id, @user.id, false)
+					@msg_cnt.update_all(is_read: true) if @msg_cnt.present?
 					@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 					@alert = "send message"
 					@group_users = @group.users.where('id != ?', @user.id)

@@ -2,7 +2,7 @@ class CitiesController < ApplicationController
  before_filter :check_user  
 
 	def add_current_city
-		if (params[:current_city] and params[:state] and params[:country]).present?
+		if (params[:current_city] and params[:country]).present?
 		 	@user_city = nil
 		 	if !City.exists?(:city_name => params[:current_city].strip)
 		  	@user_city = City.create(:city_name => params[:current_city].strip, :state => params[:state].strip, :country => params[:country].strip, :status => true)
