@@ -71,7 +71,7 @@ class InvitationsController < ApplicationController
 			@profile = Profile.find(@ids)
 			friends = []
 			@ids.uniq.each do |user|
-				friends << @profile.select{|x| x}
+				friends = @profile.select{|x| x}
 			end
 			render :json => {:response_code => 200,:message => "Member successfully fetched.", :members => friends,:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}}
 		else
