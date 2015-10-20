@@ -112,12 +112,19 @@ class MessagesController < ApplicationController
 					m << msgs.user.profile.attributes.merge(:message => msgs.attributes.slice("id","content").merge!("created_at"=> msgs.created_at.to_i) )
 				end
 			end
-			@group.users.count == 2 ? chat_type = "single" : chat_type = "multiple"
+			if @group.users.count == 2
+				chat_type = "single"
+				group_user_id = @group.users.where("id != ?", @user.id).first.id
+			else
+				chat_type = "multiple"
+				group_user_id = nil
+			end
 			render :json => {
 							:response_code => 200,
 							:message => "Message list",
 							:predefined_messages => @get_default_quetions,
 							:chat_type => chat_type,
+							:group_user_id => group_user_id,
 							:user_messages => m,
 							:pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries}
 							}

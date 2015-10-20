@@ -23,22 +23,19 @@ class Interest < ActiveRecord::Base
 		matches = []
 		@final = []
 		@blok = blocked_user_list(user) + [user.id] + user_friends(user)
-		# if user.search_gender == "both"
-		# 	p "++++++++++++both+++++++"
+		if user.search_gender == "both"
 			selected_interest.includes(users: [:profile,:cities]).where("users.id NOT IN (?) and users.current_city = ?",@blok.uniq,user.current_city).references(:users).each do |interest|
 				matches << interest.users
 			end
-		# elsif user.search_gender == "male"
-		# 	p "++++++++++++male+++++++"
-		# 	selected_interest.includes(users: [:profile,:cities]).where("users.id NOT IN (?) and users.current_city = ? and user.search_gender = ?",@blok.uniq,user.current_city, "male").references(:users).each do |interest|
-		# 		matches << interest.users
-		# 	end
-		# else
-		# 	p "++++++++++++female+++++++"
-		# 	selected_interest.includes(users: [:profile,:cities]).where("users.id NOT IN (?) and users.current_city = ? and user.search_gender = ?",@blok.uniq,user.current_city, "female").references(:users).each do |interest|
-		# 		matches << interest.users
-		# 	end
-		# end
+		elsif user.search_gender == "male"
+			selected_interest.includes(users: [:profile,:cities]).where("users.id NOT IN (?) and users.current_city = ? and gender = ?",@blok.uniq,user.current_city, "male").references(:users).each do |interest|
+				matches << interest.users
+			end
+		else
+			selected_interest.includes(users: [:profile,:cities]).where("users.id NOT IN (?) and users.current_city = ? and gender = ?",@blok.uniq,user.current_city, "female").references(:users).each do |interest|
+				matches << interest.users
+			end
+		end
 			
 		matches = matches.flatten
 		@matchups = matches.uniq.paginate(:page => page, :per_page => size)
