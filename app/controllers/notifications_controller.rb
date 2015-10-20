@@ -37,7 +37,7 @@ class NotificationsController < ApplicationController
 	end
 
 	def gender_update
-		@user.update_attributes(:search_gender => params[:gender]) if params["gender"].present?
+		@user.update_attributes(:search_gender => params[:gender].downcase) if params["gender"].present?
 		render :json => {
 										:response_code => 200, :message => "Gender updated"
 										}
