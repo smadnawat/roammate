@@ -12,7 +12,7 @@ class Profile < ActiveRecord::Base
   	i=1
   	@status = ""
   	if File.extname(file.original_filename) == ".csv"
-	  	CSV.foreach(file.path) do |row|
+	  	CSV.foreach(file.path, :quote_char => "|") do |row|
 	  		if i!=1
 	  			if row[12] == "new" or row[12] == "New"
 	  				if !Profile.exists?(:email => row[1])
