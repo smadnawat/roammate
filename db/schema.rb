@@ -264,10 +264,10 @@ ActiveRecord::Schema.define(version: 20151019153501) do
   create_table "questions", force: :cascade do |t|
     t.string   "question"
     t.integer  "interest_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "category_id"
-    t.boolean  "status"
+    t.boolean  "status",      default: true
   end
 
   add_index "questions", ["interest_id"], name: "index_questions_on_interest_id", using: :btree
