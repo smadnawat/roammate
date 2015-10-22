@@ -36,6 +36,7 @@ module ApplicationHelper
 			eve = []
 			@likees.each do |e|
 				@even = {}
+        @even[:event_id] = e.event.id
 				@even[:event_name] = e.event.event_name
 				@even[:place] = e.event.place
 				@even[:city] = e.event.city
