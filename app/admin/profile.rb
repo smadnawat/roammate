@@ -43,9 +43,15 @@ ActiveAdmin.register Profile do
     column "Current city" do |resource|
       resource.user.current_city
     end
+     column "Other cities" do |resource|
+      resource.user.cities.map{|x| x.city_name}.join(", ")
+    end
     column "Status" do |resource|
       status_tag (resource.status ? "Active" : "Deactive"), (resource.status ? :ok : :error) 
-    end    
+    end  
+    column "Last Active At" do |resource|
+      time_ago_in_words(resource.user.updated_at) + "Ago"
+    end  
     column :created_at
       column "Actions" do |resource|
           links = ''.html_safe
@@ -55,6 +61,8 @@ ActiveAdmin.register Profile do
               else
                links += link_to 'Active', profile_status_path(resource),:data => { :confirm => 'Are you sure, you want to active this profile?' }
                end
+              links += " / "
+             links +=  link_to 'send_message', admin_admin_message_path(user_id: "#{resource.id}")
              links += " / "
              links +=  link_to 'Edit', edit_admin_profile_path(resource)
              links += " / "  

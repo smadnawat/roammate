@@ -14,6 +14,9 @@ ActiveAdmin.register Event do
     column "Time"  do |resources|
       resources.event_time
     end
+    column "Interest"  do |resources|
+      resources.interest.interest_name
+    end
     column "Date" do |resources|
       resources.event_date.to_date if resources.event_date.present?
     end
@@ -32,6 +35,7 @@ ActiveAdmin.register Event do
 
   filter :city_cont, label: 'Search by city'
   filter :event_name_cont, label: 'Search by name'
+  filter :interest_interest_name_cont, label: 'Search by interest'
   # filter :sign_in_count
   # filter :created_at
 
@@ -57,8 +61,8 @@ ActiveAdmin.register Event do
       label :Please_enter_event_name,:class => "label_error" ,:id => "event_name_label"
       f.input :host_name
       label :Please_enter_host_name,:class => "label_error" ,:id => "host_name_label"
-      f.input :image,:as => :file
-      label :Image_resolution_should_be_minimum_200x600,:class => "label_error" ,:id => "event_image_label"
+      f.input :image,:as => :file, :label=>"Image (minimum 600x200)"
+      label :Image_resolution_should_be_minimum_600x200,:class => "label_error" ,:id => "event_image_label"
       f.input :place
       label :Please_enter_place,:class => "label_error" ,:id => "place_label"
       f.input :event_time ,:class =>"time_holder"

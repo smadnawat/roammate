@@ -1,0 +1,14 @@
+<h3>Type Message To Share</h3>
+<br>
+<%= form_for :send_message,multipart: true, url: send_message_path(user_id: params[:user_id]) do |f| %>
+	<b><big><big><big><big>
+	<%= f.label :Message%></big> </big></big> </big></b>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<%= f.text_field :message  %> 
+	<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<%= f.submit "Send" %>
+<%end%>
+
+<br/><br/><br/>

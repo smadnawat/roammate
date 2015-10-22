@@ -1,7 +1,7 @@
 ActiveAdmin.register AdminUser do
   # menu false
   menu priority: 0
-  permit_params :email, :password, :password_confirmation
+  permit_params :email, :password, :password_confirmation, :is_admin
   actions :all, :except => [:destroy]
   config.filters = false
 
@@ -9,6 +9,9 @@ ActiveAdmin.register AdminUser do
     selectable_column
     # id_column
     column :email
+    column "Admin Type" do |resource|
+      status_tag (resource.is_admin ? "Admin" : "Event Admin"), (resource.is_admin ? :ok : :error) 
+    end
     column :current_sign_in_at
     column :sign_in_count
     column :created_at
@@ -20,6 +23,7 @@ ActiveAdmin.register AdminUser do
       f.input :email
       f.input :password
       f.input :password_confirmation
+      f.input :is_admin, :label => 'Admin Type', :as => :select, :collection => {'Admin' => true,'Event Admin' => false},include_blank: false, allow_blank: false
     end
     f.actions
   end
@@ -41,7 +45,7 @@ ActiveAdmin.register AdminUser do
     end
   end
 
-  controller do
+    controller do
       def index
         if current_admin_user.is_admin 
          super

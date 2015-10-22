@@ -1,5 +1,6 @@
 ActiveAdmin.register SpecialMessage do
-  menu priority: 14
+  menu label: "Admin Message", priority: 14
+  # menu priority: 14
   permit_params :content, :interest_id
 
   index download_links: [:csv] do

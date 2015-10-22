@@ -1,8 +1,7 @@
 ActiveAdmin.register Report do
 
-  menu priority: 15
+  menu label: "Reported Users", priority: 15
   actions :all, :except => [:new, :edit, :show]
-  # permit_params :email, :password, :password_confirmation
 
   index download_links: [:csv] do
     selectable_column

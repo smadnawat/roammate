@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   delete 'destroy_users/:id' => "users#destroy_users" , :as => "destroy_users"
   get 'post/:post_id/delete_comment/:id' => "comments#delete_comment",:as => "delete_comment"
   post 'upload_file' => "upload_files#upload_file"
+  post 'send_message' => "upload_files#send_message"
 
   #*****************************************************************************
   post 'like_event' => "likes#like_event"

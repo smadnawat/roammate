@@ -1,6 +1,6 @@
 ActiveAdmin.register Post do
-  menu priority: 8
-  permit_params :title, :content, :image, :user_id,:user_type,:admin_user_id
+  menu label: "Chatter", priority: 8
+  permit_params :content, :user_id,:user_type,:admin_user_id
   actions :all
   index download_links: [:csv] do
     selectable_column
@@ -34,16 +34,12 @@ ActiveAdmin.register Post do
 
   show :title => :title do
     attributes_table do
-      row :title
       row :content
-      row "Image" do |resources|
-        image_tag resources.image_url(:display)
-      end
       row "User" do |resources|
         if resources.user_id.present?
           resources.user.profile.first_name
         else
-          "Admin user"
+          "Team Roammate"
         end
       end
       row "User type" do |resources|
@@ -67,20 +63,17 @@ ActiveAdmin.register Post do
 
   form do |f|
     f.inputs "Admin Details" do
-      f.input :title
-      label :Please_enter_title,:class => "label_error" ,:id => "title_label"
       f.input :content
       label :Please_enter_content,:class => "label_error" ,:id => "content_label"
-      f.input :image,:as => :file
       if params[:action] != "edit"
         f.input :admin_user_id,:input_html => {:value => current_admin_user.id,:readonly=>true }
-        f.input :user_type,:input_html => {:value => "Roammate",:readonly=>true } 
+        f.input :user_type,:input_html => {:value => "Team Roammate",:readonly=>true } 
       end
     end
     f.actions
   end
 
-  controller do
+    controller do
       def index
         if current_admin_user.is_admin 
          super

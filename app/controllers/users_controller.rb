@@ -48,6 +48,8 @@ class UsersController < ApplicationController
 			@profile = Profile.create(email: "#{params[:user_id]}@#{params[:provider]}.com", fb_email: params[:email],first_name: params[:first_name], image: params[:image] ,last_name: params[:last_name], gender: params[:gender], status: true, user_id: @user.id,dob: params[:dob],location: params[:address])
 		  	@signup_points = @user.points.create(:pointable_type => "Sign Up")
 		  	@album = params[:album]
+		  	@admin_user_group = Group.create(group_name: "Team Roammate", group_admin: @user.id)
+		  	@user.groups << @admin_user_group
 		  	@album.map{|x| @user.albums.create(image: x, status: false)}
 		  	if @user and @profile
 		  	   @status =true

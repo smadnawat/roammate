@@ -1,5 +1,5 @@
 ActiveAdmin.register Feedback do
-  menu priority: 6
+  menu label: "Feedback", priority: 6
   actions :all, :except => [:new, :edit]
   # permit_params :email, :password, :password_confirmation
 

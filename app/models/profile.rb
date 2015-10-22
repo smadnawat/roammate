@@ -14,7 +14,9 @@ class Profile < ActiveRecord::Base
   	if File.extname(file.original_filename) == ".csv"
 	  	CSV.foreach(file.path, :quote_char => "|") do |row|
 	  		if i!=1
+	  			p "+++++++++++++#{row[12].inspect}+++++++++++"
 	  			if row[12] == "new" or row[12] == "New"
+	  				p "+++++++++++==============444444444444444444"
 	  				if !Profile.exists?(:email => row[1])
 		  				email = row[1].split("@")
 		  				@user = User.create(provider: email[1].split(".")[0],user_id: email[0])
