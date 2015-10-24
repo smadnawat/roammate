@@ -2,7 +2,7 @@ ActiveAdmin.register_page "Chat history" do
   menu priority: 5
   
   content do
-      rating = Rating.where("rate = ?","-1")
+      rating = Rating.all#where("rate = ?","-1")
     table :class => "index_table index" do
       tr do
         th { 'Reciever(user1)' }
@@ -35,8 +35,7 @@ ActiveAdmin.register_page "Chat history" do
 
   controller do
       def index
-        if current_admin_user.is_admin #|| Group.set_access_for_current_admin(current_admin_user).include?("Banner list")
-         p "++00000000000++++++++#{current_admin_user.is_admin}+++++++++++++"
+        if current_admin_user.is_admin
          super
         else
          redirect_to :back ,:alert => "You are not allowed to access this Page!"

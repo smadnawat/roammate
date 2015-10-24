@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   get 'my_notifications' => "notifications#my_notifications"
   get 'my_profile' => "profiles#my_profile"
   get 'get_roammate_to_add_in_group' => "invitations#get_roammate_to_add_in_group"
-  get 'special_messages' => "messages#special_messages"
+  # get 'special_messages' => "messages#special_messages"
   get 'add_member_to_group' => "invitations#add_member_to_group"
   # get 'delete_message' => "messages#delete_message"
   get 'delete_chat' => 'messages#delete_chat'
@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   get 'get_points' => 'blocks#get_points'
   get 'leave_group' => 'invitations#leave_group'
   get 'user_inbox' => 'messages#user_inbox'
-  get 'admin_post' => 'posts#admin_post'
+  # get 'admin_post' => 'posts#admin_post'
   # get 'get_point' =>"points#get_point"
   # get 'get_profile' => "profiles#get_profile"
   get 'get_user_cities' => "cities#get_user_cities"

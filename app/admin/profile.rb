@@ -9,15 +9,13 @@ ActiveAdmin.register Profile do
     link_to 'Upload CSV',  admin_upload_file_path
   end
 
-  index :title => "Total users #{Profile.all.count}", download_links: [:csv] do
+  index :title => proc { "Total users #{Profile.count}" } , download_links: [:csv] do
     selectable_column
     # id_column
     column "Name" do |resource|
       "#{resource.first_name}  #{resource.last_name}"
     end
-    # column "Roammate email" do |resource|
-    #   resource.email
-    # end
+
     column "Facebook email" do |resource|
       resource.fb_email
     end
@@ -83,7 +81,6 @@ ActiveAdmin.register Profile do
       label :Please_enter_a_valid_first_name,:class => "label_error" ,:id => "fname_label"
       f.input :last_name
       label :Please_enter_a_valid_last_name,:class => "label_error" ,:id => "lname_label"
-      #f.input :image,:as => :file
       f.input :location
       f.input :dob,as: :datepicker, datepicker_options: { max_date: 18.years.ago.to_date}
       label :Please_enter_date_of_birth,:class => "label_error" ,:id => "dob_label"

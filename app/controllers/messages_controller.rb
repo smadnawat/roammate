@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
 
 	include ApplicationHelper
-	before_filter :check_user, :only => [:delete_chat, :user_inbox, :create_new_message, :delete_message, :create_new_group, :special_messages,:get_messages]
+	before_filter :check_user, :only => [:admin_group, :delete_chat, :user_inbox, :create_new_message, :delete_message, :create_new_group, :special_messages,:get_messages]
 
 	def message_status
 		@message = Question.find(params[:id])
@@ -23,7 +23,7 @@ class MessagesController < ApplicationController
 
 
 	def user_inbox
-		@user = User.includes(:groups,:profile,:messages).where(:id => params[:user_id]).first
+		@user = User.includes(:profile, groups: [:messages]).where(:id => params[:user_id]).first
 		# blocked_user_list(@user)
 		# @arr.present? ? @groups = @user.groups.where('group_admin NOT IN (?)', @arr).paginate(:page => params[:page], :per_page => params[:size]) : 
 		@groups = @user.groups.paginate(:page => params[:page], :per_page => params[:size])
@@ -34,7 +34,7 @@ class MessagesController < ApplicationController
 				@grp_name =  g.users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",")
 			end
 		  	user_list = {}
-			@all_messages = Message.where(id: (g.message_counts.where("user_id = ? and is_delete = ?", @user.id, false).pluck(:message_id)))
+			@all_messages = Message.includes(:user, :group).where(id: (g.message_counts.where("user_id = ? and is_delete = ?", @user.id, false).pluck(:message_id)))
 			@mg = @all_messages.order("created_at ASC").last
 			@quee = Question.where('interest_id = ? and status = ?',@user.active_interest, true ).last
 			@mg.present? ? user_list["last_message"] = @mg.attributes.slice("content").merge!("created_at"=> @mg.created_at.to_i) : user_list["last_message"] = (@quee.present? ?  @quee.slice().merge!("created_at"=> g.created_at.to_i, "content" => @quee.question) : nil)
@@ -42,7 +42,7 @@ class MessagesController < ApplicationController
 			user_list["group_name"] = @grp_name
 			g.users.count == 2 ? chat_type = "single" : chat_type = "multiple"
 			user_list["group_type"] = chat_type
-			user_list["total_unread_message_count"] = (MessageCount.where('is_read = ? and user_id = ? and group_id = ?', false, @user.id, g.id ).count)
+			user_list["total_unread_message_count"] = (MessageCount.includes(:user, :group).where('is_read = ? and user_id = ? and group_id = ?', false, @user.id, g.id ).count)
 			if @user.id == g.group_admin
 				@upro = User.find_by_id(g.group_name.to_i)
 				@p = point_algo(@user, @upro )
@@ -66,29 +66,29 @@ class MessagesController < ApplicationController
 											}
 	end
 
-	def special_messages
-		@active_interest = Interest.find_by_id(@user.active_interest)
-		if @active_interest.present?
-			@active_messages = @active_interest.special_messages.where(status: true)
-			if @active_messages.present?
-				render :json => {
-												:active_messages => @active_messages,
-												:response_code => 200,
-												:message => "Successfully fetched messages",
-												}
-			else
-				render :json => {
-												:response_code => 400,
-												:message => "Messages not present"
-												}
-			end
-		else
-			render :json => {
-											:response_code => 500,
-											:message => "Your active interest not present"
-											}
-		end
-	end
+	# def special_messages
+	# 	@active_interest = Interest.find_by_id(@user.active_interest)
+	# 	if @active_interest.present?
+	# 		@active_messages = @active_interest.special_messages.where(status: true)
+	# 		if @active_messages.present?
+	# 			render :json => {
+	# 											:active_messages => @active_messages,
+	# 											:response_code => 200,
+	# 											:message => "Successfully fetched messages",
+	# 											}
+	# 		else
+	# 			render :json => {
+	# 											:response_code => 400,
+	# 											:message => "Messages not present"
+	# 											}
+	# 		end
+	# 	else
+	# 		render :json => {
+	# 										:response_code => 500,
+	# 										:message => "Your active interest not present"
+	# 										}
+	# 	end
+	# end
 
 	def get_messages
 		@group = Group.includes(:users).find_by_id(params[:group_id])
@@ -98,7 +98,7 @@ class MessagesController < ApplicationController
 		  @qs.each do |q|
 		  	@get_default_quetions << q.attributes.slice("id","question","interest_id","status").merge!("created_at"=> q.created_at.to_i)
 		  end
-			@get_previous_messages = Message.includes(:user).where(id: (@group.message_counts.where("user_id = ? and is_delete = ?", @user.id, false).pluck(:message_id))).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
+			@get_previous_messages = Message.includes(user: [:profile]).where(id: (@group.message_counts.where("user_id = ? and is_delete = ?", @user.id, false).pluck(:message_id))).order("created_at DESC").paginate(:page => params[:page], :per_page => params[:size])
 			@msg_cnt = MessageCount.where("group_id = ? and user_id = ? and is_read = ?", @group.id, @user.id, false)
 			@msg_cnt.update_all(is_read: true) if @msg_cnt.present?
 			@max = @get_previous_messages.total_pages
@@ -137,7 +137,7 @@ class MessagesController < ApplicationController
 	end
 
 	def create_new_message
-		@group = Group.find_by_id(params[:group_id])
+		@group = Group.includes(:users).find_by_id(params[:group_id])
 		if @group.present?
 			if !params[:message_content].present?
 				message = "Message not created"
@@ -146,7 +146,7 @@ class MessagesController < ApplicationController
 				@message = @user.messages.build(content: params[:message_content], group_id: @group.id, image: params[:image])
 				if @message.save
 					# @group.users.where('id != ?', @user.id).each do |g_user|
-					@group.users.each do |g_user|
+					@group.users.includes(:message_counts).each do |g_user|
 						@group.message_counts.create(user_id: g_user.id, message_id: @message.id, is_read: false)
 					end
 					@msg_cnt = MessageCount.where("group_id = ? and user_id = ? and is_read = ?", @group.id, @user.id, false)
@@ -154,8 +154,8 @@ class MessagesController < ApplicationController
 					@user.points.create(:pointable_type => "Reply first to ice breaker message") if !@user.points.where(:pointable_type => "Reply first to ice breaker message").present?	
 					@alert = "send message"
 					@group_users = @group.users.where('id != ?', @user.id)
-					@group_users.each do |snd|
-						@group_name =  @group.users.where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",")
+					@group_users.includes(:devices).each do |snd|
+						@group_name =  @group.users.includes(:profile).where('id != ?', @user.id).map {|x| x.profile.first_name}.join(",")
 						@type = "Send message"
 						@badge = Notification.where("reciever = ? and status = ?",snd.id ,false).count
             snd.devices.each {|device| (device.device_type == "android") ? AndroidPushWorker.perform_async(snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, @user.profile.image, @group_name, @group.id, nil ) : ApplePushWorker.perform_async( snd.id, "#{@user.profile.first_name}: #{@message.content}", @badge, nil, nil, @type, device.device_id, nil, @group_name, @group.id, nil ) } if snd.message_notification
@@ -186,19 +186,14 @@ class MessagesController < ApplicationController
 		end
 	end
 
-	def delete_message
-		if @message = Message.find_by_id_and_user_id(params[:message_id], @user.id)
-			@message.destroy
-			message = "Successfully deleted message"
-			code = 200
-		else
-			message = "Message not found"
-			code = 400
-		end
+	def admin_group
+		@messages =  Message.where("is_roammate = ? and user_id = ?", true, @user.id)
 		render :json => {
-										:response_code => code,
-										:message => message
+										:response_code => 200,
+										:message => "Successfully Fetched Admin Messages",
+										:admin_messages => @messages
 										}
 	end
+
 
 end

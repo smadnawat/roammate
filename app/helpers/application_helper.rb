@@ -34,7 +34,7 @@ module ApplicationHelper
 		@likees = user.likes.where(status: true)
     if @likees.present?
 			eve = []
-			@likees.each do |e|
+			@likees.includes(:event).each do |e|
 				@even = {}
         @even[:event_id] = e.event.id
 				@even[:event_name] = e.event.event_name
@@ -89,7 +89,7 @@ module ApplicationHelper
 	def message_count user, group
 		@first_user_message_count = group.messages.where("user_id = ?",user.id).count#Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',user,member,member,user).count
 		@second_user_message_count = group.messages.where("user_id = ?",group.group_name.to_i).count#Message.where('(user_id = ? and reciever = ?) or (user_id = ? and reciever = ?)',member,user,user,member).count
-		if @first_user_message_count >= 10 && @second_user_message_count >= 10
+		if (@first_user_message_count >= 15 && @second_user_message_count >= 15)
 			true
 		else
 			false

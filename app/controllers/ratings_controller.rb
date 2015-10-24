@@ -21,7 +21,7 @@ class RatingsController < ApplicationController
 			else
 					render :json => {
 													:response_code => 500,
-													:message => "You have to sent and recieve atleast 10 messages."
+													:message => "You have to sent and recieve atleast 15 messages."
 													}
 			end
 		else

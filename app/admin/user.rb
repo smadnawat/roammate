@@ -5,7 +5,7 @@ ActiveAdmin.register User,:as => "Rating" do
   index download_links: [:csv] do
     selectable_column
     column "User Name" do |resources|
-       resources.profile.first_name + " " + resources.profile.last_name
+       "#{resources.profile.first_name}" + " " + "#{resources.profile.last_name}"
     end
     column "Email" do |resources|
        resources.profile.fb_email
@@ -23,11 +23,11 @@ ActiveAdmin.register User,:as => "Rating" do
       @ratings = resource.ratings
       @rate_sum =0
        if @ratings.present?
-        @ratings.each do |r|
+        @ratings.where(rate: "1").each do |r|
           @rate = r.rate.to_i+0.0
           @rate_sum = @rate_sum+@rate         
         end
-        @avg = "#{((@rate_sum/@ratings.count)*100).round(2)}%"
+        @avg = "#{((@rate_sum/@ratings.count)*100).round(2)}% of #{resource.ratings.count} were positive."
       else
         @avg = "No budy rating"
       end
