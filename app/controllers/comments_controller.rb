@@ -1,6 +1,7 @@
 class CommentsController < ApplicationController
 
 before_filter :check_user, :only => [:create_comment, :get_comments]
+
 	def create_comment
 		if @post = Post.find_by_id(params[:post_id])
 			@comment = @post.comments.create(:reply => params[:reply], :user_id => @user.id)
@@ -31,4 +32,5 @@ before_filter :check_user, :only => [:create_comment, :get_comments]
     @comment.destroy
 		redirect_to  admin_post_path(params[:post_id])
 	end
+
 end

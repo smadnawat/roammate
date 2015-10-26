@@ -23,8 +23,8 @@ class PostsController < ApplicationController
 			@post["content"] = p.content
 			@post["user_type"] = p.user_type
 			@post["created_at"] = p.created_at.to_i
-			@points = user_points(p.user, ServicePoint.all)
-			@post["user"] = p.user.profile.attributes.merge(:points =>  @points, :online_status => p.user.online)
+			@points = user_points(p.user, ServicePoint.all) if p.user_type == "user"
+			@post["user"] = p.user.profile.attributes.merge(:points =>  @points, :online_status => p.user.online) if p.user_type == "user"
 			@arr << @post
 		end
 		render :json => {:response_code => 200,:message => "All posts fetched successsfully.", :posts => @arr, :pagination => { :page => params[:page], :size=> params[:size], :max_page => @max, :total_entries => @total_entries} }
