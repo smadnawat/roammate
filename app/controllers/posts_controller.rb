@@ -18,7 +18,7 @@ class PostsController < ApplicationController
 		@arr = []
 		@posts.each do |p|
 			@post = {}
-			@post["user_id"] = p.user.id 
+			@post["user_id"] = p.user.id if p.user_type == "user"
 			@post["post_id"] = p.id
 			@post["content"] = p.content
 			@post["user_type"] = p.user_type
